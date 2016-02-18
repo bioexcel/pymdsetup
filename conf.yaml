@@ -1,0 +1,4 @@
+# pymdsetup configuration file
+
+# PDB mirror settings
+pdb_mirror : http://mmb.irbbarcelona.org/api/
