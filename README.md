@@ -21,11 +21,15 @@ dynamics simulation.
 ### GROMACS installation
 1. Download Gromacs package v.5.1.2 (February 2016)
 
-    ```bash
-    wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-5.1.2.tar.gz
-    mv gromacs-5.1.2.tar.gz $HOME/soft/gromacs/
-    cd $HOME/soft/gromacs/
-    ```
+    
+```
+#!bash
+wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-5.1.2.tar.gz
+mv gromacs-5.1.2.tar.gz $HOME/soft/gromacs/
+cd $HOME/soft/gromacs/
+```
+
+    
 
 2. Extract package
 
@@ -49,4 +53,4 @@ dynamics simulation.
 
 ### GROMACS not automated setup tutorial
 (source: http://www.gromacs.org/@api/deki/files/198/=gmx-tutorial.pdf)
-1. 
+1.
