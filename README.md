@@ -43,5 +43,35 @@ dynamics simulation.
         source /usr/local/gromacs/bin/GMXRC
 
 ### GROMACS not automated setup tutorial
-(source: http://www.gromacs.org/@api/deki/files/198/=gmx-tutorial.pdf)
-1.
+(source: http://www.bevanlab.biochem.vt.edu/Pages/Personal/justin/gmx-tutorials/lysozyme/01_pdb2gmx.html)
+
+
+TODO: Change this tutorial to adapt it to GROMACS 5.x.x
+1. Download the Lysozyme PDB structure
+
+        #!bash
+        curl mmb.irbbarcelona.org/api/pdb/1lyd/entry > 1lyd.pdb
+
+2. Creating Gromacs topology from the PDB file
+
+        #!bash
+        gmx pdb2gmx -f 1lyd.pdb -water tip3p -ff amber99sb-ildn
+
+3. Creating the water box
+
+        #!bash
+        gmx editconf -f conf.gro -bt dodecahedron -d 0.5 -o box.gro
+        gmx solvate -cp box.gro -cs spc216.gro -o 1AKI_solv.gro -p topol.top
+
+4. Running an energy minimization
+
+        #!bash
+        echo "integrator      = steep
+        nsteps          = 200
+        nstlist         = 10
+        cutoff-scheme   = verlet
+        vdw-type        = cut-off
+        rvdw            = 1.0
+        coulombtype     = pme
+        rcoulomb        = 1.0" > em.mdp
+        
