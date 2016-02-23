@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Settings loader module.
 
 This module contains the classes to read the different formats of the 
@@ -6,6 +7,7 @@ configuration files.
 The configuration file path should be specified in the PYMDS_CONF environment
 variable.
 
+@author: pau
 """
 
 import yaml
@@ -25,6 +27,6 @@ class YamlReader(object):
             self.yaml_path = os.path.abspath(os.environ.get('PYMDS_CONF'))
         self.properties = self.__read_yaml()
 
-    def __read_yaml(self):
+    def _read_yaml(self):
         with open(self.yaml_path, 'r') as stream:
             return yaml.load(stream)
