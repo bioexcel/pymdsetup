@@ -45,9 +45,6 @@ dynamics simulation.
 ### GROMACS not automated setup tutorial
 (source: http://www.bevanlab.biochem.vt.edu/Pages/Personal/justin/gmx-tutorials/lysozyme/01_pdb2gmx.html)
 
-
-TODO: Change this tutorial to adapt it to GROMACS 5.x.x
-
 1. Download the Lysozyme PDB structure
 
         #!bash
