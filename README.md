@@ -48,7 +48,7 @@ dynamics simulation.
 1. Download the Lysozyme PDB structure
 
         #!bash
-        curl mmb.irbbarcelona.org/api/pdb/1aki/entry > 1AKI.pdb
+        curl mmb.irbbarcelona.org/api/pdb/1aki/coords > 1AKI.pdb
 
 2. Remove crystal water molecules
 
