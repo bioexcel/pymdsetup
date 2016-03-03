@@ -116,7 +116,7 @@ dynamics simulation.
 
         gmx grompp -f minim.mdp -c 1AKI_solv_ions.gro -p topol.top -o minim.tpr
 
-        gmx mdrun -s minim.tpr -o minim.trr  -c minim.gro -e minim.edr -g minim.log
+        gmx mdrun -s minim.tpr -o minim.trr  -c minim.gro -e minim.edr
 
 8. Two step equilibration
 
