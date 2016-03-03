@@ -6,6 +6,7 @@
 
 import settings
 import requests
+import os
 import pdb2gmx
 import re
 import editconf
@@ -18,6 +19,9 @@ prop = settings.YamlReader().properties
 
 pdb_path = "structure.pdb"
 pdb_code = "1NAG"
+
+
+mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
 
 # Get PDB file from the MMB API without solvent or ligands
 url = "mmb.irbbarcelona.org/api/pdb/"+pdb_code.lower()+"/coords/?group=ATOM"
@@ -45,7 +49,8 @@ sol = solvate.Solvate512(prop['box_gro'], prop['sol_gro'], prop['top'])
 sol.launch()
 
 # Add ions to neutralice the charge
-gpp = grompp.Grompp512(prop['ions_mdp'], prop['sol_gro'], prop['top'], 
+ions_mdp = os.path.join(mdp_dir, prop['ions_mdp'])
+gpp = grompp.Grompp512(ions_mdp, prop['sol_gro'], prop['top'],
                        prop['ions_tpr'])
 gpp.launch()
 
@@ -68,6 +73,16 @@ gpp.launch()
 
 mdr = mdrun.Mdrun512(prop['nvt_tpr'], prop['nvt_trr'], prop['nvt_gro'],
                      prop['nvt_edr'], prop['nvt_cpt'])
+mdr.launch()
+
+# Equilibration step 2/2 nvt (constant number of molecules, pressure and temp)
+gpp = grompp.Grompp512(prop['npt_mdp'], prop['nvt_gro'], prop['nvt_cpt'],
+                       prop['top'], prop['npt_tpr'])
+gpp.launch()
+
+mdr = mdrun.Mdrun512(prop['npt_tpr'], prop['npt_trr'], prop['npt_gro'],
+                     prop['npt_edr'], prop['npt_cpt'])
+mdr.launch()
 
 # 1ns Molecular dynamics
 gpp = grompp.Grompp512(prop['md_mdp'], prop['npt_gro'], prop['npt_cpt'],
@@ -76,5 +91,5 @@ gpp.launch()
 
 mdr = mdrun.Mdrun512(prop['md_tpr'], prop['md_trr'], prop['md_gro'],
                      prop['md_edr'], prop['md_cpt'])
-
+mdr.launch()
  

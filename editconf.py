@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Python wrapper for the GROMACS pdb2gmx module
+"""Python wrapper for the GROMACS editconf module
 
 @author: pau
 """
@@ -12,7 +12,7 @@ class Pdb2gmx512(object):
     """Wrapper for the 5.1.2 version of the pdb2gmx module
     """
 
-    def __init__(self, structure_path, output_path, 
+    def __init__(self, structure_gro_path, output_path, 
                  water_type='spce', force_field='oplsaa', 
                  log_path=None, error_path=None, gmx_path=None):
         self.structure_path = osp.abspath(structure_path)

@@ -2,3 +2,100 @@
 
 # PDB mirror settings
 pdb_mirror : http://mmb.irbbarcelona.org/api/
+
+
+################################# File Paths #################################
+# First gro converted from pdb
+p2g_gro : p2g.gro
+p2g_log : p2g.log
+
+# Box gro 
+box_gro : box.gro
+
+# Solvent gro
+sol_gro : sol.gro
+
+# Topology top
+top : topol.top
+
+# Adding ions mdp
+ions_mdp : gmx_full_ions.mdp
+
+# Ions tpr
+ions_tpr : ions.tpr
+
+# Ions gro
+ions_gro : ions.gro
+
+# Minimization mdp (inside package mdp subfolder)
+min_mdp : gmx_full_min.mdp
+
+# Minimization tpr
+min_tpr : min.tpr
+
+# Minimization energies edr
+min_edr : min.edr
+
+# Equilibration nvt mdp (inside package mdp subfolder)
+nvt_mdp : gmx_full_nvt.mdp
+
+# Equilibration nvt tpr
+nvt_tpr : nvt.tpr
+
+# Equilibration nvt trr
+nvt_trr : nvt.trr
+
+# Equilibration nvt gro
+nvt_gro : nvt.gro
+
+# Equilibration nvt edr
+nvt_edr : nvt.edr
+
+# Equilibration nvt cpt
+nvt_cpt : nvt.cpt
+
+# Equilibration npt (inside package mdp subfolder)
+npt_mdp : gmx_full_npt.mdp
+
+# Equilibration npt tpr
+npt_tpr : npt.tpr
+
+# Equilibration npt trr
+npt_trr : npt.trr
+
+# Equilibration npt gro
+npt_gro : npt.gro
+
+# Equilibration npt edr
+npt_edr : npt.edr
+
+# Equilibration npt cpt
+npt_cpt : npt.cpt
+
+# Molecular dynamics (inside package mdp subfolder)
+md_mdp : gmx_full_md.mdp
+
+# Molecular dynamics tpr
+md_tpr : md.tpr
+
+# Molecular dynamics trr
+md_trr : md.trr
+
+# Molecular dynamics gro
+md_gro : md.gro
+
+# Molecular dynamics edr
+md_edr : md.edr
+
+# Molecular dynamics cpt
+md_cpt : md.cpt
+
+##############################################################################
+
+
+
+
+
+
+
+
