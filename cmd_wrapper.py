@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Python wrapper for subprocess library
+"""Python wrapper for command line
 
 @author: pau
 """
@@ -8,7 +8,7 @@ import subprocess
 
 
 class CmdWrapper(object):
-    """Wrapper for the 5.1.2 version of the pdb2gmx module
+    """Command line wrapper using subprocess library
     """
 
     def __init__(self, cmd, log_path=None, error_path=None):

@@ -114,9 +114,9 @@ dynamics simulation.
         rvdw            = 1.0       ; Short-range Van der Waals cut-off
         pbc             = xyz       ; Periodic Boundary Conditions (yes/no)" > minim.mdp
 
-        gmx grompp -f minim.mdp -c 1AKI_solv_ions.gro -p topol.top -o em.tpr
+        gmx grompp -f minim.mdp -c 1AKI_solv_ions.gro -p topol.top -o minim.tpr
 
-        gmx mdrun -v -deffnm em
+        gmx mdrun -s minim.tpr -o minim.trr  -c minim.gro -e minim.edr -g minim.log
 
 8. Two step equilibration
 
@@ -165,9 +165,9 @@ dynamics simulation.
         gen_temp    = 300       ; temperature for Maxwell distribution
         gen_seed    = -1        ; generate a random seed" > nvt.mdp
 
-        gmx grompp -f nvt.mdp -c em.gro -p topol.top -o nvt.tpr
+        gmx grompp -f nvt.mdp -c minim.gro -p topol.top -o nvt.tpr
 
-        gmx mdrun -deffnm nvt
+        gmx mdrun -s nvt.tpr -o nvt.trr -c nvt.gro -e nvt.edr -cpo nvt.cpt
 
         echo "define        = -DPOSRES  ; position restrain the protein
         ; Run parameters
@@ -219,7 +219,7 @@ dynamics simulation.
 
         gmx grompp -f npt.mdp -c nvt.gro -t nvt.cpt -p topol.top -o npt.tpr
 
-        gmx mdrun -deffnm npt
+        gmx mdrun -s npt.tpr -o npt.trr -c npt.gro -e npt.edr -cpo npt.cpt
 
 9. Run 1ns molecular dynamics
 
@@ -273,6 +273,6 @@ dynamics simulation.
         ; Velocity generation
         gen_vel     = no        ; Velocity generation is off" > md.mdp
 
-        gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md_0_1.tpr
+        gmx grompp -f md.mdp -c npt.gro -t npt.cpt -p topol.top -o md1ns.tpr
 
-        gmx mdrun -deffnm md_0_1
+        gmx mdrun -s md1ns.tpr -o md1ns.trr -c md1ns.gro -e md1ns.edr -cpo md1ns.cpt

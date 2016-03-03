@@ -21,11 +21,15 @@ class YamlReader(object):
     'PYMDS_CONF' environment variable. Default path will be './conf.yaml'
     """
     
-    def __init__(self):
-        self.yaml_path = os.path.abspath('./conf.yaml')
-        if os.environ.get('PYMDS_CONF') is not None:
-            self.yaml_path = os.path.abspath(os.environ.get('PYMDS_CONF'))
-        self.properties = self.__read_yaml()
+    def __init__(self, yaml_path=None):
+        if yaml_path is not None:
+            self.yaml_path = yaml_path
+        elif os.environ.get('PYMDS_CONF') is not None:
+            self.yaml_path = os.environ.get('PYMDS_CONF')
+        else:
+            self.yaml_path = 'conf.yaml'
+            
+        self.properties = self._read_yaml()
 
     def _read_yaml(self):
         with open(self.yaml_path, 'r') as stream:
