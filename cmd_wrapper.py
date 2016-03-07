@@ -3,7 +3,6 @@
 
 @author: pau
 """
-
 import subprocess
 
 
@@ -18,10 +17,31 @@ class CmdWrapper(object):
 
     def launch(self):
 
-        process = subprocess.Popen(self.cmd, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE,
-                                   universal_newlines=True)
-        out, err = process.communicate()
+        n_commands = 0
+        commands = []
+        for argument in self.cmd:
+            if argument == "|":
+                n_commands += 1
+            else:
+                commands[n_commands].append(argument)
+        if n_commands > 0:
+            process_list = []
+            for i in range(len(commands)):
+                if i == 0:
+                    process_list.append(subprocess.Popen(commands[i],
+                                        stdout=subprocess.PIPE))
+                else:
+                    process_list.append(subprocess.Popen(commands[i],
+                                        stdin=process_list[i-1],
+                                        stdout=subprocess.PIPE))
+                    process_list[i-1].stdout.close()
+
+            out, err = process_list[-1].communicate()
+        else:
+            process = subprocess.Popen(self.cmd, stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE,
+                                       universal_newlines=True)
+            out, err = process.communicate()
 
         # Write output to log_file
         if self.log_path is not None:
