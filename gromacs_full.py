@@ -29,7 +29,7 @@ pdb_string = requests.get(url)
 with open(pdb_path, 'w') as pdb_file:
     pdb_file.write(pdb_string)
 
-# Create gromacs topology 
+# Create gromacs topology
 p2g = pdb2gmx.Pdb2gmx512(pdb_path, prop['p2g_gro'], prop['p2g_log'])
 p2g.launch()
 
@@ -37,8 +37,8 @@ p2g.launch()
 with open(prop['p2g_log'], 'w') as p2g_log_file:
     out = p2g_log_file.read()
     charge = float(
-           re.search(r'Total charge ([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)',
-                     out, re.MULTILINE))
+        re.search(r'Total charge ([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)',
+                  out, re.MULTILINE))
 
 # Define box dimensions
 ec = editconf.Editconf512(prop['p2g_gro'], prop['box_gro'])
@@ -71,25 +71,24 @@ gpp = grompp.Grompp512(prop['nvt_mdp'], prop['min_gro'],  prop['top'],
                        prop['nvt_tpr'])
 gpp.launch()
 
-mdr = mdrun.Mdrun512(prop['nvt_tpr'], prop['nvt_trr'], prop['nvt_gro'],
-                     prop['nvt_edr'], prop['nvt_cpt'])
+mdr = mdrun.Mdrun512(prop['nvt_tpr'], prop['nvt_gro'], prop['nvt_trr'],
+                     prop['nvt_edr'], output_cpt_path=prop['nvt_cpt'])
 mdr.launch()
 
 # Equilibration step 2/2 nvt (constant number of molecules, pressure and temp)
-gpp = grompp.Grompp512(prop['npt_mdp'], prop['nvt_gro'], prop['nvt_cpt'],
-                       prop['top'], prop['npt_tpr'])
+gpp = grompp.Grompp512(prop['npt_mdp'], prop['nvt_gro'], prop['top'],
+                       prop['npt_tpr'], cpt_path=prop['nvt_cpt'])
 gpp.launch()
 
-mdr = mdrun.Mdrun512(prop['npt_tpr'], prop['npt_trr'], prop['npt_gro'],
-                     prop['npt_edr'], prop['npt_cpt'])
+mdr = mdrun.Mdrun512(prop['npt_tpr'],  prop['npt_gro'], prop['npt_trr'],
+                     prop['npt_edr'], output_cpt_path=prop['npt_cpt'])
 mdr.launch()
 
 # 1ns Molecular dynamics
-gpp = grompp.Grompp512(prop['md_mdp'], prop['npt_gro'], prop['npt_cpt'],
-                       prop['top'], prop['md_tpr'])
+gpp = grompp.Grompp512(prop['md_mdp'], prop['npt_gro'], prop['top'],
+                       prop['md_tpr'],  cpt_path=prop['npt_cpt'])
 gpp.launch()
 
-mdr = mdrun.Mdrun512(prop['md_tpr'], prop['md_trr'], prop['md_gro'],
-                     prop['md_edr'], prop['md_cpt'])
+mdr = mdrun.Mdrun512(prop['md_tpr'], prop['md_gro'], prop['md_trr'],
+                     prop['md_edr'], output_cpt_path=prop['md_cpt'])
 mdr.launch()
- 
