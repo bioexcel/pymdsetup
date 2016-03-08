@@ -30,15 +30,15 @@ with open(pdb_path, 'w') as pdb_file:
     pdb_file.write(pdb_string)
 
 # Create gromacs topology
-p2g = pdb2gmx.Pdb2gmx512(pdb_path, prop['p2g_gro'], prop['p2g_log'])
+p2g = pdb2gmx.Pdb2gmx512(pdb_path, prop['p2g_gro'])
 p2g.launch()
 
-#Get the total charge of the molecule
-with open(prop['p2g_log'], 'w') as p2g_log_file:
-    out = p2g_log_file.read()
-    charge = float(
-        re.search(r'Total charge ([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)',
-                  out, re.MULTILINE))
+# Get the total charge of the molecule
+# with open(prop['p2g_log'], 'w') as p2g_log_file:
+#    out = p2g_log_file.read()
+#    charge = float(
+#        re.search(r'Total charge ([+-]?(\d+(\.\d*)?|\.\d+)([eE][+-]?\d+)?)',
+#                  out, re.MULTILINE))
 
 # Define box dimensions
 ec = editconf.Editconf512(prop['p2g_gro'], prop['box_gro'])
