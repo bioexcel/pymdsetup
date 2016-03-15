@@ -24,7 +24,7 @@ class Pdb2gmx512(object):
     def launch(self):
         gmx = "gmx" if self.gmx_path is None else self.gmx_path
         cmd = [gmx, "pdb2gmx", "-f", self.structure_pdb_path,
-               "-o", self.output_gro_path, "-water", self.water_type,
+               "-o", self.output_path, "-water", self.water_type,
                "-ff", self.force_field]
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)

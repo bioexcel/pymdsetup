@@ -18,10 +18,11 @@ class CmdWrapper(object):
     def launch(self):
 
         n_commands = 0
-        commands = []
+        commands = [[]]
         for argument in self.cmd:
             if argument == "|":
                 n_commands += 1
+                commands.append([])
             else:
                 commands[n_commands].append(argument)
         if n_commands > 0:
