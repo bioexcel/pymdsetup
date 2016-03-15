@@ -31,6 +31,6 @@ class TestPdb2gmx512(unittest.TestCase):
         output_gro_path = opj(self.results, '1NAG.gro')
         p2g = Pdb2gmx512(pdb_path, output_gro_path)
         p2g.launch()
-        with open(output_gro_path, 'r') as out_gro, open('pdb2gmx512_gold_gro',
+        with open(output_gro_path, 'r') as out_gro, open('pdb2gmx512_gold.gro',
                                                          'r') as gold_gro:
             unittest.assertMultilineEqual(out_gro.read(), gold_gro.read())
