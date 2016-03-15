@@ -11,10 +11,6 @@ from os.path import join as opj
 
 class TestPdb2gmx512(unittest.TestCase):
 
-    def __init__(self):
-        self.data_dir = None
-        self.results = None
-
     def setup(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
         self.results = opj(self.data_dir, "temp_results")
@@ -37,4 +33,7 @@ class TestPdb2gmx512(unittest.TestCase):
         p2g.launch()
         with open(output_gro_path, 'r') as out_gro, open('pdb2gmx512_gold.gro',
                                                          'r') as gold_gro:
-            unittest.assertMultilineEqual(out_gro.read(), gold_gro.read())
+            self.assertMultilineEqual(out_gro.read(), gold_gro.read())
+
+if __name__ == '__main__':
+    unittest.main()
