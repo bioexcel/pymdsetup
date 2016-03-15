@@ -23,8 +23,9 @@ class Genion512(object):
 
     def launch(self):
         gmx = "gmx" if self.gmx_path is None else self.gmx_path
-        cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s", self.tpr_path, "-o", self.output_gro_path,
-               "-p", self.top_path, "-neutral"]
+        cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
+               self.tpr_path, "-o", self.output_gro_path, "-p", self.top_path,
+               "-neutral"]
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()

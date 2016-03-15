@@ -4,9 +4,8 @@
 @author: pau
 """
 import unittest
-import gromacs_wrapper.Pdb2gmx512
+from gromacs_wrapper import Pdb2gmx512
 import os
-import shutil
 import os.path.join as opj
 
 
@@ -31,3 +30,7 @@ class TestPdb2gmx512(unittest.TestCase):
         pdb_path = opj(self.data_dir, '1NAG.pdb')
         output_gro_path = opj(self.results, '1NAG.gro')
         p2g = Pdb2gmx512(pdb_path, output_gro_path)
+        p2g.launch()
+        with open(output_gro_path, 'r') as out_gro, open('pdb2gmx512_gold_gro',
+                                                         'r') as gold_gro:
+            unittest.assertMultilineEqual(out_gro.read(), gold_gro.read())
