@@ -34,7 +34,7 @@ class TestPdb2gmx512(unittest.TestCase):
         p2g.launch()
         with open(output_gro_path, 'r') as out_gro, open(gold_gro_path,
                                                          'r') as gold_gro:
-            self.assertMultilineEqual(out_gro.read(), gold_gro.read())
+            self.assertMultiLineEqual(out_gro.read(), gold_gro.read())
 
 if __name__ == '__main__':
     unittest.main()
