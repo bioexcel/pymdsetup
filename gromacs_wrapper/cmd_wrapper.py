@@ -42,6 +42,7 @@ class CmdWrapper(object):
             process = subprocess.Popen(self.cmd, stdout=subprocess.PIPE,
                                        stderr=subprocess.PIPE,
                                        universal_newlines=True)
+
             out, err = process.communicate()
 
         # Write output to log_file
