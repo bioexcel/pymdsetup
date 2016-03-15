@@ -21,7 +21,7 @@ class TestPdb2gmx512(unittest.TestCase):
             file_path = opj(self.results, the_file)
             try:
                 # Not removing directories
-                if os.path.isfile(file_path):
+                if os.path.isfile(file_path) and the_file.:
                     os.unlink(file_path)
             except Exception, e:
                 print e
