@@ -13,6 +13,7 @@ class TestPdb2gmx512(unittest.TestCase):
 
     def setup(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
+        print self.data_dir
         self.results = opj(self.data_dir, "temp_results")
 
     def teardown(self):
