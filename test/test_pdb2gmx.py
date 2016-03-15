@@ -11,12 +11,11 @@ from os.path import join as opj
 
 class TestPdb2gmx512(unittest.TestCase):
 
-    def setup(self):
+    def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
-        print self.data_dir
         self.results = opj(self.data_dir, "temp_results")
 
-    def teardown(self):
+    def tearDown(self):
         # Remove all files in the temp_results directory
         for the_file in os.listdir(self.results):
             file_path = opj(self.results, the_file)
