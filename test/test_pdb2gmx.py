@@ -4,7 +4,7 @@
 @author: pau
 """
 import unittest
-from gromacs_wrapper import Pdb2gmx512
+from gromacs_wrapper.pdb2gmx import Pdb2gmx512
 import os
 import os.path.join as opj
 
