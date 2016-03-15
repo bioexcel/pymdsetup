@@ -21,7 +21,7 @@ class TestPdb2gmx512(unittest.TestCase):
             file_path = opj(self.results, the_file)
             try:
                 # Not removing directories
-                if os.path.isfile(file_path) and the_file.:
+                if os.path.isfile(file_path) and the_file == 'readme.txt':
                     os.unlink(file_path)
             except Exception, e:
                 print e
