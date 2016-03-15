@@ -6,7 +6,7 @@
 import unittest
 from gromacs_wrapper.pdb2gmx import Pdb2gmx512
 import os
-import os.path.join as opj
+from os.path import join as opj
 
 
 class TestPdb2gmx512(unittest.TestCase):
