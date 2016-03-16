@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Unittests for gromacs_wrapper.pdb2gmx module
+"""Unittests for gromacs_wrapper.solvate module
 
 @author: pau
 """
 import unittest
-from gromacs_wrapper.pdb2gmx import Pdb2gmx512
+from gromacs_wrapper.solvate import Solvate512
 import os
 from os.path import join as opj
+import shutil
 
 
-class TestPdb2gmx512(unittest.TestCase):
+class TestSolvate512(unittest.TestCase):
 
     def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
@@ -26,18 +27,29 @@ class TestPdb2gmx512(unittest.TestCase):
             except Exception, e:
                 print e
 
-    def test_launch_returns_correct_data(self):
-        pdb_path = opj(self.data_dir, '1NAJ.pdb')
-        output_gro_path = opj(self.results, 'pdb2gmx512.gro')
-        output_top_path = opj(self.results, 'pdb2gmx512.top')
-        gold_top_path = opj(self.data_dir, 'pdb2gmx512_gold.top')
-        gold_gro_path = opj(self.data_dir, 'pdb2gmx512_gold.gro')
-        p2g = Pdb2gmx512(pdb_path, output_gro_path, output_top_path)
-        p2g.launch()
+        for the_file in os.listdir(os.getcwd()):
+            file_path = opj(os.getcwd(), the_file)
+            try:
+                # Not removing directories
+                if os.path.isfile(file_path) and the_file.startswith('#temp'):
+                    os.unlink(file_path)
+            except Exception, e:
+                print e
 
-        with open(output_gro_path, 'r') as out_gro, open(gold_gro_path,
-                                                         'r') as gold_gro:
-            self.assertMultiLineEqual(out_gro.read(), gold_gro.read())
+    def test_launch_returns_correct_data(self):
+        input_path = opj(self.data_dir, 'editconf512_gold.gro')
+        shutil.copy(opj(self.data_dir, 'pdb2gmx512_gold.top'),
+                    opj(self.results, 'solvate512.top'))
+        input_top_path = opj(self.results, 'solvate512.top')
+        output_path = opj(self.results, 'solvate512.gro')
+        gold_path = opj(self.data_dir, 'solvate512_gold.gro')
+        output_top_path = opj(self.results, 'solvate512.top')
+        gold_top_path = opj(self.data_dir, 'solvate512_gold.top')
+        p2g = Solvate512(input_path, output_path, input_top_path)
+        p2g.launch()
+        with open(output_path, 'r') as out_file, open(gold_path,
+                                                      'r') as gold_file:
+            self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
         with open(output_top_path, 'r') as out_top, open(gold_top_path,
                                                          'r') as gold_top:

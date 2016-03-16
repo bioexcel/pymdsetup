@@ -26,8 +26,8 @@ class Editconf512(object):
     def launch(self):
         gmx = "gmx" if self.gmx_path is None else self.gmx_path
         cmd = [gmx, "editconf", "-f", self.structure_gro_path,
-               "-o", self.output_gro_path, "-d ", self.distance_to_molecule,
-               "-bt", self.box_type]
+               "-o", self.output_gro_path, "-d",
+               str(self.distance_to_molecule), "-bt", self.box_type]
         if self.center_molecule:
             cmd.append("-c")
 

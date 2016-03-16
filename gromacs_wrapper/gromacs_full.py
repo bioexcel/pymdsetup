@@ -17,13 +17,14 @@ import mdrun
 prop = settings.YamlReader().properties
 
 pdb_path = "structure.pdb"
-pdb_code = "1NAG"
+pdb_code = "1NAJ"
+filter = "filter=/1"
 
 
 mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
 
 # Get PDB file from the MMB API without solvent or ligands
-url = "mmb.irbbarcelona.org/api/pdb/"+pdb_code.lower()+"/coords/?group=ATOM"
+url = "mmb.irbbarcelona.org/api/pdb/"+pdb_code.lower()+"/coords/?"+filter
 pdb_string = requests.get(url)
 with open(pdb_path, 'w') as pdb_file:
     pdb_file.write(pdb_string)
