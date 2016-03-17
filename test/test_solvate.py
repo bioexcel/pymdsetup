@@ -4,7 +4,7 @@
 @author: pau
 """
 import unittest
-from gromacs_wrapper.solvate import Solvate512
+from pymdsetup.gromacs_wrapper.solvate import Solvate512
 import os
 from os.path import join as opj
 import shutil

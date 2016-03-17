@@ -4,7 +4,7 @@
 @author: pau
 """
 import unittest
-from gromacs_wrapper.editconf import Editconf512
+from pymdsetup.gromacs_wrapper.editconf import Editconf512
 import os
 from os.path import join as opj
 

@@ -3,7 +3,7 @@
 
 @author: pau
 """
-import cmd_wrapper
+from pymdsetup.command_wrapper import cmd_wrapper
 
 
 class MDrun512(object):

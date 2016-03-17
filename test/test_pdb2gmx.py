@@ -4,7 +4,7 @@
 @author: pau
 """
 import unittest
-from gromacs_wrapper.pdb2gmx import Pdb2gmx512
+from pymdsetup.gromacs_wrapper.pdb2gmx import Pdb2gmx512
 import os
 from os.path import join as opj
 
