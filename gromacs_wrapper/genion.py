@@ -11,12 +11,13 @@ class Genion512(object):
     """
 
     def __init__(self, tpr_path, output_gro_path, top_path,
-                 replaced_group="SOL", log_path=None, error_path=None,
-                 gmx_path=None):
+                 replaced_group="SOL", seed=None, log_path=None,
+                 error_path=None, gmx_path=None):
         self.tpr_path = tpr_path
         self.output_gro_path = output_gro_path
         self.top_path = top_path
         self.replaced_group = replaced_group
+        self.seed = seed
         self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
@@ -26,6 +27,9 @@ class Genion512(object):
         cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
                self.tpr_path, "-o", self.output_gro_path, "-p", self.top_path,
                "-neutral"]
+        if self.seed:
+            cmd.append('-seed')
+            cmd.append(str(self.seed))
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()

@@ -33,7 +33,7 @@ class CmdWrapper(object):
                                         stdout=subprocess.PIPE))
                 else:
                     process_list.append(subprocess.Popen(commands[i],
-                                        stdin=process_list[i-1],
+                                        stdin=process_list[i-1].stdout,
                                         stdout=subprocess.PIPE))
                     process_list[i-1].stdout.close()
 
@@ -48,8 +48,8 @@ class CmdWrapper(object):
         # Write output to log_file
         if self.log_path is not None:
             with open(self.log_path, 'a') as log_file:
-                log_file.writte(out)
+                log_file.write(out)
 
         if self.error_path is not None:
             with open(self.error_path, 'a') as error_file:
-                error_file.writte(err)
+                error_file.write(err)

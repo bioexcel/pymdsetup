@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-"""Python wrapper for the GROMACS grommpp module
+"""Python wrapper for the GROMACS grompp module
 
 @author: pau
 """
 from pymdsetup.command_wrapper import cmd_wrapper
 
 
-class Grommpp512(object):
+class Grompp512(object):
     """Wrapper for the 5.1.2 version of the pdb2gmx module
     """
 
@@ -23,7 +23,7 @@ class Grommpp512(object):
 
     def launch(self):
         gmx = "gmx" if self.gmx_path is None else self.gmx_path
-        cmd = [gmx, "grommpp", "-f", self.mdp_path, "-c", self.gro_path, "-p",
+        cmd = [gmx, "grompp", "-f", self.mdp_path, "-c", self.gro_path, "-p",
                self.top_path, "-o", self.output_tpr_path]
         if self.cpt_path is not None:
             cmd.append("-t")

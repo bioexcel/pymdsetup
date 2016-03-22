@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-"""Unittests for gromacs_wrapper.solvate module
+"""Unittests for gromacs_wrapper.genion module
 
 @author: pau
 """
 import unittest
-from pymdsetup.gromacs_wrapper.solvate import Solvate512
+from pymdsetup.gromacs_wrapper.genion import Genion512
 import os
 from os.path import join as opj
 import shutil
 
 
-class TestSolvate512(unittest.TestCase):
+class TestGenion512(unittest.TestCase):
 
     def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
@@ -37,17 +37,18 @@ class TestSolvate512(unittest.TestCase):
                 print e
 
     def test_launch_returns_correct_data(self):
-        input_path = opj(self.data_dir, 'editconf512_gold.gro')
-        shutil.copy(opj(self.data_dir, 'pdb2gmx512_gold.top'),
-                    opj(self.results, 'solvate512.top'))
-        top_path = opj(self.results, 'solvate512.top')
-        gold_top_path = opj(self.data_dir, 'solvate512_gold.top')
-        output_path = opj(self.results, 'solvate512.gro')
-        gold_path = opj(self.data_dir, 'solvate512_gold.gro')
-        p2g = Solvate512(input_path, output_path, top_path)
-        p2g.launch()
-        with open(output_path, 'r') as out_file, open(gold_path,
-                                                      'r') as gold_file:
+        tpr_path = opj(self.data_dir, 'grompp512_gold.tpr')
+        shutil.copy(opj(self.data_dir, 'solvate512_gold.top'),
+                    opj(self.results, 'genion512.top'))
+        top_path = opj(self.results, 'genion512.top')
+        gold_top_path = opj(self.data_dir, 'genion512_gold.top')
+        output_gro_path = opj(self.results, 'genion512.gro')
+        gold_gro_path = opj(self.data_dir, 'genion512_gold.gro')
+
+        gio = Genion512(tpr_path, output_gro_path, top_path, seed=1)
+        gio.launch()
+        with open(output_gro_path, 'r') as out_file, open(gold_gro_path,
+                                                          'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
         with open(top_path, 'r') as out_top, open(gold_top_path,

@@ -6,11 +6,11 @@
 from pymdsetup.command_wrapper import cmd_wrapper
 
 
-class MDrun512(object):
+class Mdrun512(object):
     """Wrapper for the 5.1.2 version of the mdrun module
     """
 
-    def __init__(self, tpr_path, gro_path, output_trr_path, output_edr_path,
+    def __init__(self, tpr_path, output_trr_path, gro_path, output_edr_path,
                  output_xtc_path=None, output_cpt_path=None, log_path=None,
                  error_path=None, gmx_path=None):
         self.tpr_path = tpr_path

@@ -1,0 +1,49 @@
+;
+;	File 'pdb2gmx512_gold.top' was generated
+;	By user: pau (1000)
+;	On host: mmb01
+;	At date: Wed Mar 16 17:00:56 2016
+
+;
+;	This is a standalone topology file
+;
+;	Created by:
+;	                 :-) GROMACS - gmx pdb2gmx, VERSION 5.1.2 (-:
+;
+;	Executable:   /usr/local/gromacs/bin/gmx
+;	Data prefix:  /usr/local/gromacs
+;	Command line:
+;	  gmx pdb2gmx -f 1NAJ.pdb -o pdb2gmx512_gold.gro -p pdb2gmx512_gold.top -water spce -ff amber99sb-ildn
+;	Force field was read from the standard GROMACS share directory.
+;
+
+; Include forcefield parameters
+#include "amber99sb-ildn.ff/forcefield.itp"
+
+; Include chain topologies
+#include "pdb2gmx512_DNA_chain_A.itp"
+#include "pdb2gmx512_DNA_chain_B.itp"
+
+; Include water topology
+#include "amber99sb-ildn.ff/spce.itp"
+
+#ifdef POSRES_WATER
+; Position restraint for each water oxygen
+[ position_restraints ]
+;  i funct       fcx        fcy        fcz
+   1    1       1000       1000       1000
+#endif
+
+; Include topology for ions
+#include "amber99sb-ildn.ff/ions.itp"
+
+[ system ]
+; Name
+1NAJ in water
+
+[ molecules ]
+; Compound        #mols
+DNA_chain_A         1
+DNA_chain_B         1
+SOL         6307
+NA               22
