@@ -4,6 +4,8 @@
 @author: pau
 """
 from pymdsetup.command_wrapper import cmd_wrapper
+import os
+import shutil
 
 
 class Mdrun512(object):
@@ -36,3 +38,6 @@ class Mdrun512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+        if os.path.exists("md.log"):
+                shutil.move("md.log", os.path.dirname(self.output_trr_path))
