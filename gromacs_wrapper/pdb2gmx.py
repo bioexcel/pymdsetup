@@ -5,6 +5,7 @@
 """
 from pymdsetup.command_wrapper import cmd_wrapper
 import os
+import shutil
 
 
 class Pdb2gmx512(object):
@@ -12,14 +13,13 @@ class Pdb2gmx512(object):
     """
 
     def __init__(self, structure_pdb_path, output_gro_path, output_top_path,
-                 water_type='spce', force_field='amber99sb-ildn', clean=True,
+                 water_type='spce', force_field='amber99sb-ildn',
                  log_path=None, error_path=None, gmx_path=None):
         self.structure_pdb_path = structure_pdb_path
         self.output_path = output_gro_path
         self.output_top_path = output_top_path
         self.water_type = water_type
         self.force_field = force_field
-        self.clean = clean
         self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
@@ -33,7 +33,9 @@ class Pdb2gmx512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-        if self.clean:
-            filelist = [f for f in os.listdir(".") if f.endswith(".itp")]
-            for f in filelist:
-                os.remove(f)
+        #Move posre itp files to the topology directory
+        filelist = [f for f in os.listdir(".") if f.startswith("posre") and
+                    f.endswith(".itp")]
+
+        for f in filelist:
+            shutil.move(f, os.path.dirname(self.output_top_path))

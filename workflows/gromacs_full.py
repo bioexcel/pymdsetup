@@ -68,7 +68,7 @@ mdr = mdrun.Mdrun512(prop['nvt_tpr'], prop['nvt_gro'], prop['nvt_trr'],
                      prop['nvt_edr'], output_cpt_path=prop['nvt_cpt'])
 mdr.launch()
 
-# Equilibration step 2/2 nvt (constant number of molecules, pressure and temp)
+# Equilibration step 2/2 npt (constant number of molecules, pressure and temp)
 gpp = grompp.Grompp512(prop['npt_mdp'], prop['nvt_gro'], prop['top'],
                        prop['npt_tpr'], cpt_path=prop['nvt_cpt'])
 gpp.launch()

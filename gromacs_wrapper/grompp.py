@@ -4,6 +4,8 @@
 @author: pau
 """
 from pymdsetup.command_wrapper import cmd_wrapper
+import shutil
+import os
 
 
 class Grompp512(object):
@@ -31,3 +33,6 @@ class Grompp512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+        #Move mdout.mdp to the tpr path
+        shutil.move("mdout.mdp", os.path.dirname(self.output_tpr_path))
