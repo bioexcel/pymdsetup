@@ -41,11 +41,11 @@ class Mdrun512(object):
 
         if op.exists("md.log"):
                 dest_dir = op.dirname(self.output_trr_path)
-                if not op.exits(op.join(dest_dir, "md.log")):
+                if not op.exists(op.join(dest_dir, "md.log")):
                     shutil.move("md.log", dest_dir)
                 else:
                     n = 1
-                    while op.exits(op.join(dest_dir, "md.log." + str(n))):
+                    while op.exists(op.join(dest_dir, "md.log." + str(n))):
                         n += 1
                     shutil.move("md.log", op.join(dest_dir,
                                                   "md.log." + str(n)))
