@@ -45,3 +45,7 @@ pbc     = xyz       ; 3-D PBC
 DispCorr    = EnerPres  ; account for cut-off vdW scheme
 ; Velocity generation
 gen_vel     = no        ; Velocity generation is off
+gen-seed    = 1         ; not random seed
+
+; Langevin dynamics
+ld-seed = 1

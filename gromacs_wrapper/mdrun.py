@@ -5,7 +5,6 @@
 """
 from pymdsetup.command_wrapper import cmd_wrapper
 import os.path as op
-import shutil
 
 
 class Mdrun512(object):
@@ -38,14 +37,4 @@ class Mdrun512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
-
-        if op.exists("md.log"):
-                dest_dir = op.dirname(self.output_trr_path)
-                if not op.exists(op.join(dest_dir, "md.log")):
-                    shutil.move("md.log", dest_dir)
-                else:
-                    n = 1
-                    while op.exists(op.join(dest_dir, "md.log." + str(n))):
-                        n += 1
-                    shutil.move("md.log", op.join(dest_dir,
-                                                  "md.log." + str(n)))
+        command.move_file_output("md.log", op.dirname(self.output_trr_path))

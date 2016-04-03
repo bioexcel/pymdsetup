@@ -4,6 +4,8 @@
 @author: pau
 """
 import subprocess
+import os.path as op
+import shutil
 
 
 class CmdWrapper(object):
@@ -54,3 +56,15 @@ class CmdWrapper(object):
         if self.error_path is not None:
             with open(self.error_path, 'a') as error_file:
                 error_file.write(err)
+
+    def move_file_output(self, file_name, dest_dir):
+        if op.exists(file_name):
+                if not op.exists(op.join(dest_dir, file_name)):
+                    shutil.move(file_name, dest_dir)
+                else:
+                    n = 1
+                    while op.exists(op.join(dest_dir,
+                                            file_name + '.' + str(n))):
+                        n += 1
+                    shutil.move(file_name, op.join(dest_dir,
+                                                   file_name + '.' + str(n)))
