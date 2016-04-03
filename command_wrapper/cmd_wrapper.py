@@ -16,7 +16,7 @@ class CmdWrapper(object):
         self.cmd = cmd
 
     def launch(self):
-
+        print ''
         print "cmd_wrapper commnand print: " + " ".join(self.cmd)
         n_commands = 0
         commands = [[]]
