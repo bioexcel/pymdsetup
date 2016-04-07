@@ -4,12 +4,12 @@
 @author: pau
 """
 import unittest
-from pymdsetup.structure.db import MMBStructure
+from pymdsetup.scwrl_wrapper.scwrl import Scwrl4
 import os
 from os.path import join as opj
 
 
-class TestMMBStructure(unittest.TestCase):
+class TestScwrl(unittest.TestCase):
 
     def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
@@ -26,14 +26,17 @@ class TestMMBStructure(unittest.TestCase):
             except Exception, e:
                 print e
 
-    def test_get_pdb(self):
-        pdb_code = '2ki5'
-        output_path = opj(self.results, 'structure.pdb')
-        gold_path = opj(self.data_dir, '2ki5_gold.pdb')
-        mmb_st = MMBStructure(pdb_code, output_path)
-        mmb_st.get_pdb()
-        with open(output_path, 'r') as out_file, open(gold_path,
-                                                      'r') as gold_file:
+    def test_launch(self):
+        mutation = 'p.His11Asp'
+        output_path = opj(self.results, 'scwrl4.pdb')
+        output_prepared_path = opj(self.results,
+                                   'scwrl4.pdb.scwrl4.prepared.pdb')
+        gold_prepared_path = opj(self.data_dir, 'gold.scwrl4.prepared.pdb')
+        input_scwrl_path = opj(self.data_dir, 'gold.scwrl4.input.pdb')
+        sc = Scwrl4(input_scwrl_path, output_path, mutation)
+        sc.launch()
+        with open(output_prepared_path,
+                  'r') as out_file, open(gold_prepared_path, 'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
 

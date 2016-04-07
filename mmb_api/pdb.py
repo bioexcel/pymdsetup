@@ -4,7 +4,7 @@
 import requests
 
 
-class MMBStructure(object):
+class MmbPdb(object):
     """
     """
 
@@ -16,7 +16,6 @@ class MMBStructure(object):
     def get_pdb(self):
         url = ("http://mmb.irbbarcelona.org"
                "/api/pdb/"+self.pdb_code.lower()+"/coords/?"+self.filter)
-        print url
         pdb_string = requests.get(url).content
         with open(self.output_pdb_path, 'w') as pdb_file:
             pdb_file.write(pdb_string)

@@ -2,10 +2,9 @@
 
 """
 import requests
-import re
 
 
-class MMBVariants(object):
+class MmbVariants(object):
     """
     """
 
@@ -20,7 +19,4 @@ class MMBVariants(object):
         url_uniprot_mut = ("http://mmb.irbbarcelona.org"
                            "/api/uniprot/"+str(uniprot_id)+"/entry"
                            "/variants/vardata/mut/")
-        variants = requests.get(url_uniprot_mut).json()['variants.vardata.mut']
-        pattern = re.compile(("p.(?P<wt>[a-zA-Z]{3})"
-                              "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
-        return [pattern.match(var).groupdict() for var in variants]
+        return requests.get(url_uniprot_mut).json()['variants.vardata.mut']
