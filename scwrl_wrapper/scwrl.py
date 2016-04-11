@@ -4,18 +4,23 @@
 import re
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
+from pymdsetup.command_wrapper import cmd_wrapper
 
 
 class Scwrl4(object):
     """
     """
 
-    def __init__(self, pdb_path, output_pdb_path, mutation):
+    def __init__(self, pdb_path, output_pdb_path, mutation, log_path=None,
+                 error_path=None, scwrl_path=None):
         self.pdb_path = pdb_path
         self.output_pdb_path = output_pdb_path
         pattern = re.compile(("p.(?P<wt>[a-zA-Z]{3})"
                               "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mutation = pattern.match(mutation).groupdict()
+        self.scwrl_path = scwrl_path
+        self.log_path = log_path
+        self.error_path = error_path
 
     def launch(self):
         # Read structure with Biopython
@@ -44,4 +49,11 @@ class Scwrl4(object):
         # Write resultant structure
         w = PDBIO()
         w.set_structure(st)
-        w.save(self.output_pdb_path + '.scwrl4.prepared.pdb')
+        prepared_file_path = self.output_pdb_path + '.scwrl4.prepared.pdb'
+        w.save(prepared_file_path)
+
+        scrwl = "Scwrl4" if self.scwrl_path is None else self.scwrl_path
+        cmd = [scrwl, "-i", prepared_file_path, "-o", self.output_pdb_path]
+
+        command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
+        command.launch()

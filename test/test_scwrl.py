@@ -29,6 +29,7 @@ class TestScwrl(unittest.TestCase):
     def test_launch(self):
         mutation = 'p.His11Asp'
         output_path = opj(self.results, 'scwrl4.pdb')
+        output_gold_path = opj(self.data_dir, 'scwrl4_gold.pdb')
         output_prepared_path = opj(self.results,
                                    'scwrl4.pdb.scwrl4.prepared.pdb')
         gold_prepared_path = opj(self.data_dir, 'gold.scwrl4.prepared.pdb')
@@ -37,6 +38,9 @@ class TestScwrl(unittest.TestCase):
         sc.launch()
         with open(output_prepared_path,
                   'r') as out_file, open(gold_prepared_path, 'r') as gold_file:
+            self.assertMultiLineEqual(out_file.read(), gold_file.read())
+        with open(output_path,
+                  'r') as out_file, open(output_gold_path, 'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
 
