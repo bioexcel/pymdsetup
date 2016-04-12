@@ -23,13 +23,14 @@ class Pdb2gmx512(object):
     """
 
     def __init__(self, structure_pdb_path, output_path, output_top_path,
-                 water_type='spce', force_field='amber99sb-ildn',
+                 water_type='spce', force_field='oplsaa', ignh=False,
                  log_path='None', error_path='None', gmx_path='None'):
         self.structure_pdb_path = structure_pdb_path
         self.output_path = output_path
         self.output_top_path = output_top_path
         self.water_type = water_type
         self.force_field = force_field
+        self.ignh = ignh
         self.gmx_path = gmx_path
         self.log_path = log_path
         self.error_path = error_path
@@ -39,6 +40,9 @@ class Pdb2gmx512(object):
         cmd = [gmx, "pdb2gmx", "-f", self.structure_pdb_path,
                "-o", self.output_path, "-p", self.output_top_path, "-water",
                self.water_type, "-ff", self.force_field]
+
+        if self.ignh:
+            cmd.append("-ignh")
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()

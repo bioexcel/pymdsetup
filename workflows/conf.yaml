@@ -10,13 +10,13 @@ gmx_path: /usr/local/gromacs/bin/gmx
 scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
 
 # workflow path
-workflow_path: /home/pau/projects/test/data/temp_results
+workflow_path: /home/pau/Desktop/test
 ################################# File Paths #################################
 # PDB path
 pdb: structure.pdb
 
 # PDB code
-pdb_code: 1ive
+pdb_code: 2vgb
 
 # Mutated PDB
 mutated_pdb: mutated.pdb
