@@ -43,6 +43,23 @@ class TestScwrl(unittest.TestCase):
                   'r') as out_file, open(output_gold_path, 'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
+    def test_launchPycompss(self):
+        mutation = 'p.His11Asp'
+        output_path = opj(self.results, 'scwrl4.pdb')
+        output_gold_path = opj(self.data_dir, 'scwrl4_gold.pdb')
+        output_prepared_path = opj(self.results,
+                                   'scwrl4.pdb.scwrl4.prepared.pdb')
+        gold_prepared_path = opj(self.data_dir, 'gold.scwrl4.prepared.pdb')
+        input_scwrl_path = opj(self.data_dir, 'gold.scwrl4.input.pdb')
+        sc = Scwrl4(input_scwrl_path, output_path, mutation)
+        sc.launchPyCOMPSs()
+        with open(output_prepared_path,
+                  'r') as out_file, open(gold_prepared_path, 'r') as gold_file:
+            self.assertMultiLineEqual(out_file.read(), gold_file.read())
+        with open(output_path,
+                  'r') as out_file, open(output_gold_path, 'r') as gold_file:
+            self.assertMultiLineEqual(out_file.read(), gold_file.read())
+
 
 if __name__ == '__main__':
     unittest.main()

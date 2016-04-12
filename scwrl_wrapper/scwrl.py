@@ -6,13 +6,23 @@ from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
 from pymdsetup.command_wrapper import cmd_wrapper
 
+try:
+    from pycompss.api.task import task
+    from pycompss.api.parameter import *
+    from pycompss.api.task import task
+    from pycompss.api.constraint import constraint
+except ImportError:
+    from pymdsetup.pycompss_dummies.task import task
+    from pymdsetup.pycompss_dummies.constraint import constraint
+    from pymdsetup.pycompss_dummies.parameter import *
+
 
 class Scwrl4(object):
     """
     """
 
-    def __init__(self, pdb_path, output_pdb_path, mutation, log_path=None,
-                 error_path=None, scwrl_path=None):
+    def __init__(self, pdb_path, output_pdb_path, mutation, log_path='None',
+                 error_path='None', scwrl_path='None'):
         self.pdb_path = pdb_path
         self.output_pdb_path = output_pdb_path
         pattern = re.compile(("p.(?P<wt>[a-zA-Z]{3})"
@@ -52,8 +62,13 @@ class Scwrl4(object):
         prepared_file_path = self.output_pdb_path + '.scwrl4.prepared.pdb'
         w.save(prepared_file_path)
 
-        scrwl = "Scwrl4" if self.scwrl_path is None else self.scwrl_path
+        scrwl = "Scwrl4" if self.scwrl_path == 'None' else self.scwrl_path
         cmd = [scrwl, "-i", prepared_file_path, "-o", self.output_pdb_path]
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+    @task(returns=dict)
+    def launchPyCOMPSs(self):
+        self.launch()
+        return {'scw_pdb': self.output_pdb_path}

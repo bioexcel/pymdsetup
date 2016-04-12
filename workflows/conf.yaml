@@ -3,13 +3,30 @@
 # PDB mirror settings
 pdb_mirror : http://mmb.irbbarcelona.org/api/
 
+# Gromacs bin path
+gmx_path: /usr/local/gromacs/bin/gmx
 
+# Scwrl4 bin path
+scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+
+# workflow path
+workflow_path: /home/pau/projects/test/data/temp_results
 ################################# File Paths #################################
+# PDB path
+pdb: structure.pdb
+
+# PDB code
+pdb_code: 1ive
+
+# Mutated PDB
+mutated_pdb: mutated.pdb
+
 # First gro converted from pdb
 p2g_gro : p2g.gro
+p2g_top : p2g.top
 p2g_log : p2g.log
 
-# Box gro 
+# Box gro
 box_gro : box.gro
 
 # Solvent gro
@@ -91,11 +108,3 @@ md_edr : md.edr
 md_cpt : md.cpt
 
 ##############################################################################
-
-
-
-
-
-
-
-

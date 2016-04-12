@@ -7,16 +7,26 @@ from pymdsetup.command_wrapper import cmd_wrapper
 import os
 import shutil
 
+try:
+    from pycompss.api.task import task
+    from pycompss.api.parameter import *
+    from pycompss.api.task import task
+    from pycompss.api.constraint import constraint
+except ImportError:
+    from pymdsetup.pycompss_dummies.task import task
+    from pymdsetup.pycompss_dummies.constraint import constraint
+    from pymdsetup.pycompss_dummies.parameter import *
+
 
 class Pdb2gmx512(object):
     """Wrapper for the 5.1.2 version of the pdb2gmx module
     """
 
-    def __init__(self, structure_pdb_path, output_gro_path, output_top_path,
+    def __init__(self, structure_pdb_path, output_path, output_top_path,
                  water_type='spce', force_field='amber99sb-ildn',
-                 log_path=None, error_path=None, gmx_path=None):
+                 log_path='None', error_path='None', gmx_path='None'):
         self.structure_pdb_path = structure_pdb_path
-        self.output_path = output_gro_path
+        self.output_path = output_path
         self.output_top_path = output_top_path
         self.water_type = water_type
         self.force_field = force_field
@@ -25,7 +35,7 @@ class Pdb2gmx512(object):
         self.error_path = error_path
 
     def launch(self):
-        gmx = "gmx" if self.gmx_path is None else self.gmx_path
+        gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = [gmx, "pdb2gmx", "-f", self.structure_pdb_path,
                "-o", self.output_path, "-p", self.output_top_path, "-water",
                self.water_type, "-ff", self.force_field]
@@ -39,3 +49,8 @@ class Pdb2gmx512(object):
 
         for f in filelist:
             shutil.move(f, os.path.dirname(self.output_top_path))
+
+    @task(returns=dict)
+    def launchPyCOMPSs(self):
+        self.launch()
+        return {'p2g_gro': self.output_path, 'p2g_top': self.output_top_path}
