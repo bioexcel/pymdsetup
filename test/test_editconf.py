@@ -26,12 +26,22 @@ class TestEditconf512(unittest.TestCase):
             except Exception, e:
                 print e
 
-    def test_launch_returns_correct_data(self):
+    def test_launch(self):
         input_path = opj(self.data_dir, 'pdb2gmx512_gold.gro')
         output_path = opj(self.results, 'editconf512.gro')
         gold_path = opj(self.data_dir, 'editconf512_gold.gro')
-        p2g = Editconf512(input_path, output_path)
-        p2g.launch()
+        ec = Editconf512(input_path, output_path)
+        ec.launch()
+        with open(output_path, 'r') as out_file, open(gold_path,
+                                                      'r') as gold_file:
+            self.assertMultiLineEqual(out_file.read(), gold_file.read())
+
+    def test_launchPycompss(self):
+        input_path = opj(self.data_dir, 'pdb2gmx512_gold.gro')
+        output_path = opj(self.results, 'editconf512.gro')
+        gold_path = opj(self.data_dir, 'editconf512_gold.gro')
+        ec = Editconf512(input_path, output_path)
+        ec.launchPyCOMPSs()
         with open(output_path, 'r') as out_file, open(gold_path,
                                                       'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())

@@ -1,6 +1,7 @@
 ; Run parameters
 integrator  = md        ; leap-frog integrator
-nsteps      = 500000    ; 2 * 500000 = 1000 ps (1 ns)
+;nsteps      = 500000    ; 2 * 500000 = 1000 ps (1 ns)
+nsteps      = 5    ; 2 * 500000 = 1000 ps (1 ns)
 dt          = 0.002     ; 2 fs
 ; Output control
 nstxout             = 5000      ; save coordinates every 10.0 ps
@@ -11,8 +12,8 @@ nstxout-compressed  = 5000      ; save compressed coordinates every 10.0 ps
                                 ; nstxout-compressed replaces nstxtcout
 compressed-x-grps   = System    ; replaces xtc-grps
 ; Bond parameters
-continuation            = yes       ; Restarting after NPT 
-constraint_algorithm    = lincs     ; holonomic constraints 
+continuation            = yes       ; Restarting after NPT
+constraint_algorithm    = lincs     ; holonomic constraints
 constraints             = all-bonds ; all bonds (even heavy atom-H bonds)
 constrained
 lincs_iter              = 1         ; accuracy of LINCS

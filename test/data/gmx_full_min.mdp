@@ -11,7 +11,7 @@ range forces
 cutoff-scheme   = Verlet
 ns_type         = grid      ; Method to determine neighbor list (simple, grid)
 coulombtype     = PME       ; Treatment of long range electrostatic interactions
-rcoulomb        = 1.0       ; Short-range electrostatic cut-off
+rcoulomb        = 1.0      ; Short-range electrostatic cut-off
 rvdw            = 1.0       ; Short-range Van der Waals cut-off
 pbc             = xyz       ; Periodic Boundary Conditions (yes/no)
 

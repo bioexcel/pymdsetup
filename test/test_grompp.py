@@ -33,12 +33,21 @@ class TestGrompp512(unittest.TestCase):
         top_path = opj(self.data_dir, 'solvate512_gold.top')
         output_tpr_path = opj(self.results, 'grompp512_ions.tpr')
         gold_tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
-        output_log = opj(self.results, 'out.log')
-        err_log = opj(self.results, 'err.log')
 
-        gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path,
-                        log_path=output_log, error_path=err_log)
+        gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
         gpp.launch()
+
+        self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
+
+    def test_launch_ionsPycompss(self):
+        mdp_path = opj(self.data_dir, 'gmx_full_ions.mdp')
+        gro_path = opj(self.data_dir, 'solvate512_gold.gro')
+        top_path = opj(self.data_dir, 'solvate512_gold.top')
+        output_tpr_path = opj(self.results, 'grompp512_ions.tpr')
+        gold_tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
+
+        gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
+        gpp.launchPyCOMPSs()
 
         self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 
@@ -51,6 +60,18 @@ class TestGrompp512(unittest.TestCase):
 
         gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
         gpp.launch()
+
+        self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
+
+    def test_launch_minimizationPycompss(self):
+        mdp_path = opj(self.data_dir, 'gmx_full_min.mdp')
+        gro_path = opj(self.data_dir, 'genion512_gold.gro')
+        top_path = opj(self.data_dir, 'genion512_gold.top')
+        output_tpr_path = opj(self.results, 'grompp512_min.tpr')
+        gold_tpr_path = opj(self.data_dir, 'grompp512_min_gold.tpr')
+
+        gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
+        gpp.launchPyCOMPSs()
 
         self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 

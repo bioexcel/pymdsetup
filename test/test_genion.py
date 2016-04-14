@@ -27,23 +27,46 @@ class TestGenion512(unittest.TestCase):
             except Exception, e:
                 print e
 
-    def test_launch_returns_correct_data(self):
+    def test_launch(self):
         tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
-        shutil.copy(opj(self.data_dir, 'solvate512_gold.top'),
-                    opj(self.results, 'genion512.top'))
-        top_path = opj(self.results, 'genion512.top')
+        input_top = opj(self.data_dir, 'solvate512_gold.top')
+        output_top = opj(self.results, 'genion512.top')
         gold_top_path = opj(self.data_dir, 'genion512_gold.top')
         output_gro_path = opj(self.results, 'genion512.gro')
         gold_gro_path = opj(self.data_dir, 'genion512_gold.gro')
 
-        gio = Genion512(tpr_path, output_gro_path, top_path, seed=1)
+        gio = Genion512(tpr_path, output_gro_path, input_top,
+                        output_top, seed=1)
         gio.launch()
         with open(output_gro_path, 'r') as out_file, open(gold_gro_path,
                                                           'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
-        with open(top_path, 'r') as out_top, open(gold_top_path,
-                                                  'r') as gold_top:
+        with open(output_top, 'r') as out_top, open(gold_top_path,
+                                                    'r') as gold_top:
+            out_top_list = " ".join([line if not line.startswith(';')
+                                    else '' for line in out_top])
+            out_top_gold_list = " ".join([line if not line.startswith(';')
+                                         else '' for line in gold_top])
+            self.assertItemsEqual(out_top_list, out_top_gold_list)
+
+    def test_launchPycompss(self):
+        tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
+        input_top = opj(self.data_dir, 'solvate512_gold.top')
+        output_top = opj(self.results, 'genion512.top')
+        gold_top_path = opj(self.data_dir, 'genion512_gold.top')
+        output_gro_path = opj(self.results, 'genion512.gro')
+        gold_gro_path = opj(self.data_dir, 'genion512_gold.gro')
+
+        gio = Genion512(tpr_path, output_gro_path, input_top,
+                        output_top, seed=1)
+        gio.launchPyCOMPSs()
+        with open(output_gro_path, 'r') as out_file, open(gold_gro_path,
+                                                          'r') as gold_file:
+            self.assertMultiLineEqual(out_file.read(), gold_file.read())
+
+        with open(output_top, 'r') as out_top, open(gold_top_path,
+                                                    'r') as gold_top:
             out_top_list = " ".join([line if not line.startswith(';')
                                     else '' for line in out_top])
             out_top_gold_list = " ".join([line if not line.startswith(';')

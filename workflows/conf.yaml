@@ -1,5 +1,8 @@
 # pymdsetup configuration file
 
+# PDB code
+pdb_code: 2vgb
+
 # PDB mirror settings
 pdb_mirror : http://mmb.irbbarcelona.org/api/
 
@@ -15,9 +18,6 @@ workflow_path: /home/pau/Desktop/test
 # PDB path
 pdb: structure.pdb
 
-# PDB code
-pdb_code: 2vgb
-
 # Mutated PDB
 mutated_pdb: mutated.pdb
 
@@ -26,85 +26,54 @@ p2g_gro : p2g.gro
 p2g_top : p2g.top
 p2g_log : p2g.log
 
-# Box gro
-box_gro : box.gro
+# Box
+ec_gro : ec.gro
 
-# Solvent gro
+# Solvent
 sol_gro : sol.gro
+sol_top : sol.top
 
-# Topology top
-top : topol.top
+# Adding ions
+gppions_mdp : gmx_full_ions.mdp
+gppions_tpr : gppions.tpr
 
-# Adding ions mdp
-ions_mdp : gmx_full_ions.mdp
+gio_gro : ions.gro
+gio_top : gio.top
 
-# Ions tpr
-ions_tpr : ions.tpr
+# Minimization
+gppmin_mdp : gmx_full_min.mdp
+gppmin_tpr : min.tpr
 
-# Ions gro
-ions_gro : ions.gro
+mdmin_gro : min.gro
+mdmin_trr : min.trr
+mdmin_edr : min.edr
 
-# Minimization mdp (inside package mdp subfolder)
-min_mdp : gmx_full_min.mdp
+# Equilibration nvt
+gppnvt_mdp : gmx_full_nvt.mdp
+gppnvt_tpr : nvt.tpr
 
-# Minimization tpr
-min_tpr : min.tpr
+mdnvt_trr : nvt.trr
+mdnvt_gro : nvt.gro
+mdnvt_edr : nvt.edr
+mdnvt_cpt : nvt.cpt
 
-# Minimization energies edr
-min_edr : min.edr
+# Equilibration npt
+gppnpt_mdp : gmx_full_npt.mdp
+gppnpt_tpr : npt.tpr
 
-# Equilibration nvt mdp (inside package mdp subfolder)
-nvt_mdp : gmx_full_nvt.mdp
+mdnpt_trr : npt.trr
+mdnpt_gro : npt.gro
+mdnpt_edr : npt.edr
+mdnpt_cpt : npt.cpt
 
-# Equilibration nvt tpr
-nvt_tpr : nvt.tpr
+# Molecular dynamics
+gppeq_mdp : gmx_full_md.mdp
+gppeq_tpr : md.tpr
 
-# Equilibration nvt trr
-nvt_trr : nvt.trr
+mdeq_trr : npt.trr
+mdeq_gro : npt.gro
+mdeq_edr : npt.edr
+mdeq_cpt : npt.cpt
 
-# Equilibration nvt gro
-nvt_gro : nvt.gro
-
-# Equilibration nvt edr
-nvt_edr : nvt.edr
-
-# Equilibration nvt cpt
-nvt_cpt : nvt.cpt
-
-# Equilibration npt (inside package mdp subfolder)
-npt_mdp : gmx_full_npt.mdp
-
-# Equilibration npt tpr
-npt_tpr : npt.tpr
-
-# Equilibration npt trr
-npt_trr : npt.trr
-
-# Equilibration npt gro
-npt_gro : npt.gro
-
-# Equilibration npt edr
-npt_edr : npt.edr
-
-# Equilibration npt cpt
-npt_cpt : npt.cpt
-
-# Molecular dynamics (inside package mdp subfolder)
-md_mdp : gmx_full_md.mdp
-
-# Molecular dynamics tpr
-md_tpr : md.tpr
-
-# Molecular dynamics trr
-md_trr : md.trr
-
-# Molecular dynamics gro
-md_gro : md.gro
-
-# Molecular dynamics edr
-md_edr : md.edr
-
-# Molecular dynamics cpt
-md_cpt : md.cpt
 
 ##############################################################################

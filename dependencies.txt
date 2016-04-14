@@ -1,0 +1,116 @@
+step 1 mmbpdb
+  mmbpdb
+
+step 2 mmbuniprot
+
+step 3 scw
+  in:
+    mmbpdb
+  out:
+    3.1 scw_pdb
+
+step 4 p2g
+  in:
+    3.1 scw_pdb
+  out:
+    4.1 p2g_gro
+    4.2 p2g_top
+
+step 5 ec
+  in:
+    4.1 p2g_gro
+  out:
+    5.1 ec_gro
+
+step 6 sol
+  in:
+    4.2 p2g_top
+    5.1 ec_gro
+  out:
+    6.1 sol_gro
+    6.2 sol_top
+
+step 7 gppions
+  in:
+    gppions_mdp
+    6.1 sol_gro
+    6.2 sol_top
+  out:
+    7.1 gppions_tpr
+
+step 8 gio
+  in:
+    6.1 sol_top
+    7.1 gppions_tpr
+  out:
+    8.1 gio_gro
+    8.2 gio_top
+
+step 9 gppmin
+  in:
+    gppmin_mdp
+    8.1 gio_gro
+    8.2 gio_top
+  out:
+    9.1 gppmin_tpr
+
+step 10 mdmin
+  in:
+    9.1 gppmin_tpr
+  out:
+    10.1 mdmin_gro
+    mdmin_trr
+    mdmin_edr
+
+step 11 gppnvt
+  in:
+    gppnvt_mdp
+    8.2 gio_top
+    10.1 mdmin_gro
+  out:
+    11.1 gppnvt_tpr
+
+step 12 mdnvt
+  in:
+    11.1 gppnvt_tpr
+  out:
+    12.1 mdnvt_gro
+    12.2 mdnvt_cpt
+    mdnvt_trr
+    mdnvt_edr
+
+step 13 gppnpt
+  in:
+    gppnpt_mdp
+    8.2 gio_top
+    12.1 mdnvt_gro
+    12.2 mdnvt_cpt
+  out:
+    13.1 gppnpt_tpr
+
+step 14 mdnpt
+  in:
+    13.1 gppnpt_tpr
+  out:
+    14.1 mdnpt_gro
+    14.2 mdnpt_cpt
+    mdnpt_trr
+    mdnpt_edr
+
+step 15 gppeq
+  in:
+    gppeq_mdp
+    8.2 gio_top
+    14.1 mdnpt_gro
+    14.2 mdnpt_cpt
+  out:
+    15.1 gppeq_tpr
+
+step 16 mdeq
+  in:
+    15.1 gppeq_tpr
+  out:
+    mdeq_trr
+    mdeq_gro
+    mdeq_edr
+    mdeq_cpt

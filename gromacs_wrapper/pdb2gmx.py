@@ -52,7 +52,9 @@ class Pdb2gmx512(object):
                     f.endswith(".itp")]
 
         for f in filelist:
-            shutil.move(f, os.path.dirname(self.output_top_path))
+            if not os.path.exists(os.path.join(
+                                  os.path.dirname(self.output_top_path), f)):
+                shutil.move(f, os.path.dirname(self.output_top_path))
 
     @task(returns=dict)
     def launchPyCOMPSs(self):
