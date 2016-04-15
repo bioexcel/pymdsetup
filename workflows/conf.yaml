@@ -10,10 +10,10 @@ pdb_mirror : http://mmb.irbbarcelona.org/api/
 gmx_path: /usr/local/gromacs/bin/gmx
 
 # Scwrl4 bin path
-scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
 
 # workflow path
-workflow_path: /home/pau/Desktop/test
+workflow_path: /home/compss/PyCOMPSs/git/test
 ################################# File Paths #################################
 # PDB path
 pdb: structure.pdb

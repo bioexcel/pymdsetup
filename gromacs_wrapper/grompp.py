@@ -3,7 +3,7 @@
 
 @author: pau
 """
-from pymdsetup.command_wrapper import cmd_wrapper
+from command_wrapper import cmd_wrapper
 import os.path as op
 
 try:
@@ -46,6 +46,6 @@ class Grompp512(object):
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self):
+    def launchPyCOMPSs(self, sol):
         self.launch()
         return {'gpp_tpr': self.output_tpr_path}
