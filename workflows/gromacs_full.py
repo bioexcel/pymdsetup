@@ -12,6 +12,7 @@ from pymdsetup.gromacs_wrapper import solvate
 from pymdsetup.gromacs_wrapper import grompp
 from pymdsetup.gromacs_wrapper import genion
 from pymdsetup.gromacs_wrapper import mdrun
+from pymdsetup.gromacs_wrapper import rms
 from pymdsetup.mmb_api import pdb
 from pymdsetup.mmb_api import uniprot
 from pymdsetup.scwrl_wrapper import scwrl
@@ -47,7 +48,11 @@ def rmtemp():
 
 
 def main():
-    prop = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
+    #MACOS
+    #prop = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
+    #                                      '/workflows/conf.yaml')).properties
+    #Ubunutu
+    prop = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
                                           '/workflows/conf.yaml')).properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
@@ -66,9 +71,16 @@ def main():
     print 'step2: mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(prop['pdb_code'])
     mutations = mmbuniprot.fetch_variants()
+
+#Demo purposes
+########################################################################
+    if mmbuniprot.get_uniprot() == 'P00698':
+        mutations = ['p.VAL2GLY', 'p.GLY4VAL', 'p.CYS6VAL']
+########################################################################
+
     if mutations is None:
-        print prop['pdb_code'] + " "
-        + mmbuniprot.get_uniprot() + ": No variants"
+        print (prop['pdb_code'] +
+               " " + mmbuniprot.get_uniprot() + ": No variants")
         return
 
     for mut in mutations:
@@ -168,7 +180,8 @@ def main():
         mdrun.Mdrun512(gppnpt_tpr, mdnpt_trr, mdnpt_gro,
                        mdnpt_edr, output_cpt_path=mdnpt_cpt).launch()
 
-        print 'step15: gppeq -- 1ns Molecular dynamics Equilibration'
+        print ('step15: gppeq -- '
+               'Preprocessing: 1ns Molecular dynamics Equilibration')
         gppeq_path = cdir(mut_path, 'step15_gppeq')
         cext(gio_path, gppeq_path, 'itp')
         gppeq_mdp = opj(gppeq_path, prop['gppeq_mdp'])
@@ -177,7 +190,8 @@ def main():
         grompp.Grompp512(gppeq_mdp, mdnpt_gro, gio_top,
                          gppeq_tpr, cpt_path=mdnpt_cpt).launch()
 
-        print 'step16: mdeq -- 1ns Molecular dynamics Equilibration'
+        print ('step16: mdeq -- '
+               'Running: 1ns Molecular dynamics Equilibration')
         mdeq_path = cdir(mut_path, 'step14_mdeq')
         mdeq_gro = opj(mdeq_path, prop['mdeq_gro'])
         mdeq_trr = opj(mdeq_path, prop['mdeq_trr'])
@@ -185,6 +199,11 @@ def main():
         mdeq_cpt = opj(mdeq_path, prop['mdeq_cpt'])
         mdrun.Mdrun512(gppeq_tpr, mdeq_trr, mdeq_gro,
                        mdeq_edr, output_cpt_path=mdeq_cpt).launch()
+
+        print ('step17: rms -- Computing RMSD')
+        rms_path = cdir(mut_path, 'step17_rms')
+        rms_xvg = opj(rms_path, prop['rms_xvg'])
+        rms.Rms512(gio_gro, mdeq_trr, rms_xvg).launch()
 
         rmtemp()
         break

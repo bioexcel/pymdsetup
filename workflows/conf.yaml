@@ -1,7 +1,7 @@
 # pymdsetup configuration file
 
 # PDB code
-pdb_code: 2vgb
+pdb_code: 1aki
 
 # PDB mirror settings
 pdb_mirror : http://mmb.irbbarcelona.org/api/
@@ -74,6 +74,9 @@ mdeq_trr : npt.trr
 mdeq_gro : npt.gro
 mdeq_edr : npt.edr
 mdeq_cpt : npt.cpt
+
+# RMSD calculation
+rms_xvg : rmsd.xvg
 
 
 ##############################################################################
