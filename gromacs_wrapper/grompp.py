@@ -46,6 +46,6 @@ class Grompp512(object):
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self, sol):
-        self.launch()
+    def launchPyCOMPSs(self, sol, gro = 'None'):
+        #self.launch()
         return {'gpp_tpr': self.output_tpr_path}

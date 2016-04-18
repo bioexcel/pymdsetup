@@ -3,7 +3,7 @@
 
 @author: pau
 """
-from pymdsetup.command_wrapper import cmd_wrapper
+from command_wrapper import cmd_wrapper
 import os.path as op
 
 try:
@@ -16,6 +16,32 @@ except ImportError:
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
 
+
+@task(returns=int)
+def reduceMDR(a, b):
+    """ dummy reduce task """
+    sa = 1
+    sb = 1
+    return sa+sb
+
+def mergeReduce(function, data):
+    """ Apply function cumulatively to the items of data,
+        from left to right in binary tree structure, so as to
+        reduce the data to a single value.
+    :param function: function to apply to reduce data
+    :param data: List of items to be reduced
+    :return: result of reduce the data to a single value
+    """
+    from collections import deque
+    q = deque(xrange(len(data)))
+    while len(q):
+        x = q.popleft()
+        if len(q):
+            y = q.popleft()
+            data[x] = function(data[x], data[y])
+            q.append(x)
+        else:
+            return data[x]
 
 class Mdrun512(object):
     """Wrapper for the 5.1.2 version of the mdrun module
@@ -51,7 +77,12 @@ class Mdrun512(object):
         command.move_file_output("md.log", op.dirname(self.output_trr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self):
-        self.launch()
+    def launchPyCOMPSs(self, tpr):
+        #self.launch()
         return {'md_gro': self.output_gro_path, 'md_trr': self.output_trr_path,
                 'md_edr': self.output_edr_path, 'md_cpt': self.output_cpt_path}
+
+    @classmethod
+    def mergeResults(cls, mdrunList):
+        result = mergeReduce(reduceMDR, mdrunList)
+        return result

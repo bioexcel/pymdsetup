@@ -59,5 +59,5 @@ class Pdb2gmx512(object):
     @task(returns=dict)
     def launchPyCOMPSs(self, pdb_path):
         # self.structure_pdb_path = pdb_path
-        self.launch()
+        #self.launch()
         return {'p2g_gro': self.output_path, 'p2g_top': self.output_top_path}

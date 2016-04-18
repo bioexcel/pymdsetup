@@ -47,5 +47,5 @@ class Editconf512(object):
     @task(returns=str)
     def launchPyCOMPSs(self, gro_path):
         #self.structure_gro_path = gro_path
-        self.launch()
+        #self.launch()
         return self.output_gro_path
