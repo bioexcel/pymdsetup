@@ -47,7 +47,7 @@ def rmtemp():
 
 
 def main():
-    prop = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
+    prop = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
                                           '/workflows/conf.yaml')).properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
