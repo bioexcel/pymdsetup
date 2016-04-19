@@ -7,13 +7,16 @@ pdb_code: 1aki
 pdb_mirror : http://mmb.irbbarcelona.org/api/
 
 # Gromacs bin path
-gmx_path: /usr/local/gromacs/bin/gmx
+#gmx_path: /usr/local/gromacs/bin/gmx
+gmx_path: /usr/local/bin/gmx
 
 # Scwrl4 bin path
-scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
+# scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
+scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
 
 # workflow path
-workflow_path: /home/compss/PyCOMPSs/git/test
+#workflow_path: /home/compss/PyCOMPSs/git/test
+workflow_path: /Users/pau/Desktop/test
 ################################# File Paths #################################
 # PDB path
 pdb: structure.pdb
