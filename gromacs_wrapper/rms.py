@@ -46,5 +46,5 @@ class Rms512(object):
         return float(self.rmsd)
 
     @task(returns=float)
-    def launchPyCOMPSs(self):
+    def launchPyCOMPSs(self, mdeq):
         return self.launch()

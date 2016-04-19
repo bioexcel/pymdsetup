@@ -50,5 +50,5 @@ class Genion512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, top, tpr):
-        self.launch()
+        #self.launch()
         return {'gio_gro': self.output_gro_path, 'gio_top': self.output_top}

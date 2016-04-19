@@ -47,5 +47,5 @@ class Solvate512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, top, gro):
-        self.launch()
+        #self.launch()
         return {'sol_gro': self.output_gro_path, 'sol_top': self.topology_out}

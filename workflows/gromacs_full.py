@@ -7,6 +7,7 @@ import os
 from os.path import join as opj
 
 try:
+    import configuration.settings as settings
     import gromacs_wrapper.pdb2gmx as pdb2gmx
     import gromacs_wrapper.grompp as grompp
     import scwrl_wrapper.scwrl as scwrl
@@ -17,7 +18,10 @@ try:
     import mmb_api.pdb as pdb
     import mmb_api.uniprot as uniprot
     import gromacs_wrapper.rms as rms
+    from pycompss.api.api import compss_wait_on
+    from pycompss.api.api import compss_open
 except ImportError:
+    from pymdsetup.configuration import settings
     from pymdsetup.gromacs_wrapper import pdb2gmx
     from pymdsetup.gromacs_wrapper import grompp
     from pymdsetup.scwrl_wrapper import scwrl
@@ -65,11 +69,11 @@ def main():
     #prop = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml')).properties
     #Ubunutu
-    prop = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
-                                          '/workflows/conf.yaml')).properties
-    #COMPSS VM
-    #prop = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git/pymdsetup'
+    #prop = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml')).properties
+    #COMPSS VM
+    prop = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git/pymdsetup'
+                                          '/workflows/conf.yaml')).properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
@@ -149,7 +153,8 @@ def main():
         cext(gppions_path, gio_path, 'itp')
         gio_gro = opj(gio_path, prop['gio_gro'])
         gio_top = opj(gio_path, prop['gio_top'])
-        gio = genion.Genion512(gppions_tpr, gio_gro, sol_top, gio_top)
+        gio = genion.Genion512(gppions_tpr, gio_gro, sol_top, gio_top,
+                               gmx_path=gmx_path)
         gen2 = gio.launchPyCOMPSs(sol2, gro2)
 
         print 'step9: gppmin -- Preprocessing: Energy minimization'
@@ -240,8 +245,8 @@ def main():
         print ('step17: rms -- Computing RMSD')
         rms_path = cdir(mut_path, 'step17_rms')
         rms_xvg = opj(rms_path, prop['rms_xvg'])
-        grorms = rms.Rms512(gio_gro, mdeq_trr, rms_xvg)
-        rmsd_list.append(grorms.launch())
+        grorms = rms.Rms512(gio_gro, mdeq_trr, rms_xvg, gmx_path=gmx_path)
+        rmsd_list.append(grorms.launchPyCOMPSs(mdeq1))
         rmtemp()
 
     result = mdrun.Mdrun512.mergeResults(rmsd_list)
