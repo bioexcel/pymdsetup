@@ -3,7 +3,7 @@
 
 @author: pau
 """
-from pymdsetup.command_wrapper import cmd_wrapper
+from command_wrapper import cmd_wrapper
 
 try:
     from pycompss.api.task import task
@@ -44,7 +44,8 @@ class Editconf512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-    @task(returns=dict)
-    def launchPyCOMPSs(self):
-        self.launch()
-        return {'ec_gro': self.output_gro_path}
+    @task(returns=str)
+    def launchPyCOMPSs(self, gro_path):
+        #self.structure_gro_path = gro_path
+        #self.launch()
+        return self.output_gro_path

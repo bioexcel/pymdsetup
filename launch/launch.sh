@@ -1,1 +1,1 @@
-runcompss --lang=python --classpath=/home/compss/pymdsetup:/pymdsetup --comm=integratedtoolkit.gat.master.GATAdaptor --debug /home/compss/pymdsetup/gromacs_full.py
+runcompss --lang=python --classpath=/home/compss/PyCOMPSs/git/pymdsetup:/pymdsetup -d -g /home/compss/PyCOMPSs/git/pymdsetup/workflows/gromacs_full.py

@@ -4,8 +4,8 @@
 import re
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
-from pymdsetup.command_wrapper import cmd_wrapper
-
+#from pymdsetup.command_wrapper import cmd_wrapper
+from command_wrapper import cmd_wrapper
 try:
     from pycompss.api.task import task
     from pycompss.api.parameter import *
@@ -68,7 +68,8 @@ class Scwrl4(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-    @task(returns=dict)
+    @task(returns=str)
     def launchPyCOMPSs(self):
-        self.launch()
-        return {'scw_pdb': self.output_pdb_path}
+        """ IN: mmbpdb, OUT: scw_pdb """
+        #self.launch()
+        return self.output_pdb_path

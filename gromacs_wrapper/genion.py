@@ -3,7 +3,7 @@
 
 @author: pau
 """
-from pymdsetup.command_wrapper import cmd_wrapper
+from command_wrapper import cmd_wrapper
 import shutil
 
 try:
@@ -49,6 +49,6 @@ class Genion512(object):
         command.launch()
 
     @task(returns=dict)
-    def launchPyCOMPSs(self):
-        self.launch()
+    def launchPyCOMPSs(self, top, tpr):
+        #self.launch()
         return {'gio_gro': self.output_gro_path, 'gio_top': self.output_top}

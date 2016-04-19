@@ -42,9 +42,8 @@ class Rms512(object):
             for line in xvg:
                 pass
             self.rmsd = float(line.split()[-1])
-        return self.rmsd
+        return float(self.rmsd)
 
-    @task(returns=dict)
+    @task(returns=float)
     def launchPyCOMPSs(self):
-        self.launch()
-        return {'rms_xvg': self.output_xvg, 'rmsd': self.rmsd}
+        return self.launch()

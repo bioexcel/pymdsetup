@@ -3,7 +3,7 @@
 
 @author: pau
 """
-from pymdsetup.command_wrapper import cmd_wrapper
+from command_wrapper import cmd_wrapper
 import os
 import shutil
 
@@ -57,6 +57,7 @@ class Pdb2gmx512(object):
                 shutil.move(f, os.path.dirname(self.output_top_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self):
-        self.launch()
+    def launchPyCOMPSs(self, pdb_path):
+        # self.structure_pdb_path = pdb_path
+        #self.launch()
         return {'p2g_gro': self.output_path, 'p2g_top': self.output_top_path}
