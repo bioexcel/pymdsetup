@@ -83,6 +83,8 @@ def main():
                " " + mmbuniprot.get_uniprot() + ": No variants")
         return
 
+
+    rmsd_sum = 0
     for mut in mutations:
         mut_path = cdir(wd, mut)
 
@@ -192,7 +194,7 @@ def main():
 
         print ('step16: mdeq -- '
                'Running: 1ns Molecular dynamics Equilibration')
-        mdeq_path = cdir(mut_path, 'step14_mdeq')
+        mdeq_path = cdir(mut_path, 'step16_mdeq')
         mdeq_gro = opj(mdeq_path, prop['mdeq_gro'])
         mdeq_trr = opj(mdeq_path, prop['mdeq_trr'])
         mdeq_edr = opj(mdeq_path, prop['mdeq_edr'])
@@ -204,9 +206,10 @@ def main():
         rms_path = cdir(mut_path, 'step17_rms')
         rms_xvg = opj(rms_path, prop['rms_xvg'])
         rms.Rms512(gio_gro, mdeq_trr, rms_xvg).launch()
-
+        rmsd_sum += rms.rmsd
         rmtemp()
-        break
+
+    print "Final RMSD:" + str(rmsd_sum/len(mutations))
 
 if __name__ == '__main__':
     main()
