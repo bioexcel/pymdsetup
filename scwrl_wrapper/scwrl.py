@@ -71,5 +71,5 @@ class Scwrl4(object):
     @task(returns=str)
     def launchPyCOMPSs(self):
         """ IN: mmbpdb, OUT: scw_pdb """
-        #self.launch()
+        self.launch()
         return self.output_pdb_path
