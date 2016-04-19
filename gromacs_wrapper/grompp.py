@@ -3,15 +3,16 @@
 
 @author: pau
 """
-from command_wrapper import cmd_wrapper
+
 import os.path as op
 
 try:
+    from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
-    from pycompss.api.task import task
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
@@ -46,6 +47,6 @@ class Grompp512(object):
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self, sol, gro = 'None'):
-        #self.launch()
+    def launchPyCOMPSs(self, sol, gro='None'):
+        self.launch()
         return {'gpp_tpr': self.output_tpr_path}

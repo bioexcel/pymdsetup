@@ -3,18 +3,19 @@
 
 @author: pau
 """
-from pymdsetup.command_wrapper import cmd_wrapper
 import shutil
 
 try:
+    from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
-    from pycompss.api.task import task
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
+
 
 
 class Rms512(object):

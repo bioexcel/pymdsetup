@@ -1,7 +1,8 @@
 title		= OPLS Lysozyme MD simulation
 ; Run parameters
 integrator	= md		; leap-frog integrator
-nsteps		= 500000	; 2 * 500000 = 1000 ps (1 ns)
+;nsteps		= 500000	; 2 * 500000 = 1000 ps (1 ns)
+nsteps		= 50	; 2 * 500000 = 1000 ps (1 ns)
 dt		    = 0.002		; 2 fs
 ; Output control
 nstxout		        = 5000		; save coordinates every 10.0 ps
@@ -43,4 +44,4 @@ pbc		= xyz		; 3-D PBC
 ; Dispersion correction
 DispCorr	= EnerPres	; account for cut-off vdW scheme
 ; Velocity generation
-gen_vel		= no		; Velocity generation is off 
+gen_vel		= no		; Velocity generation is off

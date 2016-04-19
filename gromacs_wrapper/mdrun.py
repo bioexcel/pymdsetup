@@ -3,15 +3,15 @@
 
 @author: pau
 """
-from command_wrapper import cmd_wrapper
 import os.path as op
 
 try:
+    from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
-    from pycompss.api.task import task
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
@@ -21,6 +21,7 @@ except ImportError:
 def reduceMDR(a, b):
     """ dummy reduce task """
     return (a+b)/2
+
 
 def mergeReduce(function, data):
     """ Apply function cumulatively to the items of data,
@@ -40,6 +41,7 @@ def mergeReduce(function, data):
             q.append(x)
         else:
             return data[x]
+
 
 class Mdrun512(object):
     """Wrapper for the 5.1.2 version of the mdrun module
@@ -76,7 +78,7 @@ class Mdrun512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, tpr):
-        #self.launch()
+        self.launch()
         return {'md_gro': self.output_gro_path, 'md_trr': self.output_trr_path,
                 'md_edr': self.output_edr_path, 'md_cpt': self.output_cpt_path}
 

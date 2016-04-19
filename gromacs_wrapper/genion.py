@@ -3,15 +3,15 @@
 
 @author: pau
 """
-from command_wrapper import cmd_wrapper
-import shutil
 
+import shutil
 try:
+    from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
-    from pycompss.api.task import task
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
@@ -50,5 +50,5 @@ class Genion512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, top, tpr):
-        #self.launch()
+        self.launch()
         return {'gio_gro': self.output_gro_path, 'gio_top': self.output_top}

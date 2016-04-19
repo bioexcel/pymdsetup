@@ -3,18 +3,19 @@
 
 @author: pau
 """
-from command_wrapper import cmd_wrapper
 import shutil
 
 try:
+    from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
-    from pycompss.api.task import task
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
+
 
 
 class Solvate512(object):
@@ -46,7 +47,5 @@ class Solvate512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, top, gro):
-        # self.input_top_path = top
-        # self.solute_structure_gro_path = gro
-        #self.launch()
+        self.launch()
         return {'sol_gro': self.output_gro_path, 'sol_top': self.topology_out}

@@ -4,22 +4,7 @@
 @author: pau
 """
 import os
-import sys
 from os.path import join as opj
-from pymdsetup.configuration import settings
-<<<<<<< HEAD
-from pymdsetup.gromacs_wrapper import pdb2gmx
-from pymdsetup.gromacs_wrapper import editconf
-from pymdsetup.gromacs_wrapper import solvate
-from pymdsetup.gromacs_wrapper import grompp
-from pymdsetup.gromacs_wrapper import genion
-from pymdsetup.gromacs_wrapper import mdrun
-from pymdsetup.gromacs_wrapper import rms
-from pymdsetup.mmb_api import pdb
-from pymdsetup.mmb_api import uniprot
-from pymdsetup.scwrl_wrapper import scwrl
-=======
-
 
 try:
     import gromacs_wrapper.pdb2gmx as pdb2gmx
@@ -31,6 +16,7 @@ try:
     import gromacs_wrapper.mdrun as mdrun
     import mmb_api.pdb as pdb
     import mmb_api.uniprot as uniprot
+    import gromacs_wrapper.rms as rms
 except ImportError:
     from pymdsetup.gromacs_wrapper import pdb2gmx
     from pymdsetup.gromacs_wrapper import grompp
@@ -41,8 +27,8 @@ except ImportError:
     from pymdsetup.gromacs_wrapper import mdrun
     from pymdsetup.mmb_api import pdb
     from pymdsetup.mmb_api import uniprot
+    from pymdsetup.gromacs_wrapper import rms
 
->>>>>>> origin/PyCOMPSs
 import shutil
 import glob
 
