@@ -7,16 +7,28 @@ pdb_code: 1aki
 pdb_mirror : http://mmb.irbbarcelona.org/api/
 
 # Gromacs bin path
+# Ubuntu
+gmx_path: /usr/local/gromacs/bin/gmx
+# PyCOMPSs VM
 #gmx_path: /usr/local/gromacs/bin/gmx
-gmx_path: /usr/local/bin/gmx
+# MACOS
+# gmx_path: /usr/local/bin/gmx
 
 # Scwrl4 bin path
+# Ubuntu
+scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+# PyCOMPSs VM
 # scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
-scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
+# MACOS
+# scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
 
 # workflow path
-#workflow_path: /home/compss/PyCOMPSs/git/test
-workflow_path: /Users/pau/Desktop/test
+# Ubuntu
+workflow_path: /home/pau/Desktop/test
+# PyCOMPSs VM
+# workflow_path: /home/compss/PyCOMPSs/git/test
+# MACOS
+# workflow_path: /Users/pau/Desktop/test
 ################################# File Paths #################################
 # PDB path
 pdb: structure.pdb
@@ -73,10 +85,10 @@ mdnpt_cpt : npt.cpt
 gppeq_mdp : gmx_full_md.mdp
 gppeq_tpr : md.tpr
 
-mdeq_trr : npt.trr
-mdeq_gro : npt.gro
-mdeq_edr : npt.edr
-mdeq_cpt : npt.cpt
+mdeq_trr : md.trr
+mdeq_gro : md.gro
+mdeq_edr : md.edr
+mdeq_cpt : md.cpt
 
 # RMSD calculation
 rms_xvg : rmsd.xvg

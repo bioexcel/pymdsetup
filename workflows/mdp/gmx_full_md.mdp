@@ -1,8 +1,8 @@
 title		= OPLS Lysozyme MD simulation
 ; Run parameters
 integrator	= md		; leap-frog integrator
-;nsteps		= 500000	; 2 * 500000 = 1000 ps (1 ns)
-nsteps		= 50	; 2 * 500000 = 1000 ps (1 ns)
+nsteps		= 500000	; 2 * 500000 = 1000 ps (1 ns)
+;nsteps		= 50	; 2 * 50 = 100 fs (0.1 ps)
 dt		    = 0.002		; 2 fs
 ; Output control
 nstxout		        = 5000		; save coordinates every 10.0 ps

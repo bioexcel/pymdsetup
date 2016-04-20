@@ -49,11 +49,11 @@ def rmtemp():
 
 def main():
     # MACOS
-    prop = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
-                                          '/workflows/conf.yaml')).properties
-    # Ubunutu
-    # prop = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
+    # prop = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml')).properties
+    # Ubunutu
+    prop = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
+                                          '/workflows/conf.yaml')).properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
@@ -75,7 +75,7 @@ def main():
 # Demo purposes
 ########################################################################
     if mmbuniprot.get_uniprot() == 'P00698':
-        mutations = ['p.VAL2GLY', 'p.GLY4VAL', 'p.CYS6VAL']
+        mutations = ['p.GLY4VAL', 'p.CYS6VAL']
 ########################################################################
 
     if mutations is None:
@@ -192,7 +192,7 @@ def main():
 
         print ('step16: mdeq -- '
                'Running: 1ns Molecular dynamics Equilibration')
-        mdeq_path = cdir(mut_path, 'step14_mdeq')
+        mdeq_path = cdir(mut_path, 'step16_mdeq')
         mdeq_gro = opj(mdeq_path, prop['mdeq_gro'])
         mdeq_trr = opj(mdeq_path, prop['mdeq_trr'])
         mdeq_edr = opj(mdeq_path, prop['mdeq_edr'])
@@ -206,7 +206,6 @@ def main():
         rms.Rms512(gio_gro, mdeq_trr, rms_xvg).launch()
 
         rmtemp()
-        break
 
 if __name__ == '__main__':
     main()
