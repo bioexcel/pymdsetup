@@ -4,6 +4,7 @@
 @author: pau
 """
 import shutil
+import os
 
 try:
     from command_wrapper import cmd_wrapper
@@ -15,7 +16,6 @@ except ImportError:
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
-
 
 
 class Solvate512(object):
@@ -47,5 +47,5 @@ class Solvate512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, top, gro):
-        #self.launch()
+        self.launch()
         return {'sol_gro': self.output_gro_path, 'sol_top': self.topology_out}

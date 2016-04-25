@@ -26,13 +26,27 @@ class TestPdb2gmx512(unittest.TestCase):
             except Exception, e:
                 print e
 
+        for the_file in os.listdir('.'):
+            try:
+                # Not removing directories
+                if (os.path.isfile(the_file) and
+                    (the_file.startswith('#posre') or
+                     the_file.startswith('posre'))):
+                    os.unlink(the_file)
+            except Exception, e:
+                print e
+
     def test_launch(self):
         pdb_path = opj(self.data_dir, '1NAJ.pdb')
         output_gro_path = opj(self.results, 'pdb2gmx512.gro')
         output_top_path = opj(self.results, 'pdb2gmx512.top')
         gold_top_path = opj(self.data_dir, 'pdb2gmx512_gold.top')
         gold_gro_path = opj(self.data_dir, 'pdb2gmx512_gold.gro')
-        p2g = Pdb2gmx512(pdb_path, output_gro_path, output_top_path)
+        log_out = opj(self.results, 'p2g_out.log')
+        log_err = opj(self.results, 'p2g_err.log')
+        p2g = Pdb2gmx512(pdb_path, output_gro_path, output_top_path,
+                         force_field='amber99sb-ildn', log_path=log_out,
+                         error_path=log_err)
         p2g.launch()
 
         with open(output_gro_path, 'r') as out_gro, open(gold_gro_path,
@@ -47,6 +61,8 @@ class TestPdb2gmx512(unittest.TestCase):
                                          else '' for line in gold_top])
             self.assertItemsEqual(out_top_list, out_top_gold_list)
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launchPycompss(self):
         pdb_path = opj(self.data_dir, '1NAJ.pdb')
         output_gro_path = opj(self.results, 'pdb2gmx512.gro')

@@ -3,50 +3,68 @@
 # PDB code
 pdb_code: 1aki
 
-# PDB mirror settings
-pdb_mirror : http://mmb.irbbarcelona.org/api/
-
 # Gromacs bin path
 # Ubuntu
-gmx_path: /usr/local/gromacs/bin/gmx
+# gmx_path: /usr/local/gromacs/bin/gmx
 # PyCOMPSs VM
-#gmx_path: /usr/local/gromacs/bin/gmx
+# gmx_path: /usr/local/gromacs/bin/gmx
 # MACOS
-# gmx_path: /usr/local/bin/gmx
+gmx_path: /usr/local/bin/gmx
 
 # Scwrl4 bin path
 # Ubuntu
-scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+# scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
 # PyCOMPSs VM
 # scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
 # MACOS
-# scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
+scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
 
 # workflow path
 # Ubuntu
-workflow_path: /home/pau/Desktop/test
+# workflow_path: /home/pau/Desktop/test
 # PyCOMPSs VM
 # workflow_path: /home/compss/PyCOMPSs/git/test
 # MACOS
-# workflow_path: /Users/pau/Desktop/test
+workflow_path: /Users/pau/Desktop/test
 ################################# File Paths #################################
-# PDB path
-pdb: structure.pdb
 
-# Mutated PDB
-mutated_pdb: mutated.pdb
+# Step 1: mmbpdb -- Get PDB
+step1_mmbpdb:
+  path: step1_mmbpdb
+  pdb: structure.pdb
 
-# First gro converted from pdb
-p2g_gro : p2g.gro
-p2g_top : p2g.top
-p2g_log : p2g.log
+# Step2: mmbuniprot -- Get mutations
+# No configuration yet required
 
-# Box
-ec_gro : ec.gro
+# Step3: scw -- Model mutation
+step3_scw:
+  path: step3_scw
+  out: scw.out
+  err: scw.err
+  mut_pdb: mutated.pdb
 
-# Solvent
-sol_gro : sol.gro
-sol_top : sol.top
+# Step4: p2g -- Create gromacs topology
+step4_p2g:
+  path: step4_p2g
+  out: p2g.out
+  err: p2g.err
+  gro: p2g.gro
+  top: p2g.top
+
+# Step5: ec -- Define box dimensions
+step5_ec:
+  path: step5_ec
+  out: ec.out
+  err: ec.err
+  gro: ec.gro
+
+# Step6: sol -- Fill the box with water molecules
+step6_sol:
+  path: step6_sol
+  out: sol.out
+  err: sol.err
+  gro: sol.gro
+  top: sol.top
 
 # Adding ions
 gppions_mdp : gmx_full_ions.mdp

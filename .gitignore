@@ -92,3 +92,6 @@ com_crashlytics_export_strings.xml
 
 # nohup files
 .nohup.out
+
+# Test Files
+test/data/temp_results/

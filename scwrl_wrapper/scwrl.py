@@ -2,6 +2,9 @@
 
 """
 import re
+import os
+from os.path import join as opj
+import shutil
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
 try:
@@ -66,6 +69,10 @@ class Scwrl4(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+
+        # Move hot.grp file
+        f = 'hot.grp'
+        shutil.move(f, opj(os.path.dirname(self.output_pdb_path), f))
 
     @task(returns=str)
     def launchPyCOMPSs(self):

@@ -4,6 +4,7 @@
 @author: pau
 """
 import os
+from os.path import join as opj
 import shutil
 
 try:
@@ -47,14 +48,12 @@ class Pdb2gmx512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-        #Move posre itp files to the topology directory
+        # Move posre itp files to the topology directory
         filelist = [f for f in os.listdir(".") if f.startswith("posre") and
                     f.endswith(".itp")]
 
         for f in filelist:
-            if not os.path.exists(os.path.join(
-                                  os.path.dirname(self.output_top_path), f)):
-                shutil.move(f, os.path.dirname(self.output_top_path))
+            shutil.move(f, opj(os.path.dirname(self.output_top_path), f))
 
     @task(returns=dict)
     def launchPyCOMPSs(self, pdb_path):
