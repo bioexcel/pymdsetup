@@ -72,7 +72,8 @@ class Scwrl4(object):
 
         # Move hot.grp file
         f = 'hot.grp'
-        shutil.move(f, opj(os.path.dirname(self.output_pdb_path), f))
+        if os.path.exists(f):
+            shutil.move(f, opj(os.path.dirname(self.output_pdb_path), f))
 
     @task(returns=str)
     def launchPyCOMPSs(self):

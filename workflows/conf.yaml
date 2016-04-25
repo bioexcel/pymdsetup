@@ -7,25 +7,25 @@ pdb_code: 1aki
 # Ubuntu
 # gmx_path: /usr/local/gromacs/bin/gmx
 # PyCOMPSs VM
-# gmx_path: /usr/local/gromacs/bin/gmx
+gmx_path: /usr/local/gromacs/bin/gmx
 # MACOS
-gmx_path: /usr/local/bin/gmx
+# gmx_path: /usr/local/bin/gmx
 
 # Scwrl4 bin path
 # Ubuntu
 # scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
 # PyCOMPSs VM
-# scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
+scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
 # MACOS
-scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
+# scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
 
 # workflow path
 # Ubuntu
 # workflow_path: /home/pau/Desktop/test
 # PyCOMPSs VM
-# workflow_path: /home/compss/PyCOMPSs/git/test
+workflow_path: /home/compss/PyCOMPSs/git/test
 # MACOS
-workflow_path: /Users/pau/Desktop/test
+# workflow_path: /Users/pau/Desktop/test
 ################################# File Paths #################################
 
 # Step 1: mmbpdb -- Get PDB
@@ -66,50 +66,101 @@ step6_sol:
   gro: sol.gro
   top: sol.top
 
-# Adding ions
-gppions_mdp : gmx_full_ions.mdp
-gppions_tpr : gppions.tpr
+# Step7: gppions -- Preprocessing: Add ions to neutralice the charge
+step7_gppions:
+  path: step7_gppions
+  out: gppions.out
+  err: gppions.err
+  mdp: gmx_full_ions.mdp
+  tpr: gppions.tpr
 
-gio_gro : ions.gro
-gio_top : gio.top
+# Step8: gio -- Running: Add ions to neutralice the charge
+step8_gio:
+  path: step8_gio
+  out: gio.out
+  err: gio.err
+  gro: gio.gro
+  top: gio.top
 
-# Minimization
-gppmin_mdp : gmx_full_min.mdp
-gppmin_tpr : min.tpr
+# Step9: gppmin -- Preprocessing: Energy minimization
+step9_gppmin:
+  path: step9_gppmin
+  out: gppmin.out
+  err: gppmin.err
+  mdp: gmx_full_min.mdp
+  tpr: gppmin.tpr
 
-mdmin_gro : min.gro
-mdmin_trr : min.trr
-mdmin_edr : min.edr
+# Step10: mdmin -- Running: Energy minimization
+step10_mdmin:
+  path: step10_mdmin
+  out: mdmin.out
+  err: mdmin.err
+  gro: mdmin.gro
+  trr: mdmin.trr
+  edr: mdmin.edr
 
-# Equilibration nvt
-gppnvt_mdp : gmx_full_nvt.mdp
-gppnvt_tpr : nvt.tpr
+# Step11: gppnvt -- Preprocessing: nvt constant number of molecules,
+# volume and temp
+step11_gppnvt:
+  path: step11_gppnvt
+  out: gppnvt.out
+  err: gppnvt.err
+  mdp: gmx_full_nvt.mdp
+  tpr: gppnvt.tpr
 
-mdnvt_trr : nvt.trr
-mdnvt_gro : nvt.gro
-mdnvt_edr : nvt.edr
-mdnvt_cpt : nvt.cpt
+# Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
+step12_mdnvt:
+  path: step12_mdnvt
+  out: mdnvt.out
+  err: mdnvt.err
+  trr: mdnvt.trr
+  gro: mdnvt.gro
+  edr: mdnvt.edr
+  cpt: mdnvt.cpt
 
-# Equilibration npt
-gppnpt_mdp : gmx_full_npt.mdp
-gppnpt_tpr : npt.tpr
+# Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure
+# and temp
+step13_gppnpt:
+  path: step13_gppnpt
+  out: gppnpt.out
+  err: gppnpt.err
+  mdp: gmx_full_npt.mdp
+  tpr: npt.tpr
 
-mdnpt_trr : npt.trr
-mdnpt_gro : npt.gro
-mdnpt_edr : npt.edr
-mdnpt_cpt : npt.cpt
+# Step14: mdnpt -- Running: npt constant number of molecules, pressure and temp
+step14_mdnpt:
+  path: step14_mdnpt
+  out: mdnpt.out
+  err: mdnpt.err
+  trr: mdnpt.trr
+  gro: mdnpt.gro
+  edr: mdnpt.edr
+  cpt: mdnpt.cpt
 
-# Molecular dynamics
-gppeq_mdp : gmx_full_md.mdp
-gppeq_tpr : md.tpr
+# Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
+step15_gppeq:
+  path: step15_gppeq
+  out: gppeq.out
+  err: gppeq.err
+  mdp: gmx_full_md.mdp
+  tpr: gppeq.tpr
 
-mdeq_trr : md.trr
-mdeq_gro : md.gro
-mdeq_edr : md.edr
-mdeq_cpt : md.cpt
+# Step16: mdeq -- Running: 1ns Molecular dynamics Equilibration
+step16_mdeq:
+  path: step16_mdeq
+  out: mdeq.out
+  err: mdeq.err
+  trr: md.trr
+  gro: md.gro
+  edr: md.edr
+  cpt: md.cpt
 
-# RMSD calculation
-rms_xvg : rmsd.xvg
+# Step17: rms -- Computing RMSD
+step17_rmsd:
+  path: step17_rmsd
+  out: rmsd.out
+  err: rmsd.err
+  xvg: rmsd.xvg
 
 
 ##############################################################################

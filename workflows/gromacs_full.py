@@ -63,14 +63,14 @@ def rmtemp():
 
 def main():
     # MACOS
-    conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
-                                          '/workflows/conf.yaml'))
+    # conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
+    #                                      '/workflows/conf.yaml'))
     # Ubunutu
     # conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml'))
     # COMPSS VM
-    # conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
-    #                                      '/pymdsetup/workflows/conf.yaml'))
+    conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
+                                          '/pymdsetup/workflows/conf.yaml'))
     prop = conf.properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
@@ -231,10 +231,10 @@ def main():
         # mdrun.Mdrun512(gppeq_tpr, mdeq_trr, mdeq_gro,
         #                mdeq_edr, output_cpt_path=mdeq_cpt).launch()
         #
-        # print ('step17: rms -- Computing RMSD')
-        # rms_path = cdir(mut_path, 'step17_rms')
-        # rms_xvg = opj(rms_path, prop['rms_xvg'])
-        # rms.Rms512(gio_gro, mdeq_trr, rms_xvg).launch()
+        # print ('step17: rmsd -- Computing RMSD')
+        # rmsd_path = cdir(mut_path, 'step17_rmsd')
+        # rmsd_xvg = opj(rmsd_path, prop['rmsd_xvg'])
+        # rmsd.Rms512(gio_gro, mdeq_trr, rmsd_xvg).launch()
         print '***************************************************************'
         print ''
 
