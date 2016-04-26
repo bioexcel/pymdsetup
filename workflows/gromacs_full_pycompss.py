@@ -63,20 +63,25 @@ def rmtemp():
 
 def main():
     # MACOS
-    conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
-                                          '/workflows/conf.yaml'))
+    # conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
+    #                                      '/workflows/conf.yaml'))
     # Ubunutu
     # conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml'))
     # COMPSS VM
-    # conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
-    #                                      '/pymdsetup/workflows/conf.yaml'))
+    conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
+                                          '/pymdsetup/workflows/conf.yaml'))
     prop = conf.properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
     input_pdb_code = prop['pdb_code']
     cdir(os.path.abspath(prop['workflow_path']))
+
+    # Testing purposes
+    for f in os.listdir(prop['workflow_path']):
+        shutil.rmtree(opj(prop['workflow_path'], f))
+
     print ''
     print ''
     print '_______GROMACS FULL WORKFLOW_______'
@@ -130,17 +135,17 @@ def main():
         print 'step5: ec -- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         cdir(p_ec.path)
-        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, log_path=p_ec.out,
-                                  error_path=p_ec.err)
+        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
+                                  log_path=p_ec.out, error_path=p_ec.err)
         ec2 = ec.launchPyCOMPSs(p2g2)
 
-        print 'step6: sol -- Fill the box with water molecules'
-        sol_path = cdir(mut_path, 'step6_sol')
-        cext(p2g_path, sol_path, 'itp')
-        sol_gro = opj(sol_path, prop['sol_gro'])
-        sol_top = opj(sol_path, prop['sol_top'])
-        sol = solvate.Solvate512(ec_gro, sol_gro, p2g_top, sol_top,
-                                 gmx_path=gmx_path)
+        # print 'step6: sol -- Fill the box with water molecules'
+        p_sol = conf.step_prop('step6_sol', mut)
+        cdir(p_sol.path)
+        cext(p_p2g.path, p_sol.path, 'itp')
+        sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
+                                 gmx_path=gmx_path, log_path=p_sol.out,
+                                 error_path=p_sol.err)
         sol2 = sol.launchPyCOMPSs(p2g2, ec2)
 
         # print ('step7: gppions -- Preprocessing:'
@@ -256,10 +261,10 @@ def main():
         # rmsd_list.append(grorms.launchPyCOMPSs(mdeq1))
         print '***************************************************************'
         print ''
-        
+
         rmtemp()
 
-    result = mdrun.Mdrun512.mergeResults(rmsd_list)
+    #result = mdrun.Mdrun512.mergeResults(rmsd_list)
 
 if __name__ == '__main__':
     main()
