@@ -139,14 +139,15 @@ def main():
                                   log_path=p_ec.out, error_path=p_ec.err)
         ec2 = ec.launchPyCOMPSs(p2g2)
 
-        # print 'step6: sol -- Fill the box with water molecules'
+        print 'step6: sol -- Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
         cdir(p_sol.path)
         cext(p_p2g.path, p_sol.path, 'itp')
         sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
                                  gmx_path=gmx_path, log_path=p_sol.out,
                                  error_path=p_sol.err)
-        sol2 = sol.launchPyCOMPSs(p2g2, ec2)
+        # sol_ IN = p_p2g.top, OUT=p_sol.top
+        sol2 = sol.launchPyCOMPSs(p2g2, ec2, p_p2g.top, p_sol.top)
 
         # print ('step7: gppions -- Preprocessing:'
         #        'Add ions to neutralice the charge')
