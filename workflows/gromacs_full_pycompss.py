@@ -149,18 +149,20 @@ def main():
         # sol_ IN = p_p2g.top, OUT=p_sol.top
         sol2 = sol.launchPyCOMPSs(p2g2, ec2, p_p2g.top, p_sol.top)
 
-        # print ('step7: gppions -- Preprocessing:'
-        #        'Add ions to neutralice the charge')
-        # gppions_path = cdir(mut_path, 'step7_gppions')
-        # cext(sol_path, gppions_path, 'itp')
-        # gppions_mdp = opj(gppions_path, prop['gppions_mdp'])
-        # mdp_dir = '/home/compss/PyCOMPSs/git/pymdsetup/workflows/mdp/'
-        # shutil.copy(opj(mdp_dir, prop['gppions_mdp']), gppions_mdp)
-        # gppions_tpr = opj(gppions_path, prop['gppions_tpr'])
-        # gppions = grompp.Grompp512(gppions_mdp, sol_gro, sol_top, gppions_tpr,
-        #                            gmx_path=gmx_path)
-        # gro2 = gppions.launchPyCOMPSs(sol2)
-        #
+        print ('step7: gppions -- Preprocessing:'
+               'Add ions to neutralice the charge')
+        gppions = conf.step_prop('step7_gppions', mut)
+        cdir(gppions.path)
+        #gppions_path = cdir(mut_path, 'step7_gppions')
+        cext(sol_path, gppions_path, 'itp')
+        gppions_mdp = opj(gppions_path, prop['gppions_mdp'])
+        mdp_dir = '/home/compss/PyCOMPSs/git/pymdsetup/workflows/mdp/'
+        shutil.copy(opj(mdp_dir, prop['gppions_mdp']), gppions_mdp)
+        gppions_tpr = opj(gppions_path, prop['gppions_tpr'])
+        gppions = grompp.Grompp512(gppions_mdp, sol_gro, sol_top, gppions_tpr,
+                                   gmx_path=gmx_path)
+        gro2 = gppions.launchPyCOMPSs(sol2)
+
         # print 'step8: gio -- Running: Add ions to neutralice the charge'
         # gio_path = cdir(mut_path, 'step8_gio')
         # cext(gppions_path, gio_path, 'itp')
@@ -168,8 +170,8 @@ def main():
         # gio_top = opj(gio_path, prop['gio_top'])
         # gio = genion.Genion512(gppions_tpr, gio_gro, sol_top, gio_top,
         #                        gmx_path=gmx_path)
-        # gen2 = gio.launchPyCOMPSs(sol2, gro2)
-        #
+        # gen2 = gio.launchPyCOMPSs(sol2, gro2, sol_top, gio_top)
+
         # print 'step9: gppmin -- Preprocessing: Energy minimization'
         # gppmin_path = cdir(mut_path, 'step9_gppmin')
         # cext(gio_path, gppmin_path, 'itp')
