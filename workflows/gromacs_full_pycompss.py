@@ -78,7 +78,7 @@ def main():
     input_pdb_code = prop['pdb_code']
     cdir(os.path.abspath(prop['workflow_path']))
 
-    # Testing purposes
+    # Testing purposes: Remove last Test
     for f in os.listdir(prop['workflow_path']):
         shutil.rmtree(opj(prop['workflow_path'], f))
 

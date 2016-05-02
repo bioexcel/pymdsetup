@@ -27,7 +27,7 @@ class Scwrl4(object):
                  error_path='None', scwrl_path='None'):
         self.pdb_path = pdb_path
         self.output_pdb_path = output_pdb_path
-        pattern = re.compile(("p.(?P<wt>[a-zA-Z]{3})"
+        pattern = re.compile(("(?P<chain>[a-zA-Z]{1}).(?P<wt>[a-zA-Z]{3})"
                               "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
         self.mutation = pattern.match(mutation).groupdict()
         self.scwrl_path = scwrl_path
@@ -40,7 +40,9 @@ class Scwrl4(object):
         st = parser.get_structure('s', self.pdb_path)  # s random id never used
 
         # Remove the side chain of the AA to be mutated
-        residue = st[0]['A'][(' ', int(self.mutation['resnum']), ' ')]
+        chain = self.mutation['chain']
+        resnum = int(self.mutation['resnum'])
+        residue = st[0][chain][(' ', resnum, ' ')]
         backbone_atoms = ['N', 'CA', 'C', 'O', 'CB']
         not_backbone_atoms = []
         '''

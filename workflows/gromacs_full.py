@@ -66,17 +66,22 @@ def main():
     # conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml'))
     # Ubunutu
-    # conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
-    #                                      '/workflows/conf.yaml'))
+    conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
+                                          '/workflows/conf.yaml'))
     # COMPSS VM
-    conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
-                                          '/pymdsetup/workflows/conf.yaml'))
+    # conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
+    #                                      '/pymdsetup/workflows/conf.yaml'))
     prop = conf.properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
     input_pdb_code = prop['pdb_code']
     cdir(os.path.abspath(prop['workflow_path']))
+
+    # Testing purposes: Remove last Test
+    for f in os.listdir(prop['workflow_path']):
+        shutil.rmtree(opj(prop['workflow_path'], f))
+
     print ''
     print ''
     print '_______GROMACS FULL WORKFLOW_______'
@@ -91,7 +96,7 @@ def main():
 
     print 'step2: mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    mutations = mmbuniprot.fetch_variants()
+    mutations = mmbuniprot.get_pdb_variants()
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
 # Demo purposes
@@ -100,11 +105,15 @@ def main():
         # mutations = ['p.VAL2GLY', 'p.GLY4VAL', 'p.CYS6VAL']
         mutations = ['p.VAL2GLY']
 ########################################################################
-    print '     Found ' + str(len(mutations)) + ' variants'
-    if mutations is None:
+    if mutations is None or len(mutations) == 0:
         print (prop['pdb_code'] +
                " " + mmbuniprot.get_uniprot() + ": No variants")
         return
+    else:
+        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+               ' uniprot variants')
+        print ('     Mapped to ' + str(len(mutations)) + ' ' + input_pdb_code +
+               ' PDB variants')
 
     for mut in mutations:
         print ''
@@ -130,19 +139,19 @@ def main():
         print 'step5: ec  -- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         cdir(p_ec.path)
-        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, log_path=p_ec.out,
-                                  error_path=p_ec.err)
+        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
+                                  log_path=p_ec.out, error_path=p_ec.err)
         ec.launch()
 
         print 'step6: sol -- Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
         cdir(p_sol.path)
         sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
-                                 log_path=p_ec.out, error_path=p_ec.err)
+                                 log_path=p_sol.out, error_path=p_sol.err)
         sol.launch()
 
-        # print ('step7: gppions -- Preprocessing:'
-        #        'Add ions to neutralice the charge')
+        print ('step7: gppions -- Preprocessing:'
+               'Add ions to neutralice the charge')
         # gppions_path = cdir(mut_path, 'step7_gppions')
         # cext(sol_path, gppions_path, 'itp')
         # gppions_mdp = opj(gppions_path, prop['gppions_mdp'])
@@ -239,6 +248,7 @@ def main():
         print ''
 
         rmtemp()
+        break
 
 if __name__ == '__main__':
     main()
