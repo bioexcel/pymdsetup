@@ -65,12 +65,15 @@ def main():
     # MACOS
     # conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml'))
+
     # Ubunutu
     conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
                                           '/workflows/conf.yaml'))
+
     # COMPSS VM
     # conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
     #                                      '/pymdsetup/workflows/conf.yaml'))
+
     prop = conf.properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
     gmx_path = prop['gmx_path']
@@ -99,28 +102,29 @@ def main():
     mutations = mmbuniprot.get_pdb_variants()
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
-# Demo purposes
+    # Demo purposes
 ########################################################################
     if mmbuniprot.get_uniprot() == 'P00698':
-        # mutations = ['p.VAL2GLY', 'p.GLY4VAL', 'p.CYS6VAL']
-        mutations = ['p.VAL2GLY']
+        # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
+        mutations = ['A.VAL2GLY']
 ########################################################################
-    if mutations is None or len(mutations) == 0:
-        print (prop['pdb_code'] +
-               " " + mmbuniprot.get_uniprot() + ": No variants")
-        return
-    else:
-        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-               ' uniprot variants')
-        print ('     Mapped to ' + str(len(mutations)) + ' ' + input_pdb_code +
-               ' PDB variants')
+
+    # if mutations is None or len(mutations) == 0:
+    #     print (prop['pdb_code'] +
+    #            " " + mmbuniprot.get_uniprot() + ": No variants")
+    #     return
+    # else:
+    #     print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+    #            ' uniprot variants')
+    #     print ('     Mapped to ' + str(len(mutations)) + ' ' + input_pdb_code +
+    #            ' PDB variants')
 
     for mut in mutations:
         print ''
         print '___________'
         print mut
         print '-----------'
-        print 'step3: scw -- Model mutation'
+        print 'step3: scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
         cdir(p_scw.path)
         scw = scwrl.Scwrl4(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
@@ -128,7 +132,7 @@ def main():
                            error_path=p_scw.err)
         scw.launch()
 
-        print 'step4: p2g -- Create gromacs topology'
+        print 'step4: p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         cdir(p_p2g.path)
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
@@ -136,114 +140,125 @@ def main():
                                  log_path=p_p2g.out, error_path=p_p2g.err)
         p2g.launch()
 
-        print 'step5: ec  -- Define box dimensions'
+        print 'step5: ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         cdir(p_ec.path)
         ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
                                   log_path=p_ec.out, error_path=p_ec.err)
         ec.launch()
 
-        print 'step6: sol -- Fill the box with water molecules'
+        print 'step6: sol ------ Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
         cdir(p_sol.path)
+        cext(p_p2g.path, p_sol.path, 'itp')
         sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
                                  log_path=p_sol.out, error_path=p_sol.err)
         sol.launch()
 
-        print ('step7: gppions -- Preprocessing:'
+        print ('step7: gppions -- Preprocessing: '
                'Add ions to neutralice the charge')
-        # gppions_path = cdir(mut_path, 'step7_gppions')
-        # cext(sol_path, gppions_path, 'itp')
-        # gppions_mdp = opj(gppions_path, prop['gppions_mdp'])
-        # shutil.copy(opj(mdp_dir, prop['gppions_mdp']), gppions_mdp)
-        # gppions_tpr = opj(gppions_path, prop['gppions_tpr'])
-        # grompp.Grompp512(gppions_mdp, sol_gro, sol_top, gppions_tpr).launch()
-        #
-        # print 'step8: gio -- Running: Add ions to neutralice the charge'
-        # gio_path = cdir(mut_path, 'step8_gio')
-        # cext(gppions_path, gio_path, 'itp')
-        # gio_gro = opj(gio_path, prop['gio_gro'])
-        # gio_top = opj(gio_path, prop['gio_top'])
-        # genion.Genion512(gppions_tpr, gio_gro, sol_top, gio_top).launch()
-        #
-        # print 'step9: gppmin -- Preprocessing: Energy minimization'
-        # gppmin_path = cdir(mut_path, 'step9_gppmin')
-        # cext(gio_path, gppmin_path, 'itp')
-        # gppmin_mdp = opj(gppmin_path, prop['gppmin_mdp'])
-        # shutil.copy(opj(mdp_dir, prop['gppmin_mdp']), gppmin_mdp)
-        # gppmin_tpr = opj(gppmin_path, prop['gppmin_tpr'])
-        # grompp.Grompp512(gppmin_mdp, gio_gro, gio_top, gppmin_tpr).launch()
-        #
-        # print 'step10: mdmin -- Running: Energy minimization'
-        # mdmin_path = cdir(mut_path, 'step10_mdmin')
-        # mdmin_gro = opj(mdmin_path, prop['mdmin_gro'])
-        # mdmin_trr = opj(mdmin_path, prop['mdmin_trr'])
-        # mdmin_edr = opj(mdmin_path, prop['mdmin_edr'])
-        # mdrun.Mdrun512(gppmin_tpr, mdmin_trr, mdmin_gro, mdmin_edr).launch()
-        #
-        # print ('step11: gppnvt -- Preprocessing: nvt'
-        #        'constant number of molecules, volume and temp')
-        # gppnvt_path = cdir(mut_path, 'step11_gppnvt')
-        # cext(gio_path, gppnvt_path, 'itp')
-        # gppnvt_mdp = opj(gppnvt_path, prop['gppnvt_mdp'])
-        # shutil.copy(opj(mdp_dir, prop['gppnvt_mdp']), gppnvt_mdp)
-        # gppnvt_tpr = opj(gppnvt_path, prop['gppnvt_tpr'])
-        # grompp.Grompp512(gppnvt_mdp, mdmin_gro, gio_top, gppnvt_tpr).launch()
-        #
-        # print ('step12: mdnvt -- Running: nvt'
-        #        'constant number of molecules, volume and temp')
-        # mdnvt_path = cdir(mut_path, 'step12_mdnvt')
-        # mdnvt_gro = opj(mdnvt_path, prop['mdnvt_gro'])
-        # mdnvt_trr = opj(mdnvt_path, prop['mdnvt_trr'])
-        # mdnvt_edr = opj(mdnvt_path, prop['mdnvt_edr'])
-        # mdnvt_cpt = opj(mdnvt_path, prop['mdnvt_cpt'])
-        # mdrun.Mdrun512(gppnvt_tpr, mdnvt_trr, mdnvt_gro,
-        #                mdnvt_edr, output_cpt_path=mdnvt_cpt).launch()
-        #
-        # print ('step13: gppnpt -- Preprocessing: npt'
-        #        'constant number of molecules, pressure and temp')
-        # gppnpt_path = cdir(mut_path, 'step13_gppnpt')
-        # cext(gio_path, gppnpt_path, 'itp')
-        # gppnpt_mdp = opj(gppnpt_path, prop['gppnpt_mdp'])
-        # shutil.copy(opj(mdp_dir, prop['gppnpt_mdp']), gppnpt_mdp)
-        # gppnpt_tpr = opj(gppnpt_path, prop['gppnpt_tpr'])
-        # grompp.Grompp512(gppnpt_mdp, mdnvt_gro, gio_top,
-        #                  gppnpt_tpr, cpt_path=mdnvt_cpt).launch()
-        #
-        # print ('step14: mdnpt -- Running: npt'
-        #        'constant number of molecules, pressure and temp')
-        # mdnpt_path = cdir(mut_path, 'step14_mdnpt')
-        # mdnpt_gro = opj(mdnpt_path, prop['mdnpt_gro'])
-        # mdnpt_trr = opj(mdnpt_path, prop['mdnpt_trr'])
-        # mdnpt_edr = opj(mdnpt_path, prop['mdnpt_edr'])
-        # mdnpt_cpt = opj(mdnpt_path, prop['mdnpt_cpt'])
-        # mdrun.Mdrun512(gppnpt_tpr, mdnpt_trr, mdnpt_gro,
-        #                mdnpt_edr, output_cpt_path=mdnpt_cpt).launch()
-        #
-        # print ('step15: gppeq -- '
-        #        'Preprocessing: 1ns Molecular dynamics Equilibration')
-        # gppeq_path = cdir(mut_path, 'step15_gppeq')
-        # cext(gio_path, gppeq_path, 'itp')
-        # gppeq_mdp = opj(gppeq_path, prop['gppeq_mdp'])
-        # shutil.copy(opj(mdp_dir, prop['gppeq_mdp']), gppeq_mdp)
-        # gppeq_tpr = opj(gppeq_path, prop['gppeq_tpr'])
-        # grompp.Grompp512(gppeq_mdp, mdnpt_gro, gio_top,
-        #                  gppeq_tpr, cpt_path=mdnpt_cpt).launch()
-        #
-        # print ('step16: mdeq -- '
-        #        'Running: 1ns Molecular dynamics Equilibration')
-        # mdeq_path = cdir(mut_path, 'step16_mdeq')
-        # mdeq_gro = opj(mdeq_path, prop['mdeq_gro'])
-        # mdeq_trr = opj(mdeq_path, prop['mdeq_trr'])
-        # mdeq_edr = opj(mdeq_path, prop['mdeq_edr'])
-        # mdeq_cpt = opj(mdeq_path, prop['mdeq_cpt'])
-        # mdrun.Mdrun512(gppeq_tpr, mdeq_trr, mdeq_gro,
-        #                mdeq_edr, output_cpt_path=mdeq_cpt).launch()
-        #
-        # print ('step17: rmsd -- Computing RMSD')
-        # rmsd_path = cdir(mut_path, 'step17_rmsd')
-        # rmsd_xvg = opj(rmsd_path, prop['rmsd_xvg'])
-        # rmsd.Rms512(gio_gro, mdeq_trr, rmsd_xvg).launch()
+        p_gppions = conf.step_prop('step7_gppions', mut)
+        cdir(p_gppions.path)
+        shutil.copy(opj(mdp_dir, prop['step7_gppions']['mdp']), p_gppions.mdp)
+        gppions = grompp.Grompp512(p_gppions.mdp, p_sol.gro, p_sol.top,
+                                   p_gppions.tpr, log_path=p_gppions.out,
+                                   error_path=p_gppions.err)
+        gppions.launch()
+
+        print 'step8: gio ------ Running: Add ions to neutralice the charge'
+        p_gio = conf.step_prop('step8_gio', mut)
+        cdir(p_gio.path)
+        cext(p_sol.path, p_gio.path, 'itp')
+        gio = genion.Genion512(p_gppions.tpr, p_gio.gro, p_sol.top, p_gio.top,
+                               log_path=p_gio.out, error_path=p_gio.err)
+        gio.launch()
+
+        print 'step9: gppmin --- Preprocessing: Energy minimization'
+        p_gppmin = conf.step_prop('step9_gppmin', mut)
+        cdir(p_gppmin.path)
+        shutil.copy(opj(mdp_dir, prop['step9_gppmin']['mdp']), p_gppmin.mdp)
+        gppmin = grompp.Grompp512(p_gppmin.mdp, p_gio.gro, p_gio.top,
+                                  p_gppmin.tpr, log_path=p_gppmin.out,
+                                  error_path=p_gppmin.err)
+        gppmin.launch()
+
+        print 'step10: mdmin ---- Running: Energy minimization'
+        p_mdmin = conf.step_prop('step10_mdmin', mut)
+        cdir(p_mdmin.path)
+        cext(p_gio.path, p_mdmin.path, 'itp')
+        mdmin = mdrun.Mdrun512(p_gppmin.tpr, p_mdmin.trr, p_mdmin.gro,
+                               p_mdmin.edr, log_path=p_mdmin.out,
+                               error_path=p_mdmin.err)
+        mdmin.launch()
+
+        print ('step11: gppnvt --- Preprocessing: nvt '
+               'constant number of molecules, volume and temp')
+        p_gppnvt = conf.step_prop('step11_gppnvt', mut)
+        cdir(p_gppnvt.path)
+        shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['mdp']), p_gppnvt.mdp)
+        gppnvt = grompp.Grompp512(p_gppnvt.mdp, p_mdmin.gro, p_gio.top,
+                                  p_gppnvt.tpr, log_path=p_gppnvt.out,
+                                  error_path=p_gppnvt.err)
+        gppnvt.launch()
+
+        print ('step12: mdnvt ---- Running: nvt '
+               'constant number of molecules, volume and temp')
+        p_mdnvt = conf.step_prop('step12_mdnvt', mut)
+        cdir(p_mdnvt.path)
+        cext(p_mdmin.path, p_mdnvt.path, 'itp')
+        mdnvt = mdrun.Mdrun512(p_gppnvt.tpr, p_mdnvt.trr, p_mdnvt.gro,
+                               p_mdnvt.edr, output_cpt_path=p_mdnvt.cpt,
+                               log_path=p_mdnvt.out, error_path=p_mdnvt.err)
+        mdnvt.launch()
+
+        print ('step13: gppnpt --- Preprocessing: npt '
+               'constant number of molecules, pressure and temp')
+        p_gppnpt = conf.step_prop('step13_gppnpt', mut)
+        cdir(p_gppnpt.path)
+        shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['mdp']), p_gppnpt.mdp)
+        gppnpt = grompp.Grompp512(p_gppnpt.mdp, p_mdnvt.gro, p_gio.top,
+                                  p_gppnpt.tpr, cpt_path=p_mdnvt.cpt,
+                                  log_path=p_gppnpt.out,
+                                  error_path=p_gppnpt.err)
+        gppnpt.launch()
+
+        print ('step14: mdnpt ---- Running: npt '
+               'constant number of molecules, pressure and temp')
+        p_mdnpt = conf.step_prop('step14_mdnpt', mut)
+        cdir(p_mdnpt.path)
+        cext(p_mdnvt.path, p_mdnpt.path, 'itp')
+        mdnpt = mdrun.Mdrun512(p_gppnpt.tpr, p_mdnpt.trr, p_mdnpt.gro,
+                               p_mdnpt.edr, output_cpt_path=p_mdnpt.cpt,
+                               log_path=p_mdnpt.out, error_path=p_mdnpt.err)
+        mdnpt.launch()
+
+        print ('step15: gppeq ---- '
+               'Preprocessing: 1ns Molecular dynamics Equilibration')
+        p_gppeq = conf.step_prop('step15_gppeq', mut)
+        cdir(p_gppeq.path)
+        shutil.copy(opj(mdp_dir, prop['step15_gppeq']['mdp']), p_gppeq.mdp)
+        gppeq = grompp.Grompp512(p_gppeq.mdp, p_mdnpt.gro, p_gio.top,
+                                 p_gppeq.tpr, cpt_path=p_mdnpt.cpt,
+                                 log_path=p_gppeq.out,
+                                 error_path=p_gppeq.err)
+        gppeq.launch()
+
+        print ('step16: mdeq ----- '
+               'Running: 1ns Molecular dynamics Equilibration')
+        p_mdeq = conf.step_prop('step16_mdeq', mut)
+        cdir(p_mdeq.path)
+        cext(p_mdnpt.path, p_mdeq.path, 'itp')
+        mdeq = mdrun.Mdrun512(p_gppeq.tpr, p_mdeq.trr, p_mdeq.gro,
+                              p_mdeq.edr, output_cpt_path=p_mdeq.cpt,
+                              log_path=p_mdeq.out, error_path=p_mdeq.err)
+        mdeq.launch()
+
+        print ('step17: rmsd ----- Computing RMSD')
+        p_rmsd = conf.step_prop('step17_rmsd', mut)
+        cdir(p_rmsd.path)
+        rmsd = rms.Rms512(p_gio.gro, p_mdeq.trr, p_rmsd.xvg,
+                          log_path=p_rmsd.out, error_path=p_rmsd.err)
+        rmsd.launch()
         print '***************************************************************'
         print ''
 

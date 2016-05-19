@@ -33,6 +33,9 @@ class MmbVariants(object):
                               "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
 
         unfiltered_dic = requests.get(url_mapPDBRes).json()
+        if len(unfiltered_dic) == 0:
+            return []
+
         mapdic = {}
         mutations = []
         for k in unfiltered_dic.keys():

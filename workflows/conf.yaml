@@ -1,7 +1,8 @@
 # pymdsetup configuration file
 
 # PDB code
-pdb_code: 2vgb
+#pdb_code: 2vgb
+pdb_code: 1aki
 
 # Gromacs bin path
 # Ubuntu

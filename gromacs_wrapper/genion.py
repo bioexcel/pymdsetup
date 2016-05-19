@@ -34,7 +34,22 @@ class Genion512(object):
         self.log_path = log_path
         self.error_path = error_path
 
-    def launch(self, topin, topout):
+    def launch(self):
+        shutil.copy(self.input_top, self.output_top)
+        gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
+        cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
+               self.tpr_path, "-o", self.output_gro_path,
+               "-p", self.output_top, "-neutral"]
+
+        if self.seed != 'None':
+            cmd.append('-seed')
+            cmd.append(str(self.seed))
+
+        command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
+        command.launch()
+
+    @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
+    def launchPyCOMPSs(self, top, tpr, topin, topout):
         shutil.copy(topin, topout)
         shutil.copy(topout, "/tmp/gio.top")
         shutil.copy(self.input_top, self.output_top)
@@ -50,8 +65,4 @@ class Genion512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
         shutil.copy("/tmp/gio.top", topout)
-
-    @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
-    def launchPyCOMPSs(self, top, tpr, topin, topout):
-        self.launch(topin, topout)
         return {'gio_gro': self.output_gro_path, 'gio_top': self.output_top}
