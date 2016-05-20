@@ -62,17 +62,12 @@ def rmtemp():
 
 
 def main():
-    # MACOS
-    # conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
-    #                                      '/workflows/conf.yaml'))
-    # Ubunutu
-    # conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
-    #                                      '/workflows/conf.yaml'))
     # COMPSS VM
-    conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
+    conf = settings.YamlReader(yaml_path=('/home/compss'
                                           '/pymdsetup/workflows/conf.yaml'))
+
     prop = conf.properties
-    mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
+    mdp_dir = prop['mdp_path']
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
     input_pdb_code = prop['pdb_code']
@@ -96,72 +91,77 @@ def main():
 
     print 'step2: mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    mutations = mmbuniprot.fetch_variants()
+    mutations = mmbuniprot.get_pdb_variants()
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
 # Demo purposes
 ########################################################################
     if mmbuniprot.get_uniprot() == 'P00698':
-        # mutations = ['p.VAL2GLY', 'p.GLY4VAL', 'p.CYS6VAL']
-        mutations = ['p.VAL2GLY']
+        # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
+        mutations = ['A.VAL2GLY']
 ########################################################################
-    print '     Found ' + str(len(mutations)) + ' variants'
-    if mutations is None:
-        print (prop['pdb_code'] +
-               " " + mmbuniprot.get_uniprot() + ": No variants")
-        return
+
+    # if mutations is None or len(mutations) == 0:
+    #     print (prop['pdb_code'] +
+    #            " " + mmbuniprot.get_uniprot() + ": No variants")
+    #     return
+    # else:
+    #     print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+    #            ' uniprot variants')
+    #     print ('     Mapped to ' + str(len(mutations)) + ' ' + input_pdb_code +
+    #            ' PDB variants')
 
     for mut in mutations:
         print ''
         print '___________'
         print mut
         print '-----------'
-        print 'step3: scw -- Model mutation'
+        print 'step3: scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
         cdir(p_scw.path)
         scw = scwrl.Scwrl4(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
                            scwrl_path=scwrl_path, log_path=p_scw.out,
                            error_path=p_scw.err)
-        scw_pdb2 = scw.launchPyCOMPSs()
+        scw_pdb_compss = scw.launchPyCOMPSs()
 
-        print 'step4: p2g -- Create gromacs topology'
+        print 'step4: p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         cdir(p_p2g.path)
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
                                  gmx_path=gmx_path, ignh=True,
                                  log_path=p_p2g.out, error_path=p_p2g.err)
-        p2g2 = p2g.launchPyCOMPSs(scw_pdb2)
+        p2g_compss = p2g.launchPyCOMPSs(scw_pdb_compss)
 
-        print 'step5: ec -- Define box dimensions'
+        print 'step5: ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         cdir(p_ec.path)
+        cext(p_p2g.path, p_ec.path, 'itp')
         ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
                                   log_path=p_ec.out, error_path=p_ec.err)
-        ec2 = ec.launchPyCOMPSs(p2g2)
+        ec_compss = ec.launchPyCOMPSs(p2g_compss)
 
-        print 'step6: sol -- Fill the box with water molecules'
+        print 'step6: sol ------ Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
         cdir(p_sol.path)
-        cext(p_p2g.path, p_sol.path, 'itp')
+        cext(p_ec.path, p_sol.path, 'itp')
         sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
                                  gmx_path=gmx_path, log_path=p_sol.out,
                                  error_path=p_sol.err)
         # sol_ IN = p_p2g.top, OUT=p_sol.top
-        sol2 = sol.launchPyCOMPSs(p2g2, ec2, p_p2g.top, p_sol.top)
+        sol_compss = sol.launchPyCOMPSs(p2g_compss, ec_compss, p_p2g.top,
+                                        p_sol.top)
 
-        print ('step7: gppions -- Preprocessing:'
+        print ('step7: gppions -- Preprocessing: '
                'Add ions to neutralice the charge')
-        gppions = conf.step_prop('step7_gppions', mut)
-        cdir(gppions.path)
-        #gppions_path = cdir(mut_path, 'step7_gppions')
-        cext(sol_path, gppions_path, 'itp')
-        gppions_mdp = opj(gppions_path, prop['gppions_mdp'])
-        mdp_dir = '/home/compss/PyCOMPSs/git/pymdsetup/workflows/mdp/'
-        shutil.copy(opj(mdp_dir, prop['gppions_mdp']), gppions_mdp)
-        gppions_tpr = opj(gppions_path, prop['gppions_tpr'])
-        gppions = grompp.Grompp512(gppions_mdp, sol_gro, sol_top, gppions_tpr,
-                                   gmx_path=gmx_path)
-        gro2 = gppions.launchPyCOMPSs(sol2)
+        p_gppions = conf.step_prop('step7_gppions', mut)
+        cdir(p_gppions.path)
+        cext(p_sol.path, p_gppions.path, 'itp')
+        shutil.copy(opj(mdp_dir, prop['step7_gppions']['mdp']), p_gppions.mdp)
+        gppions = grompp.Grompp512(p_gppions.mdp, p_sol.gro, p_sol.top,
+                                   p_gppions.tpr, gmx_path=gmx_path,
+                                   log_path=p_gppions.out,
+                                   error_path=p_gppions.err)
+        gppions_compss = gppions.launchPyCOMPSs(sol_compss)
 
         # print 'step8: gio -- Running: Add ions to neutralice the charge'
         # gio_path = cdir(mut_path, 'step8_gio')
@@ -266,6 +266,7 @@ def main():
         print ''
 
         rmtemp()
+        break
 
     #result = mdrun.Mdrun512.mergeResults(rmsd_list)
 

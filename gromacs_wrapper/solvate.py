@@ -6,6 +6,7 @@
 import shutil
 import os
 
+
 try:
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
@@ -45,7 +46,6 @@ class Solvate512(object):
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
 
-#  !!!! Adaptation Pycompss: can this work without top and gro
     @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
     def launchPyCOMPSs(self, top, gro, topin, topout):
         shutil.copy(topin, topout)

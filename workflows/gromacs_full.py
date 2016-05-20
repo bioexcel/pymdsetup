@@ -68,11 +68,6 @@ def main():
 
     # Ubunutu
     conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
-                                          '/workflows/conf.yaml'))
-
-    # COMPSS VM
-    # conf = settings.YamlReader(yaml_path=('/home/compss/PyCOMPSs/git'
-    #                                      '/pymdsetup/workflows/conf.yaml'))
 
     prop = conf.properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
@@ -102,7 +97,7 @@ def main():
     mutations = mmbuniprot.get_pdb_variants()
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
-    # Demo purposes
+# Demo purposes
 ########################################################################
     if mmbuniprot.get_uniprot() == 'P00698':
         # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
@@ -161,7 +156,8 @@ def main():
         cdir(p_gppions.path)
         shutil.copy(opj(mdp_dir, prop['step7_gppions']['mdp']), p_gppions.mdp)
         gppions = grompp.Grompp512(p_gppions.mdp, p_sol.gro, p_sol.top,
-                                   p_gppions.tpr, log_path=p_gppions.out,
+                                   p_gppions.tpr, gmx_path=gmx_path,
+                                   log_path=p_gppions.out,
                                    error_path=p_gppions.err)
         gppions.launch()
 

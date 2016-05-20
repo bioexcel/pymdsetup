@@ -4,28 +4,20 @@
 #pdb_code: 2vgb
 pdb_code: 1aki
 
-# Gromacs bin path
 # Ubuntu
-gmx_path: /usr/local/gromacs/bin/gmx
-# PyCOMPSs VM
 # gmx_path: /usr/local/gromacs/bin/gmx
+# scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+# workflow_path: /home/pau/projects/pymdsetup/testworkflow
+
+# PyCOMPSs VM
+gmx_path: /usr/local/gromacs/bin/gmx
+scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
+workflow_path: /home/compss/pymdsetup/testworkflow
+mdp_path: /home/compss/pymdsetup/workflows/mdp/
+
 # MACOS
 # gmx_path: /usr/local/bin/gmx
-
-# Scwrl4 bin path
-# Ubuntu
-scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
-# PyCOMPSs VM
-# scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
-# MACOS
 # scwrl4_path: /Users/pau/soft/scwrl4/Scwrl4
-
-# workflow path
-# Ubuntu
-workflow_path: /home/pau/projects/pymdsetup/testworkflow
-# PyCOMPSs VM
-# workflow_path: /home/compss/PyCOMPSs/git/test
-# MACOS
 # workflow_path: /Users/pau/Desktop/test
 ################################# File Paths #################################
 
