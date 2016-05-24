@@ -4,7 +4,9 @@
 @author: pau
 """
 
+import shutil
 import os.path as op
+import tools.file_utils as fu
 
 try:
     from command_wrapper import cmd_wrapper
@@ -47,6 +49,8 @@ class Grompp512(object):
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self, sol, gro='None'):
+    def launchPyCOMPSs(self, sol, itp_path, curr_path, mdp_path, gro='None'):
+        fu.copy_ext(itp_path, curr_path, 'itp')
+        shutil.copy(mdp_path, self.mdp_path)
         self.launch()
         return {'gpp_tpr': self.output_tpr_path}

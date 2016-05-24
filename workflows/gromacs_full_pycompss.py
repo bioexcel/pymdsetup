@@ -4,7 +4,9 @@
 
 """
 import os
+import shutil
 from os.path import join as opj
+import tools.file_utils as fu
 
 try:
     import configuration.settings as settings
@@ -31,36 +33,6 @@ except ImportError:
     from pymdsetup.mmb_api import uniprot
     from pymdsetup.gromacs_wrapper import rms
 
-import shutil
-import glob
-
-
-def cdir(dir_path):
-    if not os.path.exists(dir_path):
-        os.makedirs(dir_path)
-    return dir_path
-
-
-def cext(source_dir, dest_dir, ext):
-    files = glob.iglob(os.path.join(source_dir, "*."+ext))
-    for file in files:
-        if os.path.isfile(file):
-            shutil.copy2(file, dest_dir)
-
-
-def rmtemp():
-    # Remove all files in the temp_results directory
-    for f in os.listdir('.'):
-        try:
-            # Not removing directories
-            if os.path.isfile(f) and (f.startswith('#') or
-               f.startswith('temp') or f.startswith('None') or
-               f.startswith('step')):
-                os.unlink(f)
-        except Exception, e:
-            print e
-
-
 def main():
     # COMPSS VM
     conf = settings.YamlReader(yaml_path=('/home/compss'
@@ -71,11 +43,10 @@ def main():
     gmx_path = prop['gmx_path']
     scwrl_path = prop['scwrl4_path']
     input_pdb_code = prop['pdb_code']
-    cdir(os.path.abspath(prop['workflow_path']))
+    fu.create_dir(os.path.abspath(prop['workflow_path']))
 
     # Testing purposes: Remove last Test
-    for f in os.listdir(prop['workflow_path']):
-        shutil.rmtree(opj(prop['workflow_path'], f))
+    shutil.rmtree(opj(prop['workflow_path'], f))
 
     print ''
     print ''
@@ -85,7 +56,7 @@ def main():
     print 'step1: mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
     p_mmbpdb = conf.step_prop('step1_mmbpdb')
-    cdir(p_mmbpdb.path)
+    fu.create_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
 
@@ -118,7 +89,7 @@ def main():
         print '-----------'
         print 'step3: scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
-        cdir(p_scw.path)
+        fu.create_dir(p_scw.path)
         scw = scwrl.Scwrl4(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
                            scwrl_path=scwrl_path, log_path=p_scw.out,
                            error_path=p_scw.err)
@@ -126,7 +97,7 @@ def main():
 
         print 'step4: p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
-        cdir(p_p2g.path)
+        fu.create_dir(p_p2g.path)
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
                                  gmx_path=gmx_path, ignh=True,
                                  log_path=p_p2g.out, error_path=p_p2g.err)
@@ -134,34 +105,32 @@ def main():
 
         print 'step5: ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
-        cdir(p_ec.path)
-        cext(p_p2g.path, p_ec.path, 'itp')
+        fu.create_dir(p_ec.path)
         ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
                                   log_path=p_ec.out, error_path=p_ec.err)
-        ec_compss = ec.launchPyCOMPSs(p2g_compss)
+        ec_compss = ec.launchPyCOMPSs(p2g_compss, p_p2g.path, p_ec.path)
 
         print 'step6: sol ------ Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
-        cdir(p_sol.path)
-        cext(p_ec.path, p_sol.path, 'itp')
+        fu.create_dir(p_sol.path)
         sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
                                  gmx_path=gmx_path, log_path=p_sol.out,
                                  error_path=p_sol.err)
         # sol_ IN = p_p2g.top, OUT=p_sol.top
         sol_compss = sol.launchPyCOMPSs(p2g_compss, ec_compss, p_p2g.top,
-                                        p_sol.top)
+                                        p_sol.top, p_ec.path, p_sol.path)
 
         print ('step7: gppions -- Preprocessing: '
                'Add ions to neutralice the charge')
         p_gppions = conf.step_prop('step7_gppions', mut)
-        cdir(p_gppions.path)
-        cext(p_sol.path, p_gppions.path, 'itp')
-        shutil.copy(opj(mdp_dir, prop['step7_gppions']['mdp']), p_gppions.mdp)
+        fu.create_dir(p_gppions.path)
         gppions = grompp.Grompp512(p_gppions.mdp, p_sol.gro, p_sol.top,
                                    p_gppions.tpr, gmx_path=gmx_path,
                                    log_path=p_gppions.out,
                                    error_path=p_gppions.err)
-        gppions_compss = gppions.launchPyCOMPSs(sol_compss)
+        gppions_compss = gppions.launchPyCOMPSs(sol_compss, p_sol.path,
+                                                p_gppions.path,
+                                                opj(mdp_dir, prop['step7_gppions']['mdp']))
 
         # print 'step8: gio -- Running: Add ions to neutralice the charge'
         # gio_path = cdir(mut_path, 'step8_gio')
@@ -265,7 +234,7 @@ def main():
         print '***************************************************************'
         print ''
 
-        rmtemp()
+        fu.rm_temp()
         break
 
     #result = mdrun.Mdrun512.mergeResults(rmsd_list)

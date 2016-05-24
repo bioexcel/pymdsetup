@@ -15,6 +15,8 @@ except ImportError:
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
 
+import tools.file_utils as fu
+
 
 class Editconf512(object):
     """Wrapper for the 5.1.2 version of the editconf module
@@ -45,6 +47,7 @@ class Editconf512(object):
         command.launch()
 
     @task(returns=str)
-    def launchPyCOMPSs(self, gro_path):
+    def launchPyCOMPSs(self, gro_path, itp_path, curr_path):
+        fu.copy_ext(itp_path, curr_path, 'itp')
         self.launch()
         return self.output_gro_path
