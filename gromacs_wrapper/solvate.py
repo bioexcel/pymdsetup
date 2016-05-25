@@ -16,9 +16,9 @@ try:
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.pycompss_dummies.task import task
-    from pymdsetup.pycompss_dummies.constraint import constraint
-    from pymdsetup.pycompss_dummies.parameter import *
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Solvate512(object):
@@ -49,12 +49,10 @@ class Solvate512(object):
         command.launch()
 
     @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
-    def launchPyCOMPSs(self, top, gro, topin, topout, itp_path, curr_path):
-        fu.copy_ext(itp_path, curr_path, 'itp')
+    def launchPyCOMPSs(self, top, gro, topin, topout):
         shutil.copy(topin, topout)
         tempdir = tempfile.mkdtemp()
         temptop = os.path.join(tempdir, "sol.top")
-        print temptop
         shutil.copy(topout, temptop)
 
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path

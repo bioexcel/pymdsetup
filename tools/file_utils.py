@@ -29,5 +29,7 @@ def rm_temp():
                f.startswith('temp') or f.startswith('None') or
                f.startswith('step')):
                 os.unlink(f)
+            # elif os.path.isdir(f) and (f.startswith('pycompss')):
+            #     shutil.rmtree(f)
         except Exception, e:
             print e

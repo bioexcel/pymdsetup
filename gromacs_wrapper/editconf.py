@@ -13,9 +13,9 @@ try:
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.pycompss_dummies.task import task
-    from pymdsetup.pycompss_dummies.constraint import constraint
-    from pymdsetup.pycompss_dummies.parameter import *
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Editconf512(object):

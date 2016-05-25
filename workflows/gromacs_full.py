@@ -142,7 +142,8 @@ def main():
         fu.create_dir(p_gio.path)
         fu.copy_ext(p_p2g.path, p_gio.path, 'itp')
         gio = genion.Genion512(p_gppions.tpr, p_gio.gro, p_sol.top, p_gio.top,
-                               log_path=p_gio.out, error_path=p_gio.err)
+                               gmx_path=gmx_path, log_path=p_gio.out,
+                               error_path=p_gio.err)
         gio.launch()
 
         print 'step9:  gppmin --- Preprocessing: Energy minimization'

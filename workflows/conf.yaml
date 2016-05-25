@@ -5,15 +5,15 @@
 pdb_code: 1aki
 
 # Ubuntu
-gmx_path: /usr/local/gromacs/bin/gmx
-scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
-workflow_path: /home/pau/projects/pymdsetup/testworkflow
+# gmx_path: /usr/local/gromacs/bin/gmx
+# scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
+# workflow_path: /home/pau/projects/pymdsetup/testworkflow
 
 # PyCOMPSs VM
-# gmx_path: /usr/local/gromacs/bin/gmx
-# scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
-# workflow_path: /home/compss/pymdsetup/testworkflow
-# mdp_path: /home/compss/pymdsetup/workflows/mdp/
+gmx_path: /usr/local/gromacs/bin/gmx
+scwrl4_path: /usr/local/bin/scwrl4/Scwrl4
+workflow_path: /home/compss/pymdsetup/testworkflow
+mdp_path: /home/compss/pymdsetup/workflows/mdp/
 
 # MACOS
 # gmx_path: /usr/local/bin/gmx

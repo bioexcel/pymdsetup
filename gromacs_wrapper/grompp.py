@@ -16,9 +16,9 @@ try:
 except ImportError:
     from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.pycompss_dummies.task import task
-    from pymdsetup.pycompss_dummies.constraint import constraint
-    from pymdsetup.pycompss_dummies.parameter import *
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Grompp512(object):
@@ -50,8 +50,8 @@ class Grompp512(object):
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self, sol, itp_path, curr_path, mdp_path, gro='None'):
-        fu.copy_ext(itp_path, curr_path, 'itp')
+    def launchPyCOMPSs(self, sol, mdp_path, gro='None'):
+        #fu.copy_ext(itp_path, curr_path, 'itp')
         shutil.copy(mdp_path, self.mdp_path)
         self.launch()
         return {'gpp_tpr': self.output_tpr_path}

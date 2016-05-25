@@ -5,6 +5,8 @@
 """
 
 import shutil
+import tempfile
+import os
 try:
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
@@ -12,9 +14,9 @@ try:
     from pycompss.api.constraint import constraint
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.pycompss_dummies.task import task
-    from pymdsetup.pycompss_dummies.constraint import constraint
-    from pymdsetup.pycompss_dummies.parameter import *
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Genion512(object):
@@ -51,8 +53,10 @@ class Genion512(object):
     @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
     def launchPyCOMPSs(self, top, tpr, topin, topout):
         shutil.copy(topin, topout)
-        shutil.copy(topout, "/tmp/gio.top")
-        shutil.copy(self.input_top, self.output_top)
+        tempdir = tempfile.mkdtemp()
+        temptop = os.path.join(tempdir, "gio.top")
+        shutil.copy(topout, temptop)
+
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
                self.tpr_path, "-o", self.output_gro_path,
@@ -64,5 +68,6 @@ class Genion512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
-        shutil.copy("/tmp/gio.top", topout)
+        shutil.copy(temptop, topout)
+        shutil.rmtree(tempdir)
         return {'gio_gro': self.output_gro_path, 'gio_top': self.output_top}
