@@ -4,18 +4,18 @@
 @author: pau
 """
 try:
+    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
     from pycompss.api.task import task
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
     from pymdsetup.pycompss_dummies.parameter import *
-
-import tools.file_utils as fu
 
 
 class Editconf512(object):
@@ -47,7 +47,6 @@ class Editconf512(object):
         command.launch()
 
     @task(returns=str)
-    def launchPyCOMPSs(self, gro_path, itp_path, curr_path):
-        fu.copy_ext(itp_path, curr_path, 'itp')
+    def launchPyCOMPSs(self, gro_path):
         self.launch()
         return self.output_gro_path

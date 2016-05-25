@@ -33,6 +33,7 @@ except ImportError:
     from pymdsetup.mmb_api import uniprot
     from pymdsetup.gromacs_wrapper import rms
 
+
 def main():
     # COMPSS VM
     conf = settings.YamlReader(yaml_path=('/home/compss'
@@ -46,7 +47,7 @@ def main():
     fu.create_dir(os.path.abspath(prop['workflow_path']))
 
     # Testing purposes: Remove last Test
-    shutil.rmtree(opj(prop['workflow_path'], f))
+    shutil.rmtree(prop['workflow_path'])
 
     print ''
     print ''

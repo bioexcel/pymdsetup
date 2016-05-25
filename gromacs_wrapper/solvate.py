@@ -6,14 +6,15 @@
 import shutil
 import os
 import tempfile
-import tools.file_utils as fu
 
 try:
+    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.pycompss_dummies.task import task
     from pymdsetup.pycompss_dummies.constraint import constraint
@@ -52,10 +53,10 @@ class Solvate512(object):
         fu.copy_ext(itp_path, curr_path, 'itp')
         shutil.copy(topin, topout)
         tempdir = tempfile.mkdtemp()
-        temptop = os.path.join(tempdir,"sol.top")
+        temptop = os.path.join(tempdir, "sol.top")
         print temptop
         shutil.copy(topout, temptop)
-        
+
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = [gmx, "solvate", "-cp", self.solute_structure_gro_path,
                "-cs", self.solvent_structure_gro_path, "-o",

@@ -4,10 +4,11 @@
 
 """
 import os
+import shutil
 from os.path import join as opj
-import tools.file_utils as fu
 
 try:
+    import tools.file_utils as fu
     import configuration.settings as settings
     import gromacs_wrapper.pdb2gmx as pdb2gmx
     import gromacs_wrapper.grompp as grompp
@@ -20,6 +21,7 @@ try:
     import mmb_api.uniprot as uniprot
     import gromacs_wrapper.rms as rms
 except ImportError:
+    from pymdsetup.tools import file_utils as fu
     from pymdsetup.configuration import settings
     from pymdsetup.gromacs_wrapper import pdb2gmx
     from pymdsetup.gromacs_wrapper import editconf
@@ -32,21 +34,18 @@ except ImportError:
     from pymdsetup.mmb_api import uniprot
     from pymdsetup.scwrl_wrapper import scwrl
 
-import shutil
-import glob
 
 def main():
     # COMPSS VM
-    conf = settings.YamlReader(yaml_path=('/home/compss'
-                                          '/pymdsetup/workflows/conf.yaml'))
+    # conf = settings.YamlReader(yaml_path=('/home/compss'
+    #                                       '/pymdsetup/workflows/conf.yaml'))
     # MACOS
     # conf = settings.YamlReader(yaml_path=('/Users/pau/projects/pymdsetup'
     #                                      '/workflows/conf.yaml'))
 
     # Ubunutu
-    #conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
-    #                                      '/workflows/conf.yaml'))
-
+    conf = settings.YamlReader(yaml_path=('/home/pau/projects/pymdsetup'
+                                          '/workflows/conf.yaml'))
 
     prop = conf.properties
     mdp_dir = os.path.join(os.path.dirname(__file__), 'mdp')
@@ -56,21 +55,21 @@ def main():
     fu.create_dir(os.path.abspath(prop['workflow_path']))
 
     # Testing purposes: Remove last Test
-    shutil.rmtree(opj(prop['workflow_path'], f))
+    shutil.rmtree(prop['workflow_path'])
 
     print ''
     print ''
     print '_______GROMACS FULL WORKFLOW_______'
     print ''
     print ''
-    print 'step1: mmbpdb -- Get PDB'
+    print 'step1:  mmbpdb -- Get PDB'
     print '     Selected PDB code: ' + input_pdb_code
     p_mmbpdb = conf.step_prop('step1_mmbpdb')
     fu.create_dir(p_mmbpdb.path)
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
 
-    print 'step2: mmbuniprot -- Get mutations'
+    print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
     mutations = mmbuniprot.get_pdb_variants()
     print '     Uniprot code: ' + mmbuniprot.get_uniprot()
@@ -97,7 +96,7 @@ def main():
         print '___________'
         print mut
         print '-----------'
-        print 'step3: scw ------ Model mutation'
+        print 'step3:  scw ------ Model mutation'
         p_scw = conf.step_prop('step3_scw', mut)
         fu.create_dir(p_scw.path)
         scw = scwrl.Scwrl4(p_mmbpdb.pdb, p_scw.mut_pdb, mut,
@@ -105,7 +104,7 @@ def main():
                            error_path=p_scw.err)
         scw.launch()
 
-        print 'step4: p2g ------ Create gromacs topology'
+        print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
@@ -113,22 +112,21 @@ def main():
                                  log_path=p_p2g.out, error_path=p_p2g.err)
         p2g.launch()
 
-        print 'step5: ec ------- Define box dimensions'
+        print 'step5:  ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         fu.create_dir(p_ec.path)
         ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
                                   log_path=p_ec.out, error_path=p_ec.err)
         ec.launch()
 
-        print 'step6: sol ------ Fill the box with water molecules'
+        print 'step6:  sol ------ Fill the box with water molecules'
         p_sol = conf.step_prop('step6_sol', mut)
         fu.create_dir(p_sol.path)
-        fu.copy_ext(p_p2g.path, p_sol.path, 'itp')
         sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
                                  log_path=p_sol.out, error_path=p_sol.err)
         sol.launch()
 
-        print ('step7: gppions -- Preprocessing: '
+        print ('step7:  gppions -- Preprocessing: '
                'Add ions to neutralice the charge')
         p_gppions = conf.step_prop('step7_gppions', mut)
         fu.create_dir(p_gppions.path)
@@ -139,15 +137,15 @@ def main():
                                    error_path=p_gppions.err)
         gppions.launch()
 
-        print 'step8: gio ------ Running: Add ions to neutralice the charge'
+        print 'step8:  gio ------ Running: Add ions to neutralice the charge'
         p_gio = conf.step_prop('step8_gio', mut)
         fu.create_dir(p_gio.path)
-        fu.copy_ext(p_sol.path, p_gio.path, 'itp')
+        fu.copy_ext(p_p2g.path, p_gio.path, 'itp')
         gio = genion.Genion512(p_gppions.tpr, p_gio.gro, p_sol.top, p_gio.top,
                                log_path=p_gio.out, error_path=p_gio.err)
         gio.launch()
 
-        print 'step9: gppmin --- Preprocessing: Energy minimization'
+        print 'step9:  gppmin --- Preprocessing: Energy minimization'
         p_gppmin = conf.step_prop('step9_gppmin', mut)
         fu.create_dir(p_gppmin.path)
         shutil.copy(opj(mdp_dir, prop['step9_gppmin']['mdp']), p_gppmin.mdp)
@@ -159,7 +157,6 @@ def main():
         print 'step10: mdmin ---- Running: Energy minimization'
         p_mdmin = conf.step_prop('step10_mdmin', mut)
         fu.create_dir(p_mdmin.path)
-        fu.copy_ext(p_gio.path, p_mdmin.path, 'itp')
         mdmin = mdrun.Mdrun512(p_gppmin.tpr, p_mdmin.trr, p_mdmin.gro,
                                p_mdmin.edr, log_path=p_mdmin.out,
                                error_path=p_mdmin.err)
@@ -179,7 +176,6 @@ def main():
                'constant number of molecules, volume and temp')
         p_mdnvt = conf.step_prop('step12_mdnvt', mut)
         fu.create_dir(p_mdnvt.path)
-        fu.copy_ext(p_mdmin.path, p_mdnvt.path, 'itp')
         mdnvt = mdrun.Mdrun512(p_gppnvt.tpr, p_mdnvt.trr, p_mdnvt.gro,
                                p_mdnvt.edr, output_cpt_path=p_mdnvt.cpt,
                                log_path=p_mdnvt.out, error_path=p_mdnvt.err)
@@ -200,7 +196,6 @@ def main():
                'constant number of molecules, pressure and temp')
         p_mdnpt = conf.step_prop('step14_mdnpt', mut)
         fu.create_dir(p_mdnpt.path)
-        fu.copy_ext(p_mdnvt.path, p_mdnpt.path, 'itp')
         mdnpt = mdrun.Mdrun512(p_gppnpt.tpr, p_mdnpt.trr, p_mdnpt.gro,
                                p_mdnpt.edr, output_cpt_path=p_mdnpt.cpt,
                                log_path=p_mdnpt.out, error_path=p_mdnpt.err)
@@ -221,7 +216,6 @@ def main():
                'Running: 1ns Molecular dynamics Equilibration')
         p_mdeq = conf.step_prop('step16_mdeq', mut)
         fu.create_dir(p_mdeq.path)
-        fu.copy_ext(p_mdnpt.path, p_mdeq.path, 'itp')
         mdeq = mdrun.Mdrun512(p_gppeq.tpr, p_mdeq.trr, p_mdeq.gro,
                               p_mdeq.edr, output_cpt_path=p_mdeq.cpt,
                               log_path=p_mdeq.out, error_path=p_mdeq.err)
