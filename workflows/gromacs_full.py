@@ -151,7 +151,8 @@ def main():
         fu.create_dir(p_gppmin.path)
         shutil.copy(opj(mdp_dir, prop['step9_gppmin']['mdp']), p_gppmin.mdp)
         gppmin = grompp.Grompp512(p_gppmin.mdp, p_gio.gro, p_gio.top,
-                                  p_gppmin.tpr, log_path=p_gppmin.out,
+                                  p_gppmin.tpr, gmx_path=gmx_path,
+                                  log_path=p_gppmin.out,
                                   error_path=p_gppmin.err)
         gppmin.launch()
 

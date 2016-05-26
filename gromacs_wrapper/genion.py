@@ -60,7 +60,7 @@ class Genion512(object):
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
                self.tpr_path, "-o", self.output_gro_path,
-               "-p", "/tmp/gio.top", "-neutral"]
+               "-p", temptop, "-neutral"]
 
         if self.seed != 'None':
             cmd.append('-seed')

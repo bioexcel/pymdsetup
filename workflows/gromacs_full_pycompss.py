@@ -143,16 +143,15 @@ def main():
         gio_compss = gio.launchPyCOMPSs(sol_compss, gppions_compss, p_sol.top,
                                         p_gio.top)
 
-        # print 'step9:  gppmin -- Preprocessing: Energy minimization'
-        # gppmin_path = cdir(mut_path, 'step9_gppmin')
-        # cext(gio_path, gppmin_path, 'itp')
-        # gppmin_mdp = opj(gppmin_path, prop['gppmin_mdp'])
-        # shutil.copy(opj(mdp_dir, prop['gppmin_mdp']), gppmin_mdp)
-        # gppmin_tpr = opj(gppmin_path, prop['gppmin_tpr'])
-        # gppmin = grompp.Grompp512(gppmin_mdp, gio_gro, gio_top, gppmin_tpr,
-        #                           gmx_path=gmx_path)
-        # gro3 = gppmin.launchPyCOMPSs(gen2)
-        #
+        print 'step9:  gppmin --- Preprocessing: Energy minimization'
+        p_gppmin = conf.step_prop('step9_gppmin', mut)
+        fu.create_dir(p_gppmin.path)
+        gppmin = grompp.Grompp512(p_gppmin.mdp, p_gio.gro, p_gio.top,
+                                  p_gppmin.tpr, gmx_path=gmx_path,
+                                  log_path=p_gppmin.out,
+                                  error_path=p_gppmin.err)
+        gppmin_compss = gppmin.launchPyCOMPSs(gio_compss,
+                                              opj(mdp_dir, prop['step9_gppmin']['mdp']))
         # print 'step10: mdmin -- Running: Energy minimization'
         # mdmin_path = cdir(mut_path, 'step10_mdmin')
         # mdmin_gro = opj(mdmin_path, prop['mdmin_gro'])
