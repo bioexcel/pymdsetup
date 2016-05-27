@@ -50,7 +50,7 @@ class Grompp512(object):
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self, sol, mdp_path, gro='None'):
+    def launchPyCOMPSs(self, last_step, mdp_path):
         #fu.copy_ext(itp_path, curr_path, 'itp')
         shutil.copy(mdp_path, self.mdp_path)
         self.launch()

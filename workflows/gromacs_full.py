@@ -160,8 +160,8 @@ def main():
         p_mdmin = conf.step_prop('step10_mdmin', mut)
         fu.create_dir(p_mdmin.path)
         mdmin = mdrun.Mdrun512(p_gppmin.tpr, p_mdmin.trr, p_mdmin.gro,
-                               p_mdmin.edr, log_path=p_mdmin.out,
-                               error_path=p_mdmin.err)
+                               p_mdmin.edr, gmx_path=gmx_path,
+                               log_path=p_mdmin.out, error_path=p_mdmin.err)
         mdmin.launch()
 
         print ('step11: gppnvt --- Preprocessing: nvt '
@@ -170,7 +170,8 @@ def main():
         fu.create_dir(p_gppnvt.path)
         shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['mdp']), p_gppnvt.mdp)
         gppnvt = grompp.Grompp512(p_gppnvt.mdp, p_mdmin.gro, p_gio.top,
-                                  p_gppnvt.tpr, log_path=p_gppnvt.out,
+                                  p_gppnvt.tpr, gmx_path=gmx_path,
+                                  log_path=p_gppnvt.out,
                                   error_path=p_gppnvt.err)
         gppnvt.launch()
 
@@ -179,7 +180,8 @@ def main():
         p_mdnvt = conf.step_prop('step12_mdnvt', mut)
         fu.create_dir(p_mdnvt.path)
         mdnvt = mdrun.Mdrun512(p_gppnvt.tpr, p_mdnvt.trr, p_mdnvt.gro,
-                               p_mdnvt.edr, output_cpt_path=p_mdnvt.cpt,
+                               p_mdnvt.edr, gmx_path=gmx_path,
+                               output_cpt_path=p_mdnvt.cpt,
                                log_path=p_mdnvt.out, error_path=p_mdnvt.err)
         mdnvt.launch()
 
@@ -189,7 +191,8 @@ def main():
         fu.create_dir(p_gppnpt.path)
         shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['mdp']), p_gppnpt.mdp)
         gppnpt = grompp.Grompp512(p_gppnpt.mdp, p_mdnvt.gro, p_gio.top,
-                                  p_gppnpt.tpr, cpt_path=p_mdnvt.cpt,
+                                  p_gppnpt.tpr, gmx_path=gmx_path,
+                                  cpt_path=p_mdnvt.cpt,
                                   log_path=p_gppnpt.out,
                                   error_path=p_gppnpt.err)
         gppnpt.launch()
@@ -199,7 +202,8 @@ def main():
         p_mdnpt = conf.step_prop('step14_mdnpt', mut)
         fu.create_dir(p_mdnpt.path)
         mdnpt = mdrun.Mdrun512(p_gppnpt.tpr, p_mdnpt.trr, p_mdnpt.gro,
-                               p_mdnpt.edr, output_cpt_path=p_mdnpt.cpt,
+                               p_mdnpt.edr, gmx_path=gmx_path,
+                               output_cpt_path=p_mdnpt.cpt,
                                log_path=p_mdnpt.out, error_path=p_mdnpt.err)
         mdnpt.launch()
 
@@ -210,6 +214,7 @@ def main():
         shutil.copy(opj(mdp_dir, prop['step15_gppeq']['mdp']), p_gppeq.mdp)
         gppeq = grompp.Grompp512(p_gppeq.mdp, p_mdnpt.gro, p_gio.top,
                                  p_gppeq.tpr, cpt_path=p_mdnpt.cpt,
+                                 gmx_path=gmx_path,
                                  log_path=p_gppeq.out,
                                  error_path=p_gppeq.err)
         gppeq.launch()
@@ -220,7 +225,8 @@ def main():
         fu.create_dir(p_mdeq.path)
         mdeq = mdrun.Mdrun512(p_gppeq.tpr, p_mdeq.trr, p_mdeq.gro,
                               p_mdeq.edr, output_cpt_path=p_mdeq.cpt,
-                              log_path=p_mdeq.out, error_path=p_mdeq.err)
+                              gmx_path=gmx_path, log_path=p_mdeq.out,
+                              error_path=p_mdeq.err)
         mdeq.launch()
 
         print ('step17: rmsd ----- Computing RMSD')

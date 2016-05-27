@@ -8,11 +8,13 @@ import shutil
 import tempfile
 import os
 try:
+    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
     from pymdsetup.dummies_pycompss.task import task
     from pymdsetup.dummies_pycompss.constraint import constraint
@@ -51,7 +53,8 @@ class Genion512(object):
         command.launch()
 
     @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
-    def launchPyCOMPSs(self, top, tpr, topin, topout):
+    def launchPyCOMPSs(self, top, tpr, topin, topout, itp_path, curr_path):
+        fu.copy_ext(itp_path, curr_path,'itp')
         shutil.copy(topin, topout)
         tempdir = tempfile.mkdtemp()
         temptop = os.path.join(tempdir, "gio.top")
