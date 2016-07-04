@@ -45,6 +45,9 @@ step3_scw:
 
 # Step4: p2g -- Create gromacs topology
 step4_p2g:
+  water_type: spce
+  force_field: oplsaa
+  ignh: False
   path: step4_p2g
   out: p2g.out
   err: p2g.err
@@ -53,6 +56,9 @@ step4_p2g:
 
 # Step5: ec -- Define box dimensions
 step5_ec:
+  distance_to_molecule: 1.0
+  box_type: cubic
+  center_molecule: True
   path: step5_ec
   out: ec.out
   err: ec.err
