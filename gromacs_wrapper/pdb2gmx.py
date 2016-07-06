@@ -24,7 +24,7 @@ class Pdb2gmx512(object):
     """
 
     def __init__(self, structure_pdb_path, output_path, output_top_path,
-                 water_type='spce', force_field='oplsaa', ignh=False,
+                 water_type='tip3p', force_field='amber99sb-ildn', ignh=False,
                  log_path='None', error_path='None', gmx_path='None'):
         self.structure_pdb_path = structure_pdb_path
         self.output_path = output_path

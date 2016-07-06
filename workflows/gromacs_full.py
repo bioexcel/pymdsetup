@@ -69,16 +69,16 @@ def main():
     mmbpdb = pdb.MmbPdb(input_pdb_code, p_mmbpdb.pdb)
     mmbpdb.get_pdb()
 
-    print 'step2:  mmbuniprot -- Get mutations'
-    mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    mutations = mmbuniprot.get_pdb_variants()
-    print '     Uniprot code: ' + mmbuniprot.get_uniprot()
+    # print 'step2:  mmbuniprot -- Get mutations'
+    # mmbuniprot = uniprot.MmbVariants(input_pdb_code)
+    # mutations = mmbuniprot.get_pdb_variants()
+    # print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
 # Demo purposes
 ########################################################################
-    if mmbuniprot.get_uniprot() == 'P00698':
-        # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
-        mutations = ['A.VAL2GLY']
+#    if mmbuniprot.get_uniprot() == 'P00698':
+#        mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL', 'A.VAL2CYS', 'A.GLY4ALA', 'A.CYS6ALA', 'A.VAL2ALA', 'A.GLY4CYS', 'A.CYS6GLY', 'A.VAL2ARG', 'A.GLY4ARG']
+    mutations = ['A.VAL2GLY']
 ########################################################################
 
     # if mutations is None or len(mutations) == 0:
@@ -234,12 +234,12 @@ def main():
         fu.create_dir(p_rmsd.path)
         rmsd = rms.Rms512(p_gio.gro, p_mdeq.trr, p_rmsd.xvg,
                           log_path=p_rmsd.out, error_path=p_rmsd.err)
-        rmsd.launch()
+        #        rmsd.launch()
         print '***************************************************************'
         print ''
 
         fu.rm_temp()
-        break
+#        break
 
 if __name__ == '__main__':
     main()

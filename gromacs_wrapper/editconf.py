@@ -23,7 +23,7 @@ class Editconf512(object):
     """
 
     def __init__(self, structure_gro_path, output_gro_path,
-                 distance_to_molecule=1.0, box_type='cubic',
+                 distance_to_molecule=1.0, box_type='octahedron',
                  center_molecule=True, log_path='None', error_path='None',
                  gmx_path='None'):
         self.structure_gro_path = structure_gro_path
