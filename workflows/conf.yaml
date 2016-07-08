@@ -1,13 +1,13 @@
 # pymdsetup configuration file
 
 # PDB code
-#pdb_code: 2vgb
-pdb_code: 1agi
+pdb_code: 2vgb
+#pdb_code: 1agi
 
 # Ubuntu
 gmx_path: /usr/local/gromacs/bin/gmx
 scwrl4_path: /home/pau/soft/scwrl4/Scwrl4
-workflow_path: /home/pau/projects/pymdsetup/Adamtest
+workflow_path: /home/pau/projects/pymdsetup/testworkflow
 
 # PyCOMPSs VM
 # gmx_path: /usr/local/gromacs/bin/gmx
@@ -154,6 +154,3 @@ step17_rmsd:
   out: rmsd.out
   err: rmsd.err
   xvg: rmsd.xvg
-
-
-##############################################################################

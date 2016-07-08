@@ -39,15 +39,18 @@ class MmbVariants(object):
 
         mapdic = requests.get(url_mapPDBRes).json()
         mutations = []
-#        for k in unfiltered_dic.keys():
-#            if k.startswith(self.pdb_code.upper()):
-#                mapdic[k[-1]] = unfiltered_dic[k]
         uniprot_var = self.get_variants()
+        print "VARIANTS: " + str(uniprot_var)
+        print ""
         for var in uniprot_var:
+            print "VAR: " + var
             uni_mut = pattern.match(var).groupdict()
             for k in mapdic.keys():
                 for fragment in mapdic[k]:
                     if int(fragment['unp_start']) <= int(uni_mut['resnum']) <= int(fragment['unp_end']):
                         resnum = int(uni_mut['resnum']) + int(fragment['pdb_start']) - int(fragment['unp_start'])
                         mutations.append(k[-1]+'.'+uni_mut['wt']+str(resnum)+uni_mut['mt'])
-            return mutations
+                        print str(fragment) + "<====== ACCEPTED"
+                    else:
+                        print str(fragment) + "<====== DENIED"
+        return mutations
