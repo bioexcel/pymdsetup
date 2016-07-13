@@ -43,6 +43,9 @@ step4_p2g:
   err: p2g.err
   gro: p2g.gro
   top: p2g.top
+  water_type: tip3p
+  force_field: amber99sb-ildn
+  ignh: False
 
 # Step5: ec -- Define box dimensions
 step5_ec:
@@ -50,6 +53,9 @@ step5_ec:
   out: ec.out
   err: ec.err
   gro: ec.gro
+  distance_to_molecule: 1.0
+  box_type: octahedron
+  center_molecule: True
 
 # Step6: sol -- Fill the box with water molecules
 step6_sol:
@@ -58,6 +64,7 @@ step6_sol:
   err: sol.err
   gro: sol.gro
   top: sol.top
+  solvent_structure_gro_path: spc216.gro
 
 # Step7: gppions -- Preprocessing: Add ions to neutralice the charge
 step7_gppions:
@@ -74,6 +81,8 @@ step8_gio:
   err: gio.err
   gro: gio.gro
   top: gio.top
+  neutral: False
+  concentration: 0.05
 
 # Step9: gppmin -- Preprocessing: Energy minimization
 step9_gppmin:

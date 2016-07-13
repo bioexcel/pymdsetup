@@ -54,3 +54,7 @@ class YamlReader(object):
                 dp[key] = opj(dp['path'], dp[key])
 
         return Dict2Obj(dp)
+
+
+def str2bool(v):
+    return v.lower() in ("yes", "true", "t", "1")

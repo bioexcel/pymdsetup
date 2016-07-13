@@ -108,14 +108,21 @@ def main():
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
-                                 gmx_path=gmx_path, ignh=True,
+                                 water_type=p_p2g.water_type,
+                                 force_field=p_p2g.force_field,
+                                 ignh=settings.str2bool(p_p2g.ignh),
+                                 gmx_path=gmx_path,
                                  log_path=p_p2g.out, error_path=p_p2g.err)
         p2g.launch()
 
         print 'step5:  ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         fu.create_dir(p_ec.path)
-        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
+        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro,
+                                  box_type=p_ec.box_type,
+                                  distance_to_molecule=float(p_ec.distance_to_molecule),
+                                  center_molecule=settings.str2bool(p_ec.center_molecule),
+                                  gmx_path=gmx_path,
                                   log_path=p_ec.out, error_path=p_ec.err)
         ec.launch()
 
@@ -123,6 +130,7 @@ def main():
         p_sol = conf.step_prop('step6_sol', mut)
         fu.create_dir(p_sol.path)
         sol = solvate.Solvate512(p_ec.gro, p_sol.gro, p_p2g.top, p_sol.top,
+                                 solvent_structure_gro_path=p_sol.solute_structure_gro_path,
                                  log_path=p_sol.out, error_path=p_sol.err)
         sol.launch()
 
@@ -142,6 +150,8 @@ def main():
         fu.create_dir(p_gio.path)
         fu.copy_ext(p_p2g.path, p_gio.path, 'itp')
         gio = genion.Genion512(p_gppions.tpr, p_gio.gro, p_sol.top, p_gio.top,
+                               neutral=settings.str2bool(p_gio.neutral),
+                               concentration=float(p_gio.concentration),
                                gmx_path=gmx_path, log_path=p_gio.out,
                                error_path=p_gio.err)
         gio.launch()

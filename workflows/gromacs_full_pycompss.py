@@ -101,14 +101,21 @@ def main():
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
-                                 gmx_path=gmx_path, ignh=True,
+                                 water_type=p_p2g.water_type,
+                                 force_field=p_p2g.force_field,
+                                 ignh=settings.str2bool(p_p2g.ignh),
+                                 gmx_path=gmx_path,
                                  log_path=p_p2g.out, error_path=p_p2g.err)
         p2g_compss = p2g.launchPyCOMPSs(scw_pdb_compss)
 
         print 'step5:  ec ------- Define box dimensions'
         p_ec = conf.step_prop('step5_ec', mut)
         fu.create_dir(p_ec.path)
-        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro, gmx_path=gmx_path,
+        ec = editconf.Editconf512(p_p2g.gro, p_ec.gro,
+                                  box_type=p_ec.box_type,
+                                  distance_to_molecule=float(p_ec.distance_to_molecule),
+                                  center_molecule=settings.str2bool(p_ec.center_molecule),
+                                  gmx_path=gmx_path,
                                   log_path=p_ec.out, error_path=p_ec.err)
         ec_compss = ec.launchPyCOMPSs(p2g_compss)
 
