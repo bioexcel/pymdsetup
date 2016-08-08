@@ -71,25 +71,25 @@ def main():
 
     print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    mutations = mmbuniprot.get_pdb_variants()
-    print '     Uniprot code: ' + mmbuniprot.get_uniprot()
+    # mutations = mmbuniprot.get_pdb_variants()
+    # print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
 # Demo purposes
 ########################################################################
-#    if mmbuniprot.get_uniprot() == 'P00698':
+    if mmbuniprot.get_uniprot() == 'P00698':
 #        mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL', 'A.VAL2CYS', 'A.GLY4ALA', 'A.CYS6ALA', 'A.VAL2ALA', 'A.GLY4CYS', 'A.CYS6GLY', 'A.VAL2ARG', 'A.GLY4ARG']
-#    mutations = ['A.VAL2GLY']
+        mutations = ['A.VAL2GLY']
 ########################################################################
 
-    if mutations is None or len(mutations) == 0:
-        print (prop['pdb_code'] +
-               " " + mmbuniprot.get_uniprot() + ": No variants")
-        return
-    else:
-        print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-               ' uniprot variants')
-        print ('     Mapped to ' + str(len(mutations)) + ' ' + input_pdb_code +
-               ' PDB variants')
+    # if mutations is None or len(mutations) == 0:
+    #     print (prop['pdb_code'] +
+    #            " " + mmbuniprot.get_uniprot() + ": No variants")
+    #     return
+    # else:
+    #     print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+    #            ' uniprot variants')
+    #     print ('     Mapped to ' + str(len(mutations)) + ' ' + input_pdb_code +
+    #            ' PDB variants')
 
     for mut in mutations:
         print ''
@@ -138,7 +138,7 @@ def main():
                'Add ions to neutralice the charge')
         p_gppions = conf.step_prop('step7_gppions', mut)
         fu.create_dir(p_gppions.path)
-        shutil.copy(opj(mdp_dir, prop['step7_gppions']['mdp']), p_gppions.mdp)
+        shutil.copy(opj(mdp_dir, prop['step7_gppions']['paths']['mdp']), p_gppions.mdp)
         gppions = grompp.Grompp512(p_gppions.mdp, p_sol.gro, p_sol.top,
                                    p_gppions.tpr, gmx_path=gmx_path,
                                    log_path=p_gppions.out,
@@ -159,7 +159,7 @@ def main():
         print 'step9:  gppmin --- Preprocessing: Energy minimization'
         p_gppmin = conf.step_prop('step9_gppmin', mut)
         fu.create_dir(p_gppmin.path)
-        shutil.copy(opj(mdp_dir, prop['step9_gppmin']['mdp']), p_gppmin.mdp)
+        shutil.copy(opj(mdp_dir, prop['step9_gppmin']['paths']['mdp']), p_gppmin.mdp)
         gppmin = grompp.Grompp512(p_gppmin.mdp, p_gio.gro, p_gio.top,
                                   p_gppmin.tpr, gmx_path=gmx_path,
                                   log_path=p_gppmin.out,
@@ -178,7 +178,7 @@ def main():
                'constant number of molecules, volume and temp')
         p_gppnvt = conf.step_prop('step11_gppnvt', mut)
         fu.create_dir(p_gppnvt.path)
-        shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['mdp']), p_gppnvt.mdp)
+        shutil.copy(opj(mdp_dir, prop['step11_gppnvt']['paths']['mdp']), p_gppnvt.mdp)
         gppnvt = grompp.Grompp512(p_gppnvt.mdp, p_mdmin.gro, p_gio.top,
                                   p_gppnvt.tpr, gmx_path=gmx_path,
                                   log_path=p_gppnvt.out,
@@ -199,7 +199,7 @@ def main():
                'constant number of molecules, pressure and temp')
         p_gppnpt = conf.step_prop('step13_gppnpt', mut)
         fu.create_dir(p_gppnpt.path)
-        shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['mdp']), p_gppnpt.mdp)
+        shutil.copy(opj(mdp_dir, prop['step13_gppnpt']['paths']['mdp']), p_gppnpt.mdp)
         gppnpt = grompp.Grompp512(p_gppnpt.mdp, p_mdnvt.gro, p_gio.top,
                                   p_gppnpt.tpr, gmx_path=gmx_path,
                                   cpt_path=p_mdnvt.cpt,
@@ -221,7 +221,7 @@ def main():
                'Preprocessing: 1ns Molecular dynamics Equilibration')
         p_gppeq = conf.step_prop('step15_gppeq', mut)
         fu.create_dir(p_gppeq.path)
-        shutil.copy(opj(mdp_dir, prop['step15_gppeq']['mdp']), p_gppeq.mdp)
+        shutil.copy(opj(mdp_dir, prop['step15_gppeq']['paths']['mdp']), p_gppeq.mdp)
         gppeq = grompp.Grompp512(p_gppeq.mdp, p_mdnpt.gro, p_gio.top,
                                  p_gppeq.tpr, cpt_path=p_mdnpt.cpt,
                                  gmx_path=gmx_path,

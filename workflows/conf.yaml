@@ -1,8 +1,9 @@
 # pymdsetup configuration file
 
 # PDB code
-pdb_code: 2vgb
-#pdb_code: 1agi
+#pdb_code: 2vgb
+pdb_code: 1aki
+
 
 # Ubuntu
 gmx_path: /usr/local/gromacs/bin/gmx
@@ -23,143 +24,165 @@ workflow_path: /home/pau/projects/pymdsetup/testworkflow
 
 # Step 1: mmbpdb -- Get PDB
 step1_mmbpdb:
-  path: step1_mmbpdb
-  pdb: structure.pdb
+  paths:
+    path: step1_mmbpdb
+    pdb: structure.pdb
 
 # Step2: mmbuniprot -- Get mutations
 # No configuration yet required
 
 # Step3: scw -- Model mutation
 step3_scw:
-  path: step3_scw
-  out: scw.out
-  err: scw.err
-  mut_pdb: mutated.pdb
+  paths:
+    path: step3_scw
+    out: scw.out
+    err: scw.err
+    mut_pdb: mutated.pdb
 
 # Step4: p2g -- Create gromacs topology
 step4_p2g:
-  path: step4_p2g
-  out: p2g.out
-  err: p2g.err
-  gro: p2g.gro
-  top: p2g.top
-  water_type: tip3p
-  force_field: amber99sb-ildn
-  ignh: False
+  paths:
+    path: step4_p2g
+    out: p2g.out
+    err: p2g.err
+    gro: p2g.gro
+    top: p2g.top
+  properties:
+    water_type: tip3p
+    force_field: amber99sb-ildn
+    ignh: False
 
 # Step5: ec -- Define box dimensions
 step5_ec:
-  path: step5_ec
-  out: ec.out
-  err: ec.err
-  gro: ec.gro
-  distance_to_molecule: 1.0
-  box_type: octahedron
-  center_molecule: True
+  paths:
+    path: step5_ec
+    out: ec.out
+    err: ec.err
+    gro: ec.gro
+  properties:
+    # Distance of the box from the outermost atom in nm. ie 1.0nm = 10 Ångströms
+    distance_to_molecule: 1.0
+    box_type: octahedron
+    center_molecule: True
 
 # Step6: sol -- Fill the box with water molecules
 step6_sol:
-  path: step6_sol
-  out: sol.out
-  err: sol.err
-  gro: sol.gro
-  top: sol.top
-  solvent_structure_gro_path: spc216.gro
+  paths:
+    path: step6_sol
+    out: sol.out
+    err: sol.err
+    gro: sol.gro
+    top: sol.top
+  properties:
+    solute_structure_gro_path: spc216.gro
 
 # Step7: gppions -- Preprocessing: Add ions to neutralice the charge
 step7_gppions:
-  path: step7_gppions
-  out: gppions.out
-  err: gppions.err
-  mdp: gmx_full_ions.mdp
-  tpr: gppions.tpr
+  paths:
+    path: step7_gppions
+    out: gppions.out
+    err: gppions.err
+    tpr: gppions.tpr
+    mdp: gmx_full_ions.mdp
+
 
 # Step8: gio -- Running: Add ions to neutralice the charge
 step8_gio:
-  path: step8_gio
-  out: gio.out
-  err: gio.err
-  gro: gio.gro
-  top: gio.top
-  neutral: False
-  concentration: 0.05
+  paths:
+    path: step8_gio
+    out: gio.out
+    err: gio.err
+    gro: gio.gro
+    top: gio.top
+  properties:
+    neutral: False
+    concentration: 0.05
 
 # Step9: gppmin -- Preprocessing: Energy minimization
 step9_gppmin:
-  path: step9_gppmin
-  out: gppmin.out
-  err: gppmin.err
-  mdp: gmx_full_min.mdp
-  tpr: gppmin.tpr
+  paths:
+    path: step9_gppmin
+    out: gppmin.out
+    err: gppmin.err
+    mdp: gmx_full_min.mdp
+    tpr: gppmin.tpr
 
 # Step10: mdmin -- Running: Energy minimization
 step10_mdmin:
-  path: step10_mdmin
-  out: mdmin.out
-  err: mdmin.err
-  gro: mdmin.gro
-  trr: mdmin.trr
-  edr: mdmin.edr
+  paths:
+    path: step10_mdmin
+    out: mdmin.out
+    err: mdmin.err
+    gro: mdmin.gro
+    trr: mdmin.trr
+    edr: mdmin.edr
 
 # Step11: gppnvt -- Preprocessing: nvt constant number of molecules,
 # volume and temp
 step11_gppnvt:
-  path: step11_gppnvt
-  out: gppnvt.out
-  err: gppnvt.err
-  mdp: gmx_full_nvt.mdp
-  tpr: gppnvt.tpr
+  paths:
+    path: step11_gppnvt
+    out: gppnvt.out
+    err: gppnvt.err
+    mdp: gmx_full_nvt.mdp
+    tpr: gppnvt.tpr
 
 # Step12: mdnvt -- Running: nvt constant number of molecules, volume and temp
 step12_mdnvt:
-  path: step12_mdnvt
-  out: mdnvt.out
-  err: mdnvt.err
-  trr: mdnvt.trr
-  gro: mdnvt.gro
-  edr: mdnvt.edr
-  cpt: mdnvt.cpt
+  paths:
+    path: step12_mdnvt
+    out: mdnvt.out
+    err: mdnvt.err
+    trr: mdnvt.trr
+    gro: mdnvt.gro
+    edr: mdnvt.edr
+    cpt: mdnvt.cpt
 
 # Step13: gppnpt -- Preprocessing: npt constant number of molecules, pressure
 # and temp
 step13_gppnpt:
-  path: step13_gppnpt
-  out: gppnpt.out
-  err: gppnpt.err
-  mdp: gmx_full_npt.mdp
-  tpr: npt.tpr
+  paths:
+    path: step13_gppnpt
+    out: gppnpt.out
+    err: gppnpt.err
+    mdp: gmx_full_npt.mdp
+    tpr: npt.tpr
 
 # Step14: mdnpt -- Running: npt constant number of molecules, pressure and temp
 step14_mdnpt:
-  path: step14_mdnpt
-  out: mdnpt.out
-  err: mdnpt.err
-  trr: mdnpt.trr
-  gro: mdnpt.gro
-  edr: mdnpt.edr
-  cpt: mdnpt.cpt
+  paths:
+    path: step14_mdnpt
+    out: mdnpt.out
+    err: mdnpt.err
+    trr: mdnpt.trr
+    gro: mdnpt.gro
+    edr: mdnpt.edr
+    cpt: mdnpt.cpt
 
 # Step15: gppeq -- Preprocessing: 1ns Molecular dynamics Equilibration
 step15_gppeq:
-  path: step15_gppeq
-  out: gppeq.out
-  err: gppeq.err
-  mdp: gmx_full_md.mdp
-  tpr: gppeq.tpr
+  paths:
+    path: step15_gppeq
+    out: gppeq.out
+    err: gppeq.err
+    mdp: gmx_full_md.mdp
+    tpr: gppeq.tpr
 
 # Step16: mdeq -- Running: 1ns Molecular dynamics Equilibration
 step16_mdeq:
-  path: step16_mdeq
-  out: mdeq.out
-  err: mdeq.err
-  trr: md.trr
-  gro: md.gro
-  edr: md.edr
-  cpt: md.cpt
+  paths:
+    path: step16_mdeq
+    out: mdeq.out
+    err: mdeq.err
+    trr: md.trr
+    gro: md.gro
+    edr: md.edr
+    cpt: md.cpt
 
 # Step17: rms -- Computing RMSD
 step17_rmsd:
-  path: step17_rmsd
-  out: rmsd.out
-  err: rmsd.err
-  xvg: rmsd.xvg
+  paths:
+    path: step17_rmsd
+    out: rmsd.out
+    err: rmsd.err
+    xvg: rmsd.xvg

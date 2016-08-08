@@ -18,8 +18,9 @@ from os.path import join as opj
 class YamlReader(object):
     """Configuration file loader for yaml format files.
 
-    The path for the configuration file path should be provided via the
-    'PYMDS_CONF' environment variable. Default path will be './conf.yaml'
+    The path for the configuration file path should be provided by an argument
+    in the constructor or the 'PYMDS_CONF' environment variable.
+    If none of the two is provided the default path will be './conf.yaml'
     """
 
     def __init__(self, yaml_path=None):
@@ -45,16 +46,26 @@ class YamlReader(object):
 
         self.properties = self._read_yaml()
         dp = self.properties[step]
-        if mut is None:
-            dp['path'] = opj(self.properties['workflow_path'], dp['path'])
-        else:
-            dp['path'] = opj(self.properties['workflow_path'], mut, dp['path'])
-        for key in dp:
-            if key != 'path':
-                dp[key] = opj(dp['path'], dp[key])
+        if 'paths' in dp:
+            if mut is None:
+                dp['path'] = opj(self.properties['workflow_path'], dp['paths']['path'])
+            else:
+                dp['path'] = opj(self.properties['workflow_path'], mut, dp['paths']['path'])
+            for key in dp['paths']:
+                if key != 'path':
+                    dp[key] = opj(dp['path'], dp['paths'][key])
+
+        if 'properties' in dp:
+            for key in dp['properties']:
+                dp[key] = dp['properties'][key]
+
+        dp.pop('paths', None)
+        dp.pop('properties', None)
 
         return Dict2Obj(dp)
 
 
 def str2bool(v):
+    if isinstance(v, bool):
+            return v
     return v.lower() in ("yes", "true", "t", "1")
