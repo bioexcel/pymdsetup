@@ -53,7 +53,8 @@ def main():
     scwrl_path = prop['scwrl4_path']
     input_pdb_code = prop['pdb_code']
     # Testing purposes: Remove last Test
-    shutil.rmtree(prop['workflow_path'])
+    if os.path.exists(prop['workflow_path']):
+        shutil.rmtree(prop['workflow_path'])
     # Create the wokflow working dir
     fu.create_dir(os.path.abspath(prop['workflow_path']))
 
@@ -107,6 +108,8 @@ def main():
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
+        print settings.str2bool(p_p2g.ignh)
+        print type(settings.str2bool(p_p2g.ignh))
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
                                  water_type=p_p2g.water_type,
                                  force_field=p_p2g.force_field,

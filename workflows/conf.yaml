@@ -48,9 +48,12 @@ step4_p2g:
     gro: p2g.gro
     top: p2g.top
   properties:
-    water_type: tip3p
-    force_field: amber99sb-ildn
-    ignh: False
+    # Available water molecule types: tip3p, spce, etc.
+    water_type: spce
+    # Available force fields: amber99sb-ildn, oplsaa, etc.
+    force_field: oplsaa
+    # Should be False in future operations
+    ignh: True
 
 # Step5: ec -- Define box dimensions
 step5_ec:
@@ -62,7 +65,8 @@ step5_ec:
   properties:
     # Distance of the box from the outermost atom in nm. ie 1.0nm = 10 Ångströms
     distance_to_molecule: 1.0
-    box_type: octahedron
+    # Available box types: octahedron, cubic, etc.
+    box_type: cubic
     center_molecule: True
 
 # Step6: sol -- Fill the box with water molecules
@@ -95,7 +99,8 @@ step8_gio:
     gro: gio.gro
     top: gio.top
   properties:
-    neutral: False
+    neutral: True
+    # If neutral is True concentration value is not used
     concentration: 0.05
 
 # Step9: gppmin -- Preprocessing: Energy minimization
