@@ -4,16 +4,18 @@
 @author: pau
 """
 try:
+    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
     from pycompss.api.task import task
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.pycompss_dummies.task import task
-    from pymdsetup.pycompss_dummies.constraint import constraint
-    from pymdsetup.pycompss_dummies.parameter import *
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Editconf512(object):
@@ -21,7 +23,7 @@ class Editconf512(object):
     """
 
     def __init__(self, structure_gro_path, output_gro_path,
-                 distance_to_molecule=1.0, box_type='cubic',
+                 distance_to_molecule=1.0, box_type='octahedron',
                  center_molecule=True, log_path='None', error_path='None',
                  gmx_path='None'):
         self.structure_gro_path = structure_gro_path

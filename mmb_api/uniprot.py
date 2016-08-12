@@ -22,33 +22,35 @@ class MmbVariants(object):
     def get_variants(self):
         url_uniprot_mut = ("http://mmb.irbbarcelona.org"
                            "/api/uniprot/"+self.uniprot+"/entry"
-                           "/variants/vardata/mut/")
+                           "/variants/vardata/mut/?varorig=humsavar")
         return requests.get(url_uniprot_mut).json()['variants.vardata.mut']
 
     def get_pdb_variants(self):
         url_mapPDBRes = ("http://mmb.irbbarcelona.org/api/"
-                         "uniprot/"+self.uniprot+"/mapPDBRes")
+                         "uniprot/"+self.uniprot+"/mapPDBRes?pdbId="
+                         + self.pdb_code)
 
         pattern = re.compile(("p.(?P<wt>[a-zA-Z]{3})"
                               "(?P<resnum>\d+)(?P<mt>[a-zA-Z]{3})"))
 
         unfiltered_dic = requests.get(url_mapPDBRes).json()
-        mapdic = {}
+        if len(unfiltered_dic) == 0:
+            return []
+
+        mapdic = requests.get(url_mapPDBRes).json()
         mutations = []
-        for k in unfiltered_dic.keys():
-            if k.startswith(self.pdb_code.upper()):
-                mapdic[k[-1]] = unfiltered_dic[k]
         uniprot_var = self.get_variants()
+        print "VARIANTS: " + str(uniprot_var)
+        print ""
         for var in uniprot_var:
+            print "VAR: " + var
             uni_mut = pattern.match(var).groupdict()
             for k in mapdic.keys():
                 for fragment in mapdic[k]:
-                    unp_s = int(fragment['unp_start'])
-                    uni_mut_resnum = int(uni_mut['resnum'])
-                    unp_e = int(fragment['unp_end'])
-                    pdb_s = int(fragment['pdb_start'])
-                    if unp_s <= uni_mut_resnum <= unp_e:
-                        resnum = uni_mut_resnum + pdb_s - unp_s
-                        mutations.append(k + '.' + uni_mut['wt'] +
-                                         str(resnum) + uni_mut['mt'])
+                    if int(fragment['unp_start']) <= int(uni_mut['resnum']) <= int(fragment['unp_end']):
+                        resnum = int(uni_mut['resnum']) + int(fragment['pdb_start']) - int(fragment['unp_start'])
+                        mutations.append(k[-1]+'.'+uni_mut['wt']+str(resnum)+uni_mut['mt'])
+                        print str(fragment) + "<====== ACCEPTED"
+                    else:
+                        print str(fragment) + "<====== DENIED"
         return mutations

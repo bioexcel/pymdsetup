@@ -14,9 +14,9 @@ try:
     from pycompss.api.constraint import constraint
 except ImportError:
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.pycompss_dummies.task import task
-    from pymdsetup.pycompss_dummies.constraint import constraint
-    from pymdsetup.pycompss_dummies.parameter import *
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Pdb2gmx512(object):
@@ -24,7 +24,7 @@ class Pdb2gmx512(object):
     """
 
     def __init__(self, structure_pdb_path, output_path, output_top_path,
-                 water_type='spce', force_field='oplsaa', ignh=False,
+                 water_type='tip3p', force_field='amber99sb-ildn', ignh=False,
                  log_path='None', error_path='None', gmx_path='None'):
         self.structure_pdb_path = structure_pdb_path
         self.output_path = output_path

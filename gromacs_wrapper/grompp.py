@@ -4,18 +4,21 @@
 @author: pau
 """
 
+import shutil
 import os.path as op
 
 try:
+    import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
     from pycompss.api.parameter import *
     from pycompss.api.constraint import constraint
 except ImportError:
+    from pymdsetup.tools import file_utils as fu
     from pymdsetup.command_wrapper import cmd_wrapper
-    from pymdsetup.pycompss_dummies.task import task
-    from pymdsetup.pycompss_dummies.constraint import constraint
-    from pymdsetup.pycompss_dummies.parameter import *
+    from pymdsetup.dummies_pycompss.task import task
+    from pymdsetup.dummies_pycompss.constraint import constraint
+    from pymdsetup.dummies_pycompss.parameter import *
 
 
 class Grompp512(object):
@@ -47,6 +50,8 @@ class Grompp512(object):
         command.move_file_output("mdout.mdp", op.dirname(self.output_tpr_path))
 
     @task(returns=dict)
-    def launchPyCOMPSs(self, sol, gro='None'):
+    def launchPyCOMPSs(self, last_step, mdp_path):
+        #fu.copy_ext(itp_path, curr_path, 'itp')
+        shutil.copy(mdp_path, self.mdp_path)
         self.launch()
         return {'gpp_tpr': self.output_tpr_path}
