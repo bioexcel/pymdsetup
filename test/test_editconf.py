@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """Unittests for gromacs_wrapper.editconf module
 
-@author: pau
 """
 import unittest
 from pymdsetup.gromacs_wrapper.editconf import Editconf512

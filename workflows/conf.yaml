@@ -52,7 +52,7 @@ step4_p2g:
     water_type: spce
     # Available force fields: amber99sb-ildn, oplsaa, etc.
     force_field: oplsaa
-    # Should be False in future operations
+    # Should be set to False in next release
     ignh: True
 
 # Step5: ec -- Define box dimensions

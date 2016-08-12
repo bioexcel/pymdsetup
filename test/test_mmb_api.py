@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-"""Unittests for structure.db module
-
-@author: pau
+"""Unittests for  mmb_api package
 """
 import unittest
 from pymdsetup.mmb_api.pdb import MmbPdb
@@ -11,6 +8,8 @@ from os.path import join as opj
 
 
 class TestPdb(unittest.TestCase):
+    """Unittests for  mmb_api.pdb module
+    """
 
     def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
@@ -40,11 +39,13 @@ class TestPdb(unittest.TestCase):
             # Don't know why use:
             # self.assertMultiLineEqual(out_string,
             #                           gold_string)
-            # Prints the whole pdb file on the screen
+            # Prints the whole pdb file in the standar output (screen)
             self.assertMultiLineEqual(out_string[:1000], gold_string[:1000])
 
 
 class TestUniprot(unittest.TestCase):
+    """Unittests for  mmb_api.uniprot module
+    """
 
     def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
@@ -61,11 +62,25 @@ class TestUniprot(unittest.TestCase):
             except Exception, e:
                 print e
 
-    def test_fetch_variants(self):
+    def test_get_uniprot(self):
         pdb_code = '3vtv'
         mmb_var = MmbVariants(pdb_code)
-        variants = mmb_var.fetch_variants()
+        uniprot = mmb_var.get_uniprot()
+        uniprot_expected = 'Q96CV9'
+        self.assertEqual(uniprot, uniprot_expected)
+
+    def test_get_variants(self):
+        pdb_code = '3vtv'
+        mmb_var = MmbVariants(pdb_code)
+        variants = mmb_var.get_variants()
         variants_expected = ['p.His26Asp', 'p.Glu50Lys']
+        self.assertEqual(variants[:2], variants_expected)
+
+    def test_get_pdb_variants(self):
+        pdb_code = '2vgb'
+        mmb_var = MmbVariants(pdb_code)
+        variants = mmb_var.get_pdb_variants()
+        variants_expected = ['A.Met107Thr', 'B.Met107Thr']
         self.assertEqual(variants[:2], variants_expected)
 
 

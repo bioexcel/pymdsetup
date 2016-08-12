@@ -72,25 +72,30 @@ def main():
 
     print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
-    # mutations = mmbuniprot.get_pdb_variants()
-    # print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
-# Demo purposes
-########################################################################
-    if mmbuniprot.get_uniprot() == 'P00698':
-#        mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL', 'A.VAL2CYS', 'A.GLY4ALA', 'A.CYS6ALA', 'A.VAL2ALA', 'A.GLY4CYS', 'A.CYS6GLY', 'A.VAL2ARG', 'A.GLY4ARG']
-        mutations = ['A.VAL2GLY']
-########################################################################
+    #if it is a Demo.
+    if mmbuniprot.get_uniprot() != 'P00698':
+        mutations = mmbuniprot.get_pdb_variants()
+        print '     Uniprot code: ' + mmbuniprot.get_uniprot()
 
-    # if mutations is None or len(mutations) == 0:
-    #     print (prop['pdb_code'] +
-    #            " " + mmbuniprot.get_uniprot() + ": No variants")
-    #     return
-    # else:
-    #     print ('     Found ' + str(len(mmbuniprot.get_variants())) +
-    #            ' uniprot variants')
-    #     print ('     Mapped to ' + str(len(mutations)) + ' ' + input_pdb_code +
-    #            ' PDB variants')
+        if mutations is None or len(mutations) == 0:
+            print (prop['pdb_code'] +
+                   " " + mmbuniprot.get_uniprot() + ": No variants")
+            return
+        else:
+            print ('     Found ' + str(len(mmbuniprot.get_variants())) +
+                   ' uniprot variants')
+            print ('     Mapped to ' + str(len(mutations)) + ' ' +
+                   input_pdb_code + ' PDB variants')
+
+    # Demo purposes
+    ########################################################################
+    else:
+            # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL', 'A.VAL2CYS',
+            #              'A.GLY4ALA', 'A.CYS6ALA', 'A.VAL2ALA', 'A.GLY4CYS',
+            #              'A.CYS6GLY', 'A.VAL2ARG', 'A.GLY4ARG']
+            mutations = ['A.VAL2GLY']
+    ########################################################################
 
     for mut in mutations:
         print ''
