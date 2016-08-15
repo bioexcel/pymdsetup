@@ -28,17 +28,19 @@ class TestEditconf512(unittest.TestCase):
         input_path = opj(self.data_dir, 'pdb2gmx512_gold.gro')
         output_path = opj(self.results, 'editconf512.gro')
         gold_path = opj(self.data_dir, 'editconf512_gold.gro')
-        ec = Editconf512(input_path, output_path)
+        ec = Editconf512(input_path, output_path, box_type='octahedron')
         ec.launch()
         with open(output_path, 'r') as out_file, open(gold_path,
                                                       'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launchPycompss(self):
         input_path = opj(self.data_dir, 'pdb2gmx512_gold.gro')
         output_path = opj(self.results, 'editconf512.gro')
         gold_path = opj(self.data_dir, 'editconf512_gold.gro')
-        ec = Editconf512(input_path, output_path)
+        ec = Editconf512(input_path, output_path, box_type='cubic')
         ec.launchPyCOMPSs()
         with open(output_path, 'r') as out_file, open(gold_path,
                                                       'r') as gold_file:

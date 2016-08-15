@@ -24,7 +24,7 @@ class TestScwrl(unittest.TestCase):
                 print e
 
     def test_launch(self):
-        mutation = 'p.His11Asp'
+        mutation = 'A.His11Asp'
         output_path = opj(self.results, 'scwrl4.pdb')
         output_gold_path = opj(self.data_dir, 'scwrl4_gold.pdb')
         output_prepared_path = opj(self.results,
@@ -40,8 +40,10 @@ class TestScwrl(unittest.TestCase):
                   'r') as out_file, open(output_gold_path, 'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launchPycompss(self):
-        mutation = 'p.His11Asp'
+        mutation = 'A.His11Asp'
         output_path = opj(self.results, 'scwrl4.pdb')
         output_gold_path = opj(self.data_dir, 'scwrl4_gold.pdb')
         output_prepared_path = opj(self.results,

@@ -23,7 +23,7 @@ class Scwrl4(object):
     """Wrapper class for the 4.0 version of SCWRL.
 
     Args:
-        
+
     """
 
     def __init__(self, pdb_path, output_pdb_path, mutation, log_path='None',
@@ -82,6 +82,7 @@ class Scwrl4(object):
 
     @task(returns=str)
     def launchPyCOMPSs(self):
-        """ IN: mmbpdb, OUT: scw_pdb """
+        """ Launches SCWRL 4 using the PyCOMPSs library.
+        """
         self.launch()
         return self.output_pdb_path

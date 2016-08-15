@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-"""Python wrapper for the GROMACS solvate module
-
-@author: pau
+"""Python wrapper module for the GROMACS solvate module
 """
 import shutil
 import os

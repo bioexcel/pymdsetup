@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Unittests for gromacs_wrapper.solvate module
-
-@author: pau
 """
 import unittest
 from pymdsetup.gromacs_wrapper.solvate import Solvate512

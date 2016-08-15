@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-"""Python wrapper for the GROMACS editconf module
-
-@author: pau
+"""Python wrapper module for the GROMACS editconf module
 """
 try:
     import tools.file_utils as fu
@@ -20,6 +17,15 @@ except ImportError:
 
 class Editconf512(object):
     """Wrapper for the 5.1.2 version of the editconf module
+
+    Args:
+        structure_gro_path (str): Path to the input GROMACS GRO file.
+        output_gro_path (str): Path to the output GROMACS GRO file.
+        distance_to_molecule (float): Distance of the box from the outermost
+                                      atom in nm. ie 1.0nm = 10 Angstroms.
+        box_type (str): Geometrical shape of the solvent box.
+                        Available box types: octahedron, cubic, etc.
+        center_molecule (bool): Center molecule in the box.
     """
 
     def __init__(self, structure_gro_path, output_gro_path,
@@ -36,6 +42,8 @@ class Editconf512(object):
         self.error_path = error_path
 
     def launch(self):
+        """Launches the execution of the GROMACS editconf module.
+        """
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = [gmx, "editconf", "-f", self.structure_gro_path,
                "-o", self.output_gro_path, "-d",
@@ -48,5 +56,10 @@ class Editconf512(object):
 
     @task(returns=str)
     def launchPyCOMPSs(self, gro_path):
+        """Launches the GROMACS editconf module using the PyCOMPSs library.
+
+        Args:
+            gro_path (str): Path to the input GROMACS GRO structure.
+        """
         self.launch()
         return self.output_gro_path

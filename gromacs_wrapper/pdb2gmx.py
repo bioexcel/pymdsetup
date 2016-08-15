@@ -74,7 +74,7 @@ class Pdb2gmx512(object):
         """Launches the GROMACS pdb2gmx module using the PyCOMPSs library.
 
         Args:
-            pdb_path (str): Path to the input pdb structure.
+            pdb_path (str): Path to the input PDB structure.
         """
         self.launch()
         return {'p2g_gro': self.output_path, 'p2g_top': self.output_top_path}
