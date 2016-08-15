@@ -1,5 +1,4 @@
-"""
-
+"""Python wrapper module for SCWRL
 """
 import re
 import os
@@ -7,6 +6,7 @@ from os.path import join as opj
 import shutil
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB import PDBIO
+
 try:
     from command_wrapper import cmd_wrapper
     from pycompss.api.task import task
@@ -20,7 +20,10 @@ except ImportError:
 
 
 class Scwrl4(object):
-    """
+    """Wrapper class for the 4.0 version of SCWRL.
+
+    Args:
+        
     """
 
     def __init__(self, pdb_path, output_pdb_path, mutation, log_path='None',

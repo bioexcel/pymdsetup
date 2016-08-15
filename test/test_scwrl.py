@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Unittests for structure.db module
-
-@author: pau
 """
 import unittest
 from pymdsetup.scwrl_wrapper.scwrl import Scwrl4

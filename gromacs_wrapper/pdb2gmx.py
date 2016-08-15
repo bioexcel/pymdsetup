@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-"""Python wrapper for the GROMACS pdb2gmx module
-
-@author: pau
+"""Python wrapper module for the GROMACS pdb2gmx module
 """
 import os
 from os.path import join as opj
@@ -20,7 +17,22 @@ except ImportError:
 
 
 class Pdb2gmx512(object):
-    """Wrapper for the 5.1.2 version of the pdb2gmx module
+    """Wrapper class for the 5.1.2 version of the GROMACS pdb2gmx module
+
+    Args:
+        structure_pdb_path (str): Path to the input PDB file.
+        output_path (str): Path to the output GROMACS GRO file.
+        output_top_path (str): Path the output GROMACS TOP file.
+        water_type (str): Water molecule type.
+            Valid values: tip3p, spce, etc.
+        force_field (str): Force field to be used during the conversion.
+            Valid values: amber99sb-ildn, oplsaa, etc.
+        ignh (bool): Should pdb2gmx ignore the hidrogens in the original
+            structure.
+        log_path (str): Path to the file where the pdb2gmx log will be stored.
+        error_path (str): Path to the file where the pdb2gmx error log will be
+            stored.
+        gmx_path (str): Path to the GROMACS executable binary.
     """
 
     def __init__(self, structure_pdb_path, output_path, output_top_path,
@@ -37,6 +49,8 @@ class Pdb2gmx512(object):
         self.error_path = error_path
 
     def launch(self):
+        """Launches the execution of the GROMACS pdb2gmx module.
+        """
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = [gmx, "pdb2gmx", "-f", self.structure_pdb_path,
                "-o", self.output_path, "-p", self.output_top_path, "-water",
@@ -57,5 +71,10 @@ class Pdb2gmx512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, pdb_path):
+        """Launches the GROMACS pdb2gmx module using the PyCOMPSs library.
+
+        Args:
+            pdb_path (str): Path to the input pdb structure.
+        """
         self.launch()
         return {'p2g_gro': self.output_path, 'p2g_top': self.output_top_path}

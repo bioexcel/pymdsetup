@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Unittests for gromacs_wrapper.pdb2gmx module
-
-@author: pau
 """
 import unittest
 from pymdsetup.gromacs_wrapper.pdb2gmx import Pdb2gmx512
@@ -10,6 +7,8 @@ from os.path import join as opj
 
 
 class TestPdb2gmx512(unittest.TestCase):
+    """Unittests for the gromacs_wrapper.pdb2gmx.Pdb2gmx512 class.
+    """
 
     def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
@@ -45,8 +44,8 @@ class TestPdb2gmx512(unittest.TestCase):
         log_out = opj(self.results, 'p2g_out.log')
         log_err = opj(self.results, 'p2g_err.log')
         p2g = Pdb2gmx512(pdb_path, output_gro_path, output_top_path,
-                         force_field='amber99sb-ildn', log_path=log_out,
-                         error_path=log_err)
+                         water_type='spce', force_field='amber99sb-ildn',
+                         ignh=False, log_path=log_out, error_path=log_err)
         p2g.launch()
 
         with open(output_gro_path, 'r') as out_gro, open(gold_gro_path,

@@ -73,7 +73,7 @@ def main():
     print 'step2:  mmbuniprot -- Get mutations'
     mmbuniprot = uniprot.MmbVariants(input_pdb_code)
 
-    #if it is a Demo.
+    #Is it a Demo?
     if mmbuniprot.get_uniprot() != 'P00698':
         mutations = mmbuniprot.get_pdb_variants()
         print '     Uniprot code: ' + mmbuniprot.get_uniprot()
