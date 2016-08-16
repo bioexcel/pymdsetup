@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
 """Python wrapper for the GROMACS grompp module
-
-@author: pau
 """
-
 import shutil
 import os.path as op
 
@@ -22,7 +18,21 @@ except ImportError:
 
 
 class Grompp512(object):
-    """Wrapper for the 5.1.2 version of the pdb2gmx module
+    """Wrapper for the 5.1.2 version of the GROMACS grompp module.
+    The GROMACS preprocessor module needs to be feeded with the input system
+    and the molecular dynamics parameter file MDP, to create a portable binary
+    run input file TPR.
+
+    Args:
+        mdp_path (str): Path to the input GROMACS parameter input file MDP.
+        gro_path (str): Path to the input GROMACS structure GRO file.
+        top_path (str): Path the input GROMACS topology TOP file.
+        output_tpr_path (str): Path to the portable binary run input file TPR.
+        cpt_path (str): Path to the GROMACS checkpoint file CPT.
+        log_path (str): Path to the file where the pdb2gmx log will be stored.
+        error_path (str): Path to the file where the pdb2gmx error log will be
+                          stored.
+        gmx_path (str): Path to the GROMACS executable binary.
     """
 
     def __init__(self, mdp_path, gro_path, top_path, output_tpr_path,
@@ -38,6 +48,8 @@ class Grompp512(object):
         self.error_path = error_path
 
     def launch(self):
+        """Launches the execution of the GROMACS grompp module.
+        """
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = [gmx, "grompp", "-f", self.mdp_path, "-c", self.gro_path, "-p",
                self.top_path, "-o", self.output_tpr_path]
@@ -51,6 +63,12 @@ class Grompp512(object):
 
     @task(returns=dict)
     def launchPyCOMPSs(self, last_step, mdp_path):
+        """Launches the GROMACS grompp module using the PyCOMPSs library.
+
+        Args:
+            last_step (dict): Output of the last PyCOMPSs step.
+            mdp_path (str): Path to the input GROMACS parameter input file MDP.
+        """
         #fu.copy_ext(itp_path, curr_path, 'itp')
         shutil.copy(mdp_path, self.mdp_path)
         self.launch()

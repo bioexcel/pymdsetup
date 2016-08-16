@@ -31,7 +31,7 @@ class Pdb2gmx512(object):
             structure.
         log_path (str): Path to the file where the pdb2gmx log will be stored.
         error_path (str): Path to the file where the pdb2gmx error log will be
-            stored.
+                          stored.
         gmx_path (str): Path to the GROMACS executable binary.
     """
 

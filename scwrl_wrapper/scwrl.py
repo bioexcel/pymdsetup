@@ -23,7 +23,13 @@ class Scwrl4(object):
     """Wrapper class for the 4.0 version of SCWRL.
 
     Args:
-
+        pdb_path (str): Path to the input PDB file.
+        output_pdb_path (srt): Path to the output mutated PDB file.
+        mutation (str): String representing the mutation. ie: A.His11Asp
+        log_path (str): Path to the file where the SCWRL log will be stored.
+        error_path (str): Path to the file where the SCWRL error log will be
+            stored.
+        scwrl_path (str): Path to the SCWRL executable binary.
     """
 
     def __init__(self, pdb_path, output_pdb_path, mutation, log_path='None',
@@ -38,6 +44,8 @@ class Scwrl4(object):
         self.error_path = error_path
 
     def launch(self):
+        """Launches the execution of the SCWRL binary.
+        """
         # Read structure with Biopython
         parser = PDBParser(PERMISSIVE=1)
         st = parser.get_structure('s', self.pdb_path)  # s random id never used
@@ -48,12 +56,12 @@ class Scwrl4(object):
         residue = st[0][chain][(' ', resnum, ' ')]
         backbone_atoms = ['N', 'CA', 'C', 'O', 'CB']
         not_backbone_atoms = []
-        '''
-        The following formula does not work. Biopython bug?
-        for atom in residue:
-            if atom.id not in backbone_atoms:
-                residue.detach_child(atom.id)
-        '''
+
+        # The following formula does not work. Biopython bug?
+        # for atom in residue:
+        #     if atom.id not in backbone_atoms:
+        #         residue.detach_child(atom.id)
+
         for atom in residue:
             if atom.id not in backbone_atoms:
                 not_backbone_atoms.append(atom)

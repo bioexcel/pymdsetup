@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 """Python wrapper for the GROMACS genion module
-
-@author: pau
 """
-
 import shutil
 import tempfile
 import os
+
 try:
     import tools.file_utils as fu
     from command_wrapper import cmd_wrapper
@@ -23,6 +20,21 @@ except ImportError:
 
 class Genion512(object):
     """Wrapper for the 5.1.2 version of the genion module
+
+    Args:
+        tpr_path (str): Path to the input GROMACS portable run input TPR file.
+        output_gro_path (str): Path to the input GROMACS structure GRO file.
+        input_top (str): Path the input GROMACS topology TOP file.
+        output_top (str): Path the output GROMACS topology TOP file.
+        replaced_group (str): Group of molecules that will be replaced by the
+                              solvent.
+        neutral (bool): Neutralize the charge of the system.
+        concentration (float): Concentration of the ions in (mol/liter).
+        seed (int): Seed for random number generator.
+        log_path (str): Path to the file where the genion log will be stored.
+        error_path (str): Path to the file where the genion error log will be
+                          stored.
+        gmx_path (str): Path to the GROMACS executable binary.
     """
 
     def __init__(self, tpr_path, output_gro_path, input_top, output_top,
@@ -42,6 +54,8 @@ class Genion512(object):
         self.error_path = error_path
 
     def launch(self):
+        """Launches the execution of the GROMACS genion module.
+        """
         shutil.copy(self.input_top, self.output_top)
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = ["echo", self.replaced_group, "|", gmx, "genion", "-s",
@@ -63,6 +77,8 @@ class Genion512(object):
 
     @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
     def launchPyCOMPSs(self, top, tpr, topin, topout, itp_path, curr_path):
+        """Launches the GROMACS genion module using the PyCOMPSs library.
+        """
         fu.copy_ext(itp_path, curr_path, 'itp')
         shutil.copy(topin, topout)
         tempdir = tempfile.mkdtemp()

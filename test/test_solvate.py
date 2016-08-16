@@ -7,7 +7,8 @@ from os.path import join as opj
 
 
 class TestSolvate512(unittest.TestCase):
-
+    """Unittests for the gromacs_wrapper.solvate.Solvate512 class.
+    """
     def setUp(self):
         self.data_dir = opj(os.path.dirname(__file__), 'data')
         self.results = opj(self.data_dir, "temp_results")
@@ -44,6 +45,8 @@ class TestSolvate512(unittest.TestCase):
                                          else '' for line in gold_top])
             self.assertItemsEqual(out_top_list, out_top_gold_list)
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launchPycompss(self):
         input_path = opj(self.data_dir, 'editconf512_gold.gro')
         input_top = opj(self.data_dir, 'pdb2gmx512_gold.top')
@@ -52,7 +55,7 @@ class TestSolvate512(unittest.TestCase):
         output_path = opj(self.results, 'solvate512.gro')
         gold_path = opj(self.data_dir, 'solvate512_gold.gro')
         sol = Solvate512(input_path, output_path, input_top, output_top)
-        sol.launchPyCOMPSs()
+        sol.launchPyCOMPSs(input_path, output_path, input_top, output_top)
         with open(output_path, 'r') as out_file, open(gold_path,
                                                       'r') as gold_file:
             self.assertMultiLineEqual(out_file.read(), gold_file.read())

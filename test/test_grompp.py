@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Unittests for gromacs_wrapper.grompp module
-
-@author: pau
 """
 import unittest
 from pymdsetup.gromacs_wrapper.grompp import Grompp512
@@ -39,6 +36,8 @@ class TestGrompp512(unittest.TestCase):
 
         self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launch_ionsPycompss(self):
         mdp_path = opj(self.data_dir, 'gmx_full_ions.mdp')
         gro_path = opj(self.data_dir, 'solvate512_gold.gro')
@@ -47,7 +46,7 @@ class TestGrompp512(unittest.TestCase):
         gold_tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
 
         gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
-        gpp.launchPyCOMPSs()
+        gpp.launchPyCOMPSs(None, mdp_path)
 
         self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 
@@ -63,6 +62,8 @@ class TestGrompp512(unittest.TestCase):
 
         self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launch_minimizationPycompss(self):
         mdp_path = opj(self.data_dir, 'gmx_full_min.mdp')
         gro_path = opj(self.data_dir, 'genion512_gold.gro')
@@ -71,7 +72,7 @@ class TestGrompp512(unittest.TestCase):
         gold_tpr_path = opj(self.data_dir, 'grompp512_min_gold.tpr')
 
         gpp = Grompp512(mdp_path, gro_path, top_path, output_tpr_path)
-        gpp.launchPyCOMPSs()
+        gpp.launchPyCOMPSs(None, mdp_path)
 
         self.assertTrue(filecmp.cmp(output_tpr_path, gold_tpr_path))
 

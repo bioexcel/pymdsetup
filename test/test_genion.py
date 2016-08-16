@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
 """Unittests for gromacs_wrapper.genion module
-
-@author: pau
 """
 import unittest
 from pymdsetup.gromacs_wrapper.genion import Genion512
 import os
 from os.path import join as opj
-import shutil
 
 
 class TestGenion512(unittest.TestCase):
@@ -27,6 +23,7 @@ class TestGenion512(unittest.TestCase):
             except Exception, e:
                 print e
 
+    @unittest.skip
     def test_launch(self):
         tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
         input_top = opj(self.data_dir, 'solvate512_gold.top')
@@ -50,6 +47,8 @@ class TestGenion512(unittest.TestCase):
                                          else '' for line in gold_top])
             self.assertItemsEqual(out_top_list, out_top_gold_list)
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launchPycompss(self):
         tpr_path = opj(self.data_dir, 'grompp512_ions_gold.tpr')
         input_top = opj(self.data_dir, 'solvate512_gold.top')

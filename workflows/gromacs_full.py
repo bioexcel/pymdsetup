@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-"""Gromacs full setup from a pdb
-
-
+"""Gromacs full setup from a PDB code
 """
 import os
 import shutil

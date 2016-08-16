@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
 """Python wrapper for the GROMACS mdrun module
-
-@author: pau
 """
 import os.path as op
 
