@@ -110,8 +110,6 @@ def main():
         print 'step4:  p2g ------ Create gromacs topology'
         p_p2g = conf.step_prop('step4_p2g', mut)
         fu.create_dir(p_p2g.path)
-        print settings.str2bool(p_p2g.ignh)
-        print type(settings.str2bool(p_p2g.ignh))
         p2g = pdb2gmx.Pdb2gmx512(p_scw.mut_pdb, p_p2g.gro, p_p2g.top,
                                  water_type=p_p2g.water_type,
                                  force_field=p_p2g.force_field,
