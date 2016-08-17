@@ -47,7 +47,11 @@ All of them are compatible with pytest and nosetests libraries.
 
 ### Copyright & Licensing
 This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the 
-BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/) project. 
+BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/) project.  
+   
+   
+   
+![Bioexcel](http://mmb.pcb.ub.es/gitlab/BioExcel/bioexcel_logo.png "Bioexcel")
 
 
 
