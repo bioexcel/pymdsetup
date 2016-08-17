@@ -1,7 +1,7 @@
 # pymdsetup
 
 ### Introduction
-Pymdsetup is a python module to setup systems to run molecular
+Pymdsetup is a python package to setup systems to run molecular
 dynamics simulations.
 
 ### Version 0.1 Alpha
@@ -14,45 +14,46 @@ In v0.1 Pymdsetup uses the following applications:
 4. PyCOMPSs: Python library for parallel computing. (https://www.bsc.es/computer-sciences/grid-computing/comp-superscalar/programming-model/python)
 
 ### Installation
-1. Download & Install Anaconda5
+1. Clone this repository in your local machine
+
+        #!bash
+        git clone https://github.com/bioexcel/pymdsetup.git
+        cd pymdsetup
+
+2. Download & Install Anaconda5
 
         #!bash
         wget https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda2-2.5.0-Linux-x86_64.sh
         bash Anaconda2-2.5.0-Linux-x86_64.sh
 
-2. Create an Anaconda environment
+3. Create an Anaconda environment
 
         #!bash
-        conda create --name
+        conda create --name pymdsetup --file conda_requirements.txt
+        source activate pymdsetup
 
-### GROMACS installation
-1. Download Gromacs package v.5.1.2 (February 2016)
+4. Third party applications installation  
+   In order to install the rest of applications please follow their installation instructions:
+  * GROMACS: http://manual.gromacs.org/documentation/5.1/install-guide/index.html
+  * SCWRL4: http://dunbrack.fccc.edu/scwrl4/#installation
+  * PyCOMPSs: https://www.bsc.es/computer-sciences/grid-computing/comp-superscalar/programming-model/python
 
-        #!bash
-        wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-5.1.2.tar.gz
-        mv gromacs-5.1.2.tar.gz $HOME/soft/gromacs/
-        cd $HOME/soft/gromacs/
+### Testing
+A comprehensive set of unitests is provided under the _/data_ directory.  
+All of them are compatible with pytest and nosetests libraries.
 
-2. Extract package
+### Usage
 
-        #!bash
-        tar xzvf gromacs-5.1.2.tar.gz
-        rm -rf gromacs-5.1.2.tar.gz
-        cd gromacs-5.1.2/
 
-3. Build from source
+### Copyright & Licensing
+This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the 
+BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/) project. 
 
-        #!bash
-        mkdir build
-        cd build/
-        cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=ON
-        make
-        make check
-        sudo make install
-        source /usr/local/gromacs/bin/GMXRC
 
+
+# Additional information:
 ### GROMACS not automated setup tutorial
-(source: http://www.bevanlab.biochem.vt.edu/Pages/Personal/justin/gmx-tutorials/lysozyme/01_pdb2gmx.html)
+(created using source: http://www.bevanlab.biochem.vt.edu/Pages/Personal/justin/gmx-tutorials/lysozyme/01_pdb2gmx.html)
 
 1. Download the Lysozyme PDB structure
 
