@@ -51,7 +51,7 @@ BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/) project
    
    
    
-![Bioexcel](http://mmb.pcb.ub.es/gitlab/BioExcel/bioexcel_logo.png "Bioexcel")
+![Bioexcel](bioexcel_logo.png "Bioexcel")
 
 
 
