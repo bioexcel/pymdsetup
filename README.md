@@ -1,8 +1,17 @@
 # pymdsetup
 
 ### Introduction
-Pymdsetup is a python module to setup systems to run a molecular
-dynamics simulation.
+Pymdsetup is a python module to setup systems to run molecular
+dynamics simulations.
+
+### Version 0.1 Alpha
+This first version is just an example of a functional workflow.
+In v0.1 Pymdsetup uses the following applications:
+
+1. GROMACS: Open source and widely used molecular dynamics simulation package. (http://www.gromacs.org/)
+2. MMBAPI: REST API to access the PDB, UNIPROT and lots of precomputed information about variants, residue mapping, etc. (http://mmb.pcb.ub.es/api/)
+3. SCWRL4: Application to determine the protein side chain conformations. (http://dunbrack.fccc.edu/scwrl4/)
+4. PyCOMPSs: Python library for parallel computing. (https://www.bsc.es/computer-sciences/grid-computing/comp-superscalar/programming-model/python)
 
 ### Installation
 1. Download & Install Anaconda5
