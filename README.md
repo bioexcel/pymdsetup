@@ -43,7 +43,17 @@ A comprehensive set of unitests is provided under the _/data_ directory.
 All of them are compatible with pytest and nosetests libraries.
 
 ### Usage
+1. Modify the paths of _workflows/conf.yaml_ to point your GROMACS and SCWRL4 binary files.
+2. Still in _conf.yaml_, select the input PDB code. In the current Alpha 0.1 this workflow has been tested with a small set of PDB codes and for demo purposes we recomend to use _1AKI_ the default one.
+3. Launch the serial workflow:
 
+        #!bash
+        python workflows/gromacs_full.py
+
+    or the paralel one:
+    
+        #!bash
+        python workflows/gromacs_full_pycompss.py
 
 ### Copyright & Licensing
 This software has been developed in the MMB group (http://mmb.pcb.ub.es) at the 
@@ -56,6 +66,35 @@ BSC (http://www.bsc.es/) for the european BioExcel (http://bioexcel.eu/) project
 
 
 # Additional information:
+
+### GROMACS installation
+1. Download Gromacs package v.5.1.2 (February 2016)
+
+        #!bash
+        wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-5.1.2.tar.gz
+        mv gromacs-5.1.2.tar.gz $HOME/soft/gromacs/
+        cd $HOME/soft/gromacs/
+
+2. Extract package
+
+        #!bash
+        tar xzvf gromacs-5.1.2.tar.gz
+        rm -rf gromacs-5.1.2.tar.gz
+        cd gromacs-5.1.2/
+
+3. Build from source
+
+        #!bash
+        mkdir build
+        cd build/
+        cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=ON
+        make
+        make check
+        sudo make install
+        source /usr/local/gromacs/bin/GMXRC
+
+
+
 ### GROMACS not automated setup tutorial
 (created using source: http://www.bevanlab.biochem.vt.edu/Pages/Personal/justin/gmx-tutorials/lysozyme/01_pdb2gmx.html)
 
