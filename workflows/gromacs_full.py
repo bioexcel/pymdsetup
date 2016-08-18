@@ -88,10 +88,12 @@ def main():
     # Demo purposes
     ########################################################################
     else:
+            # mutations = ['A.VAL2GLY']
+            mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
             # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL', 'A.VAL2CYS',
             #              'A.GLY4ALA', 'A.CYS6ALA', 'A.VAL2ALA', 'A.GLY4CYS',
             #              'A.CYS6GLY', 'A.VAL2ARG', 'A.GLY4ARG']
-            mutations = ['A.VAL2GLY']
+
     ########################################################################
 
     for mut in mutations:
@@ -247,13 +249,13 @@ def main():
         fu.create_dir(p_rmsd.path)
         rmsd = rms.Rms512(p_gio.gro, p_mdeq.trr, p_rmsd.xvg,
                           log_path=p_rmsd.out, error_path=p_rmsd.err)
-        #        rmsd.launch()
+        rmsd.launch()
         print '***************************************************************'
         print ''
 
         # Remove temp files
         fu.rm_temp()
-#       break
+
 
 if __name__ == '__main__':
     main()

@@ -1,6 +1,4 @@
 """Unittests for gromacs_wrapper.rms module
-
-@author: pau
 """
 import unittest
 from pymdsetup.gromacs_wrapper.rms import Rms512
@@ -44,6 +42,8 @@ class TestRms512(unittest.TestCase):
 
         self.assertEqual(rms.rmsd, 0.1557643)
 
+    @unittest.skipUnless(os.environ.get('PYCOMPSS') is not None,
+                         "Skip PyCOMPSs test")
     def test_launchPycompss(self):
         input_struct = opj(self.data_dir, 'rms_gold.pdb')
         input_traj = opj(self.data_dir, 'rms_gold.xtc')

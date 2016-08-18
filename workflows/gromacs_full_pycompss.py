@@ -83,10 +83,12 @@ def main():
     # Demo purposes
     ########################################################################
     else:
+            # mutations = ['A.VAL2GLY']
+            mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL']
             # mutations = ['A.VAL2GLY', 'A.GLY4VAL', 'A.CYS6VAL', 'A.VAL2CYS',
             #              'A.GLY4ALA', 'A.CYS6ALA', 'A.VAL2ALA', 'A.GLY4CYS',
             #              'A.CYS6GLY', 'A.VAL2ARG', 'A.GLY4ARG']
-            mutations = ['A.VAL2GLY']
+
     ########################################################################
 
     for mut in mutations:

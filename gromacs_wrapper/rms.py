@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
 """Python wrapper for the GROMACS rms module
-
-@author: pau
 """
-import shutil
 
 try:
     from command_wrapper import cmd_wrapper
@@ -17,9 +13,18 @@ except ImportError:
     from pymdsetup.dummies_pycompss.parameter import *
 
 
-
 class Rms512(object):
     """Wrapper for the 5.1.2 version of the rms module
+    Args:
+        input_ref_struct (str): Path to the original (before launching the
+                                trajectory) GROMACS structure file GRO.
+        input_traj (str): Path to the GROMACS uncompressed raw trajectory
+                          file TRR.
+        output_xvg (str): Path to the simple xmgrace plot file XVG.
+        log_path (str): Path to the file where the rms log will be stored.
+        error_path (str): Path to the file where the rms error log will be
+                          stored.
+        gmx_path (str): Path to the GROMACS executable binary.
     """
 
     def __init__(self, input_ref_struct, input_traj, output_xvg,
@@ -33,6 +38,8 @@ class Rms512(object):
         self.rmsd = 'None'
 
     def launch(self):
+        """Launches the execution of the GROMACS rms module.
+        """
         gmx = "gmx" if self.gmx_path == 'None' else self.gmx_path
         cmd = ["echo", "0 0", "|",
                gmx, "rms", "-s", self.input_ref_struct, "-f", self.input_traj,
@@ -47,4 +54,6 @@ class Rms512(object):
 
     @task(returns=float)
     def launchPyCOMPSs(self, mdeq):
+        """Launches the GROMACS rms module using the PyCOMPSs library.
+        """
         return self.launch()

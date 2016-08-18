@@ -27,10 +27,10 @@ class Grompp512(object):
         mdp_path (str): Path to the input GROMACS parameter input file MDP.
         gro_path (str): Path to the input GROMACS structure GRO file.
         top_path (str): Path the input GROMACS topology TOP file.
-        output_tpr_path (str): Path to the portable binary run input file TPR.
-        cpt_path (str): Path to the GROMACS checkpoint file CPT.
-        log_path (str): Path to the file where the pdb2gmx log will be stored.
-        error_path (str): Path to the file where the pdb2gmx error log will be
+        output_tpr_path (str): Path to the output portable binary run file TPR.
+        cpt_path (str): Path to the input GROMACS checkpoint file CPT.
+        log_path (str): Path to the file where the grompp log will be stored.
+        error_path (str): Path to the file where the grompp error log will be
                           stored.
         gmx_path (str): Path to the GROMACS executable binary.
     """

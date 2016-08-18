@@ -58,6 +58,12 @@ class Solvate512(object):
 
         command = cmd_wrapper.CmdWrapper(cmd, self.log_path, self.error_path)
         command.launch()
+        # Remove temp files
+        filelist = [f for f in os.listdir(".") if f.startswith("#temp.") and
+                    f.endswith("#")]
+
+        for f in filelist:
+            os.remove(f)
 
     @task(returns=dict, topin=FILE_IN, topout=FILE_OUT)
     def launchPyCOMPSs(self, top, gro, topin, topout):
