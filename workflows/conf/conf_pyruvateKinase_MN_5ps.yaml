@@ -1,0 +1,570 @@
+######################## pymdsetup configuration file ########################
+
+########################## System dependent paths ############################
+
+mare_nostrum:
+  workflow_path: /gpfs/scratch/bsc23/bsc23210/pyruvate_MPI_5ps
+  gmx_path: /home/bsc23/bsc23210/gromacs/bin/gmx
+  scwrl4_path: /gpfs/home/bsc23/bsc23210/scwrl4/Scwrl4
+  gnuplot_path: gnuplot
+  initial_structure_pdb_path: /gpfs/home/bsc23/bsc23210/pymdsetup/test/data/PK_Gromacs_Setup.pdb
+
+##############################################################################
+
+# List of coma separated mutations (if this field is empty
+# pdb_code field will be used to download the list).
+# Format example:  A.Lys58Glu, A.Thr74Ala
+
+# All 200 mutations
+input_mapped_mutations_list: "*.Ala115Pro, *.Ala132Ser, *.Ala137Thr, *.Ala152Gly, *.Ala154Thr, *.Ala257Thr, *.Ala257Val, *.Ala295Thr, *.Ala295Val, *.Ala299Asp, *.Ala352Asp, *.Ala392Thr, *.Ala394Asp, *.Ala394Ser, *.Ala394Val, *.Ala430Thr, *.Ala431Thr, *.Ala445Val, *.Ala459Val, *.Ala468Gly, *.Ala468Val, *.Ala470Asp, *.Ala495Thr, *.Ala495Val, *.Ala503Val, *.Arg103Gly, *.Arg103Ser, *.Arg135Trp, *.Arg163Cys, *.Arg163Leu, *.Arg194Leu, *.Arg209Gln, *.Arg216His, *.Arg270Gly, *.Arg322Lys, *.Arg337Gln, *.Arg337Pro, *.Arg337Trp, *.Arg359Cys, *.Arg359His, *.Arg385Lys, *.Arg385Trp, *.Arg426Gln, *.Arg426Trp, *.Arg435Gln, *.Arg442Cys, *.Arg442His, *.Arg449Cys, *.Arg449Leu, *.Arg479Cys, *.Arg479His, *.Arg486Leu, *.Arg486Trp, *.Arg488Gln, *.Arg490Trp, *.Arg498Cys, *.Arg498His, *.Arg504Leu, *.Arg510Gln, *.Arg518His, *.Arg518Ser, *.Arg531Cys, *.Arg531His, *.Arg532Gln, *.Arg532Trp, *.Arg543His, *.Arg547His, *.Arg559Gly, *.Arg559Pro, *.Arg569Gln, *.Arg569Leu, *.Arg86Pro, *.Asn133Asp, *.Asn198Lys, *.Asn253Asp, *.Asn316Lys, *.Asn361Asp, *.Asn393Asp, *.Asn393Lys, *.Asn393Ser, *.Asn412Thr, *.Asn566Lys, *.Asp221Asn, *.Asp221Tyr, *.Asp281Asn, *.Asp293Asn, *.Asp331Asn, *.Asp331Glu, *.Asp331Gly, *.Asp339His, *.Asp390Asn, *.Asp397Val, *.Asp550Val, *.Cys360Tyr, *.Gln182Lys, *.Gln229Arg, *.Gln267Lys, *.Gln421Lys, *.Glu125Ala, *.Glu125Gln, *.Glu172Asp, *.Glu172Gln, *.Glu172Gly, *.Glu172Lys, *.Glu266Lys, *.Glu277Lys, *.Glu304Asp, *.Glu315Lys, *.Glu387Gly, *.Glu407Gly, *.Glu407Lys, *.Glu427Ala, *.Glu427Asp, *.Glu461Lys, *.Glu81Lys, *.Gly170Ser, *.Gly215Ser, *.Gly232Asp, *.Gly307Val, *.Gly341Ala, *.Gly364Asp, *.Gly398Ala, *.Gly411Ala, *.Gly411Ser, *.Gly511Glu, *.His121Gln, *.His124Gln, *.Ile153Thr, *.Ile219Thr, *.Ile224Thr, *.Ile310Asn, *.Ile314Thr, *.Ile342Phe, *.Ile357Thr, *.Ile402Val, *.Ile457Val, *.Ile494Thr, *.Ile90Asn, *.Leu155Pro, *.Leu167Met, *.Leu272Pro, *.Leu272Val, *.Leu327Val, *.Leu374Pro, *.Leu447Ile, *.Leu73Pro, *.Lys179Asn, *.Lys365Met, *.Lys410Glu, *.Met107Thr, *.Met403Ile, *.Met65Val, *.Phe191Ile, *.Phe287Leu, *.Phe287Val, *.Pro189Ala, *.Pro212Leu, *.Pro212Ser, *.Pro303Ala, *.Pro303Leu, *.Pro414Leu, *.Pro520Thr, *.Pro521Ser, *.Pro62Leu, *.Pro82His, *.Ser120Phe, *.Ser130Pro, *.Ser330Arg, *.Ser485Phe, *.Ser499Phe, *.Ser80Pro, *.Thr371Ile, *.Thr384Met, *.Thr388Lys, *.Thr408Ala, *.Thr408Ile, *.Thr408Pro, *.Thr455Ala, *.Thr93Ile, *.Trp201Arg, *.Val134Asp, *.Val187Ala, *.Val211Leu, *.Val213Ala, *.Val227Glu, *.Val245Ile, *.Val269Ala, *.Val269Ile, *.Val269Phe, *.Val288Leu, *.Val297Ile, *.Val320Leu, *.Val320Met, *.Val335Met, *.Val368Phe, *.Val460Ala, *.Val460Met, *.Val506Ile, *.Val555Leu, *.Val83Met"
+
+########################## Step paths & properties ##########################
+# Step 1: mmbpdb -- Get PDB
+step1_mmbpdb:
+  paths:
+    output_pdb_path: structure.pdb
+  properties:
+    pdb_code: 2JQ3
+
+# Step3: scw -- Model mutation
+step3_scw:
+  paths:
+    input_pdb_path: dependency/step1_mmbpdb/output_pdb_path
+    output_pdb_path: mutated.pdb
+  properties:
+
+
+# Step4: p2g -- Create gromacs topology
+step4_p2g:
+  paths:
+    input_structure_pdb_path: dependency/step3_scw/output_pdb_path
+    output_gro_path: p2g.gro
+    output_top_zip_path: p2g_top.zip
+  properties:
+    output_top_path: p2g.top
+    output_itp_path: p2g.itp
+    # Available water molecule types: tip3p, spce, etc.
+    water_type: tip3p
+    # Available force fields: amber99sb-ildn, oplsaa, etc.
+    force_field: amber99sb
+    # Should be set to False in next release
+    ignh: True
+
+# Step5: ec -- Define box dimensions
+step5_ec:
+  paths:
+    input_gro_path: dependency/step4_p2g/output_gro_path
+    output_gro_path: ec.gro
+  properties:
+    # Available box types: octahedron, cubic, etc.
+    box_type: octahedron
+    # Distance of the box from the outermost atom in nm. ie 1.0nm = 10 Ångströms
+    distance_to_molecule: 1.5
+    center_molecule: True
+
+# Step6: sol -- Fill the box with water molecules
+step6_sol:
+  paths:
+    input_solute_gro_path: dependency/step5_ec/output_gro_path
+    input_top_zip_path: dependency/step4_p2g/output_top_zip_path
+    output_gro_path: sol.gro
+    output_top_zip_path: sol_top.zip
+  properties:
+    output_top_path: sol.top
+    input_solvent_gro_path: spc216.gro
+
+# Step7: gppions -- Preprocessing: Add ions to neutralice the charge
+step7_gppions:
+  paths:
+    input_gro_path: dependency/step6_sol/output_gro_path
+    input_top_zip_path: dependency/step6_sol/output_top_zip_path
+    output_tpr_path: gppions.tpr
+  properties:
+    mdp:
+      type: minimization
+      nsteps: 5000
+
+# Step8: gio -- Running: Add ions to neutralice the charge
+step8_gio:
+  paths:
+    input_tpr_path: dependency/step7_gppions/output_tpr_path
+    input_top_zip_path: dependency/step6_sol/output_top_zip_path
+    output_gro_path: gio.gro
+    output_top_zip_path: gio_top.zip
+  properties:
+    output_top_path: gio.top
+    neutral: True
+    # If neutral is True, first neutralize the system before reaching ion concentration
+    concentration: 0.05
+    replaced_group: SOL
+    seed: 1993
+
+#Generar pdb gro topology i mirar que tingui cadenes
+
+# Step9: gppndx -- Preprocessing index creation
+step9_gppndx:
+  paths:
+    input_gro_path: dependency/step8_gio/output_gro_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_tpr_path: gppndx.tpr
+  properties:
+    mdp:
+      type: index
+      nsteps: 5000
+
+# Step10: make_ndx -- Create restrain index
+step10_make_ndx:
+  paths:
+    input_structure_path: dependency/step9_gppndx/output_tpr_path
+    output_ndx_path: index.ndx
+  properties:
+    selection: 'chain A \n
+                chain B \n
+                chain C \n
+                chain D \n
+                name 19 Chain_A \n
+                name 20 Chain_B \n
+                name 21 Chain_C \n
+                name 22 Chain_D \n
+                \"Protein-H\" & 19 & !r RES_NUM \n
+                \"Protein-H\" & 19 & r RES_NUM & a CA C N O \n
+                23 | 24 \n
+                del 23 \n
+                del 23 \n
+                \"Protein-H\" & 20 & !r RES_NUM \n
+                \"Protein-H\" & 20 & r RES_NUM & a CA C N O \n
+                24 | 25 \n
+                del 24 \n
+                del 24 \n
+                \"Protein-H\" & 21 & !r RES_NUM \n
+                \"Protein-H\" & 21 & r RES_NUM & a CA C N O \n
+                25 | 26  \n
+                del 25 \n
+                del 25 \n
+                \"Protein-H\" & 22 & !r RES_NUM \n
+                \"Protein-H\" & 22 & r RES_NUM & a CA C N O \n
+                26 | 27 \n
+                del 26 \n
+                del 26 \n
+                name 23 Chain_A_noMut \n
+                name 24 Chain_B_noMut \n
+                name 25 Chain_C_noMut \n
+                name 26 Chain_D_noMut \n
+                19 & a CA C N O \n
+                20 & a CA C N O \n
+                21 & a CA C N O \n
+                22 & a CA C N O \n
+                name 27 Chain_A_backbone \n
+                name 28 Chain_B_backbone \n
+                name 29 Chain_C_backbone \n
+                name 30 Chain_D_backbone \n
+                \"Chain_A_noMut\" | \"Chain_B_noMut\" | \"Chain_C_noMut\" | \"Chain_D_noMut\" \n
+                name 31 Chain_all_noMut \n
+                \"Chain_A_backbone\" | \"Chain_B_backbone\" | \"Chain_C_backbone\" | \"Chain_D_backbone\" \n
+                name 32 Chain_all_backbone \n
+                \"Protein-H\" & 19 \n
+                \"Protein-H\" & 20 \n
+                \"Protein-H\" & 21 \n
+                \"Protein-H\" & 22 \n
+                name 33 Chain_A_Heavy \n
+                name 34 Chain_B_Heavy \n
+                name 35 Chain_C_Heavy \n
+                name 36 Chain_D_Heavy \n
+                q'
+
+# Step11: ndx2resttop - Create restrain topology
+step11_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 500 500 500
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_noMut, A ), ( Chain_B, Chain_B_noMut, B ), ( Chain_C, Chain_C_noMut, C ), ( Chain_D, Chain_D_noMut, D )
+
+# Step12:  gppresmin  Preprocessing: Mutated residue minimization
+step12_gppresmin:
+  paths:
+    input_gro_path: dependency/step8_gio/output_gro_path
+    input_top_zip_path: dependency/step11_ndx2resttop/output_top_zip_path
+    output_tpr_path: gppresmin.tpr
+  properties:
+    mdp:
+      type: minimization
+      nsteps: 5000
+      emtol: 10
+      define: -DCUSTOM_POSRES
+
+# Step13: mdresmin ---- Running: Mutated residue minimization
+step13_mdresmin:
+  paths:
+    input_tpr_path: dependency/step12_gppresmin/output_tpr_path
+    output_gro_path: mdresmin.gro
+    output_log_path: mdresmin.log
+  properties:
+    output_trr_path: mdresmin.trr
+    output_xtc_path: mdresmin.xtc
+    output_edr_path: mdresmin.edr
+
+# Step14: ndx2resttop - Create restrain topology
+step14_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 500 500 500
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_Heavy, A ), ( Chain_B, Chain_B_Heavy, B ), ( Chain_C, Chain_C_Heavy, C ), ( Chain_D, Chain_D_Heavy, D )
+
+# step15:  gppmin  Preprocessing: minimization
+step15_gppmin:
+  paths:
+    input_gro_path: dependency/step13_mdresmin/output_gro_path
+    input_top_zip_path: dependency/step14_ndx2resttop/output_top_zip_path
+    output_tpr_path: gppmin.tpr
+  properties:
+    mdp:
+      type: minimization
+      nsteps: 5000
+      emtol: 10
+      define: -DCUSTOM_POSRES
+
+# Step16: mdmin ---- Running: minimization
+step16_mdmin:
+  paths:
+    input_tpr_path: dependency/step15_gppmin/output_tpr_path
+    output_gro_path: mdmin.gro
+    output_log_path: mdmin.log
+  properties:
+    output_trr_path: mdmin.trr
+    output_xtc_path: mdmin.xtc
+    output_edr_path: mdmin.edr
+
+# Step17: ndx2resttop - Create restrain topology
+step17_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 1000 1000 1000
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_noMut, A ), ( Chain_B, Chain_B_noMut, B ), ( Chain_C, Chain_C_noMut, C ), ( Chain_D, Chain_D_noMut, D )
+
+# step18: gppsa  Preprocessing: simulated annealing
+step18_gppsa:
+  paths:
+    input_gro_path: dependency/step16_mdmin/output_gro_path
+    input_top_zip_path: dependency/step17_ndx2resttop/output_top_zip_path
+    output_tpr_path: gppsa.tpr
+  properties:
+    mdp:
+      type: nvt
+      nsteps: 5000
+      nstlist: 20
+      gen_temp: 0
+      annealing: single single
+      annealing-npoints: 7 7
+      annealing-time: 0 15 30  45  60  80  100 0 15 30  45  60  80  100
+      annealing-temp: 0 50 100 150 200 250 300 0 50 100 150 200 250 300
+      define: -DCUSTOM_POSRES
+
+# step19: mdsa ---- Running: simulated annealing
+step19_mdsa:
+  paths:
+    input_tpr_path: dependency/step18_gppsa/output_tpr_path
+    output_gro_path: mdsa.gro
+    output_cpt_path: mdsa.cpt
+    output_log_path: mdsa.log
+  properties:
+    output_trr_path: mdsa.trr
+    output_xtc_path: mdsa.xtc
+    output_edr_path: mdsa.edr
+
+# step20: gppnvt_1000  Preprocessing: nvt constant number of molecules, volume and temp
+step20_gppnvt_1000:
+  paths:
+    input_gro_path: dependency/step19_mdsa/output_gro_path
+    input_top_zip_path: dependency/step17_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step19_mdsa/output_cpt_path
+    output_tpr_path: gppnvt_1000.tpr
+  properties:
+    mdp:
+      type: nvt
+      nsteps: 1000
+      nstlist: 20
+      gen_vel: 'no'
+      gen_temp: ' '
+      gen_seed: ' '
+      tinit: 100
+      continuation: 'yes'
+      define: -DCUSTOM_POSRES
+
+# step21: mdnvt_1000 ---- Running: nvt constant number of molecules, volume and temp
+step21_mdnvt_1000:
+  paths:
+    input_tpr_path: dependency/step20_gppnvt_1000/output_tpr_path
+    output_gro_path: mdnvt_1000.gro
+    output_cpt_path: mdnvt_1000.cpt
+    output_log_path: mdnvt_1000.log
+  properties:
+    output_trr_path: mdnvt_1000.trr
+    output_xtc_path: mdnvt_1000.xtc
+    output_edr_path: mdnvt_1000.edr
+
+# Step22: ndx2resttop - Create restrain topology
+step22_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 800 800 800
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_noMut, A ), ( Chain_B, Chain_B_noMut, B ), ( Chain_C, Chain_C_noMut, C ), ( Chain_D, Chain_D_noMut, D )
+
+# step23: gppnvt_800  Preprocessing: nvt constant number of molecules, volume and temp
+step23_gppnvt_800:
+  paths:
+    input_gro_path: dependency/step21_mdnvt_1000/output_gro_path
+    input_top_zip_path: dependency/step22_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step21_mdnvt_1000/output_cpt_path
+    output_tpr_path: gppnvt_800.tpr
+  properties:
+    mdp:
+      type: nvt
+      nsteps: 1000
+      nstlist: 20
+      gen_vel: 'no'
+      gen_temp: ' '
+      gen_seed: ' '
+      tinit: 120
+      continuation: 'yes'
+      define: -DCUSTOM_POSRES
+
+# step24: mdnvt_800 ---- Running: nvt constant number of molecules, volume and temp
+step24_mdnvt_800:
+  paths:
+    input_tpr_path: dependency/step23_gppnvt_800/output_tpr_path
+    output_gro_path: mdnvt_800.gro
+    output_cpt_path: mdnvt_800.cpt
+    output_log_path: mdnvt_800.log
+  properties:
+    output_trr_path: mdnvt_800.trr
+    output_xtc_path: mdnvt_800.xtc
+    output_edr_path: mdnvt_800.edr
+
+# Step25: ndx2resttop - Create restrain topology
+step25_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 500 500 500
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_noMut, A ), ( Chain_B, Chain_B_noMut, B ), ( Chain_C, Chain_C_noMut, C ), ( Chain_D, Chain_D_noMut, D )
+
+# step26: gppnpt_500  Preprocessing: npt constant number of molecules, pressure and temp
+step26_gppnpt_500:
+  paths:
+    input_gro_path: dependency/step24_mdnvt_800/output_gro_path
+    input_top_zip_path: dependency/step25_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step24_mdnvt_800/output_cpt_path
+    output_tpr_path: gppnpt_500.tpr
+  properties:
+    mdp:
+      type: npt
+      nsteps: 1000
+      nstlist: 20
+      tinit: 140
+      continuation: 'yes'
+      define: -DCUSTOM_POSRES
+
+# step27: mdnpt_500 ---- Running: npt constant number of molecules, pressure and temp
+step27_mdnpt_500:
+  paths:
+    input_tpr_path: dependency/step26_gppnpt_500/output_tpr_path
+    output_gro_path: mdnpt_500.gro
+    output_cpt_path: mdnpt_500.cpt
+    output_log_path: mdnpt_500.log
+  properties:
+    output_trr_path: mdnpt_500.trr
+    output_xtc_path: mdnpt_500.xtc
+    output_edr_path: mdnpt_500.edr
+
+# Step28: ndx2resttop - Create restrain topology
+step28_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 300 300 300
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_noMut, A ), ( Chain_B, Chain_B_noMut, B ), ( Chain_C, Chain_C_noMut, C ), ( Chain_D, Chain_D_noMut, D )
+
+# step29: gppnpt_300  Preprocessing: npt constant number of molecules, pressure and temp
+step29_gppnpt_300:
+  paths:
+    input_gro_path: dependency/step27_mdnpt_500/output_gro_path
+    input_top_zip_path: dependency/step28_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step27_mdnpt_500/output_cpt_path
+    output_tpr_path: gppnpt_300.tpr
+  properties:
+    mdp:
+      type: npt
+      nsteps: 1000
+      nstlist: 20
+      tinit: 160
+      continuation: 'yes'
+      define: -DCUSTOM_POSRES
+
+# step30: mdnpt_300 ---- Running: npt constant number of molecules, pressure and temp
+step30_mdnpt_300:
+  paths:
+    input_tpr_path: dependency/step29_gppnpt_300/output_tpr_path
+    output_gro_path: mdnpt_300.gro
+    output_cpt_path: mdnpt_300.cpt
+    output_log_path: mdnpt_300.log
+  properties:
+    output_trr_path: mdnpt_300.trr
+    output_xtc_path: mdnpt_300.xtc
+    output_edr_path: mdnpt_300.edr
+
+# Step31: ndx2resttop - Create restrain topology
+step31_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 200 200 200
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_backbone, A ), ( Chain_B, Chain_B_backbone, B ), ( Chain_C, Chain_C_backbone, C ), ( Chain_D, Chain_D_backbone, D )
+
+# step32: gppnpt_200  Preprocessing: npt constant number of molecules, pressure and temp
+step32_gppnpt_200:
+  paths:
+    input_gro_path: dependency/step30_mdnpt_300/output_gro_path
+    input_top_zip_path: dependency/step31_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step30_mdnpt_300/output_cpt_path
+    output_tpr_path: gppnpt_200.tpr
+  properties:
+    mdp:
+      type: npt
+      nsteps: 5000
+      nstlist: 20
+      tinit: 180
+      continuation: 'yes'
+      define: -DCUSTOM_POSRES
+
+# step33: mdnpt_200 ---- Running: npt constant number of molecules, pressure and temp
+step33_mdnpt_200:
+  paths:
+    input_tpr_path: dependency/step32_gppnpt_200/output_tpr_path
+    output_gro_path: mdnpt_200.gro
+    output_cpt_path: mdnpt_200.cpt
+    output_log_path: mdnpt_200.log
+  properties:
+    output_trr_path: mdnpt_200.trr
+    output_xtc_path: mdnpt_200.xtc
+    output_edr_path: mdnpt_200.edr
+
+# Step34: ndx2resttop - Create restrain topology
+step34_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 100 100 100
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_backbone, A ), ( Chain_B, Chain_B_backbone, B ), ( Chain_C, Chain_C_backbone, C ), ( Chain_D, Chain_D_backbone, D )
+
+#step35: gppnpt_100  Preprocessing: npt constant number of molecules, pressure and temp
+step35_gppnpt_100:
+  paths:
+    input_gro_path: dependency/step33_mdnpt_200/output_gro_path
+    input_top_zip_path: dependency/step34_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step33_mdnpt_200/output_cpt_path
+    output_tpr_path: gppnpt_100.tpr
+  properties:
+    mdp:
+      type: npt
+      nsteps: 5000
+      nstlist: 20
+      tinit: 190
+      continuation: 'yes'
+      define: -DCUSTOM_POSRES
+
+# step36: mdnpt_100 ---- Running: npt constant number of molecules, pressure and temp
+step36_mdnpt_100:
+  paths:
+    input_tpr_path: dependency/step35_gppnpt_100/output_tpr_path
+    output_gro_path: mdnpt_100.gro
+    output_cpt_path: mdnpt_100.cpt
+    output_log_path: mdnpt_100.log
+  properties:
+    output_trr_path: mdnpt_100.trr
+    output_xtc_path: mdnpt_100.xtc
+    output_edr_path: mdnpt_100.edr
+
+# Step37: ndx2resttop - Create restrain topology
+step37_ndx2resttop:
+  paths:
+    input_ndx_path: dependency/step10_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_gio/output_top_zip_path
+    output_top_zip_path: ndx2resttop_top_out.zip
+  properties:
+    force_constants: 0 0 0
+    ref_rest_chain_triplet_list: ( Chain_A, Chain_A_backbone, A ), ( Chain_B, Chain_B_backbone, B ), ( Chain_C, Chain_C_backbone, C ), ( Chain_D, Chain_D_backbone, D )
+
+#step38: gppnpt - Preprocessing: npt constant number of molecules, pressure and temp
+step38_gppnpt:
+  paths:
+    input_gro_path: dependency/step36_mdnpt_100/output_gro_path
+    input_top_zip_path: dependency/step37_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step36_mdnpt_100/output_cpt_path
+    output_tpr_path: gppnpt.tpr
+  properties:
+    mdp:
+      type: npt
+      nsteps: 5000
+      nstlist: 20
+      tinit: 200
+      continuation: 'yes'
+      define: -DCUSTOM_POSRES
+
+# step39: mdnpt ---- Running: npt constant number of molecules, pressure and temp
+step39_mdnpt:
+  paths:
+    input_tpr_path: dependency/step38_gppnpt/output_tpr_path
+    output_gro_path: mdnpt.gro
+    output_cpt_path: mdnpt.cpt
+    output_log_path: mdnpt.log
+  properties:
+    output_trr_path: mdnpt.trr
+    output_xtc_path: mdnpt.xtc
+    output_edr_path: mdnpt.edr
+
+#step40: gppmd - Preprocessing: Free Molecular dynamics
+step40_gppmd:
+  paths:
+    input_gro_path: dependency/step39_mdnpt/output_gro_path
+    input_top_zip_path: dependency/step37_ndx2resttop/output_top_zip_path
+    input_cpt_path: dependency/step39_mdnpt/output_cpt_path
+    output_tpr_path: gppmd.tpr
+  properties:
+    mdp:
+      type: free
+      nsteps: 2500
+      nstlist: 20
+      tinit: 300
+      continuation: 'yes'
+
+# step41: md ---- Running: Free Molecular dynamics
+step41_md:
+  paths:
+    input_tpr_path: dependency/step40_gppmd/output_tpr_path
+    output_gro_path: md.gro
+    output_cpt_path: md.cpt
+    output_xtc_path: md.xtc
+    output_trr_path: md.trr
+    output_edr_path: md.edr
+    output_log_path: md.log
+  properties:
